@@ -4,7 +4,7 @@ Minihell on Earth
 <h1>TO DO</h1>
 
 - [ ] Wait for command
-  - [ ] Differentiate command vs enviroment vs signal
+  - [ ] Differentiate command vs environment vs signal
 - [ ] Input parsing
   - [ ] ' quotes
   - [ ] " quotes (except $())
@@ -19,11 +19,11 @@ Minihell on Earth
   - [ ] unset
   - [ ] env
   - [ ] exit
-- [ ] Mangae piping
+- [ ] Manage piping
   - [ ] Redirections (<, >, <<, >>)
   - [ ] || and && (Bonus)
 - [ ] Terminal variables:
-  - [ ] Enviroment variables
+  - [ ] Environment variables
   - [ ] $?
   - [ ] Wildcard (Bonus)
 - [ ] History
