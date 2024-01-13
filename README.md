@@ -1,4 +1,4 @@
-# 42-Minishell
+# 42-Minicrab 🦀
 Minihell on Earth
 
 <h1>TO DO</h1>
