@@ -6,11 +6,11 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:49:35 by xortega           #+#    #+#             */
-/*   Updated: 2024/01/12 14:40:52 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/03 12:44:02 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "libft.h"
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {

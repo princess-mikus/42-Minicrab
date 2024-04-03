@@ -5,52 +5,96 @@
 #                                                     +:+ +:+         +:+      #
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/01/24 13:12:01 by xortega           #+#    #+#              #
-#    Updated: 2024/01/24 14:21:38 by xortega          ###   ########.fr        #
+#    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
+#    Updated: 2024/04/03 16:06:07 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME := so_long
-CC				:= gcc
-CFLAGS			:= -Wall -Wextra -Werror -lreadline -I ./includes
-SOURCES			:= so_long.c so_map.c so_tiles.c so_checks.c so_exits.c so_mlx.c so_movements.c
-OBJECTS			:= $(SOURCES:.c=.o)
-LIBFT			:= libft.a
-MLX				:= libmlx.a
+NAME		:=	minishell
+OBJ_DIR		:=	obj
+SRC_PATH	:=	src
+SOURCES		:=	main.c
+OBJS		:=	$(SOURCES:%.c=$(OBJ_DIR)/%.o)
+LIBFT_PATH	:=	libft
+RLINE_PATH	:=	readline
+LIBFT		:=	libft.a
+RLINE		:=	readline.a
+CC			:=	gcc
+CFLAGS		:=	-Wall -Wextra -Werror -I./includes
+#  -Wno-error=unused-command-line-argument
+RLINE_FLAGS	:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib/
+RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
+
+# ASCII COLORS #
+BLACK=\033[0;30m
+RED=\033[0;31m
+GREEN=\033[0;32m
+YELLOW=\033[0;33m
+BLUE=\033[0;34m
+MAG=\033[0;35m
+CYAN=\033[0;36m
+WHITE=\033[0;37m
+PAPYRUS=\033[38;5;223m
+END=\033[0m
+
 
 all: $(NAME)
 
-.SILENT:
+define ASCII
+$(WHITE)
+                                                ██████       
+                                              ██    ██      
+                                          ████░░░░██        
+                                      ████    ██████                 :::   :::   ::::::::::: ::::    ::: :::::::::::      
+                                    ██░░░░        ██               :+:+: :+:+:      :+:     :+:+:   :+:     :+:           
+                                ██████████░░░░    ██             +:+ +:+:+ +:+     +:+     :+:+:+  +:+     +:+            
+                              ██░░        ████░░  ██            +#+  +:+  +#+     +#+     +#+ +:+ +#+     +#+             
+$(GREEN)                        ████  ████$(WHITE)░░          ██░░██           +#+       +#+     +#+     +#+  +#+#+#     +#+              
+$(GREEN)                      ██    ██    ██$(WHITE)░░░░        ██            #+#       #+#     #+#     #+#   #+#+#     #+#               
+$(GREEN)                      ██  ██████  ██$(WHITE)████░░      ██           ###       ### ########### ###    #### ###########            
+$(GREEN)                        ████$(RED)▒▒$(GREEN)████$(RED)▒▒▒▒▒▒$(WHITE)██░░░░░░██$(RED)                        ::::::::  :::    ::: :::::::::: :::        :::  
+                      ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒████████████                  :+:    :+: :+:    :+: :+:        :+:        :+:   
+              ████████▒▒▒▒▒▒▒▒▒▒▒▒██▒▒▒▒██▒▒▒▒▒▒▒▒▒▒▒▒██               +:+        +:+    +:+ +:+        +:+        +:+    
+          ████▒▒▒▒▒▒▒▒██▒▒████████▒▒▒▒██▒▒██████████▒▒▒▒██            +#++:++#++ +#++:++#++ +#++:++#   +#+        +#+     
+        ██▒▒▒▒▒▒██████▒▒██▒▒▒▒▒▒▒▒▒▒██  ██▒▒██    ████▒▒██                  +#+ +#+    +#+ +#+        +#+        +#+      
+        ██▒▒▒▒▒▒██████▒▒██▒▒▒▒▒▒▒▒▒▒██  ██▒▒██    ████▒▒██          #+#    #+# #+#    #+# #+#        #+#        #+#       
+      ██▒▒▒▒██▒▒██  ██▒▒████████████      ██▒▒██    ██▒▒██          ########  ###    ### ########## ########## ########## 
+      ██▒▒▒▒████    ██▒▒██                ██▒▒██    ████    
+        ████          ██                  ████              
 
-$(NAME): $(LIBFT) $(MLX) $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -Lmlx -framework OpenGL -framework AppKit $(MLX) $(LIBFT) -o $(NAME)
-	chmod 777 $(NAME)
+endef                                                                                                                                                                                                                                                                                          
+export ASCII
+
+$(NAME): $(OBJS) $(LIBFT)
+	@sleep 0.2;
+	@$(CC) $(CFLAGS) $(RLINE_FLAGS) $(RLINE) $(OBJS) $(LIBFT) -o $(NAME)
+#@printf "$(RED)"
+	@echo "$$ASCII"
+	@printf "\033[0;32;3mMINISHELL ✅\n\n"
+
+$(OBJ_DIR):
+	@mkdir $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: $(SRC_PATH)/%.c $(OBJ_DIR)
+	@$(CC) -c $(RLINE) $(CFLAGS) $< -o $@
 
 $(LIBFT):
-	@make -C Libft 2> /dev/null
-	cp Libft/libft.a $(LIBFT)
-	
-$(MLX):
-	@make -C mlx 2> /dev/null
-	cp mlx/libmlx.a $(MLX)
+	@make -C $(LIBFT_PATH)
+	@mv $(LIBFT_PATH)/$(LIBFT) ./
 
 clean:
-	make clean -C Libft
-	make clean -C mlx
-	rm -f $(OBJECTS)
+	@rm -fr $(OBJ_DIR)
+	@make clean -C $(LIBFT_PATH)
 
-fclean: clean
-	printf "\033[1;31m❌ERASED❌\n"
-	rm -f $(NAME)
-	rm -f libft.a
-	rm -f libmlx.a
+ascii:
+	@echo "$$ASCII"
 
-rclean:	clean
-	printf "✅REMAKE✅\n"
-	rm -f $(NAME)
-	rm -f libft.a
-	rm -f libmlx.a
+fclean:
+	@rm -fr $(OBJ_DIR)
+	@rm -f $(NAME)
+	@rm -f $(LIBFT)
+	@make fclean -C $(LIBFT_PATH)
+	
+re: fclean all
 
-re: rclean all
-
-.PHONY: all rclean clean fclean re
+.PHONY: all clean fclean re

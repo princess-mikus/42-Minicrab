@@ -6,11 +6,11 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 10:33:57 by xortega           #+#    #+#             */
-/*   Updated: 2024/01/12 14:40:26 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/03 12:44:02 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "libft.h"
 
 void	*ft_calloc(size_t count, size_t size)
 {

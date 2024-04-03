@@ -6,11 +6,11 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 15:22:21 by xortega           #+#    #+#             */
-/*   Updated: 2024/01/12 14:40:52 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/03 12:44:02 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "libft.h"
 
 char	*ft_strrchr(const char *s, int c)
 {
