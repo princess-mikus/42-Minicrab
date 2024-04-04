@@ -1,5 +1,5 @@
 # 42-Minicrab 🦀
-Minihell on Earth
+Minis hell on Earth
 
 <h1>TO DO</h1>
 
@@ -33,5 +33,6 @@ Minihell on Earth
   - [ ] Ctrl + C
   - [ ] Ctrl + D
   - [ ] Ctrl + \
-  - [ ] Signal managing 
+  - [ ] Signal managing
+- [x] Makefile
       

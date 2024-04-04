@@ -6,15 +6,13 @@
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/03 16:06:07 by xortega          ###   ########.fr        #
+#    Updated: 2024/04/04 11:40:05 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:=	minishell
-OBJ_DIR		:=	obj
-SRC_PATH	:=	src
-SOURCES		:=	main.c
-OBJS		:=	$(SOURCES:%.c=$(OBJ_DIR)/%.o)
+OBJ_DIR		:=	obj/
+SRC_PATH	:=	src/
 LIBFT_PATH	:=	libft
 RLINE_PATH	:=	readline
 LIBFT		:=	libft.a
@@ -24,6 +22,25 @@ CFLAGS		:=	-Wall -Wextra -Werror -I./includes
 #  -Wno-error=unused-command-line-argument
 RLINE_FLAGS	:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib/
 RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
+
+# SRCS #
+BUILT-IN 	:=
+HISTORY 	:=
+MAIN 		:= main
+PARSING 	:= parse
+PIPING 		:=
+SIGNALS 	:=
+
+PLAIN_SRCS =	$(addsuffix .c, $(addprefix built-in/,	$(BUILT-IN)))		\
+				$(addsuffix .c, $(addprefix history/,	$(HISTORY)))		\
+				$(addsuffix .c, $(addprefix main/,		$(MAIN)))			\
+				$(addsuffix .c, $(addprefix parsing/,	$(PARSING)))		\
+				$(addsuffix .c, $(addprefix piping/,	$(PIPING)))			\
+				$(addsuffix .c, $(addprefix signals/,	$(SIGNALS)))
+
+SRCS := $(addprefix $(SRC_PATH), $(PLAIN_SRCS))
+OBJS := $(addprefix $(OBJ_DIR), $(PLAIN_SRCS:.c=.o))
+
 
 # ASCII COLORS #
 BLACK=\033[0;30m
@@ -72,11 +89,9 @@ $(NAME): $(OBJS) $(LIBFT)
 	@echo "$$ASCII"
 	@printf "\033[0;32;3mMINISHELL ✅\n\n"
 
-$(OBJ_DIR):
-	@mkdir $(OBJ_DIR)
-
-$(OBJ_DIR)/%.o: $(SRC_PATH)/%.c $(OBJ_DIR)
-	@$(CC) -c $(RLINE) $(CFLAGS) $< -o $@
+$(OBJ_DIR)%.o: $(SRC_PATH)%.c
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) $(READLINE) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
 	@make -C $(LIBFT_PATH)
