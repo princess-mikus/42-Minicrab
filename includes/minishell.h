@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 12:37:14 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 14:32:53 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,13 @@ void	init_envp(t_envp **envp_mx, char **envp);
 void	envp_add(t_envp **envp_mx, t_envp *new);
 //create a t_envp node whit the variable and content and returns it
 t_envp	*new_envp(char *variable, char *content);
-//given a pointer to the list and a variable name it erase it from the list (keeping the list the same whiout the erased node)
-void	envp_erase(t_envp **envp_mx, char *variable);
 //given a pointer to the list and a variable name checks if the variable is in the envp_mx return (1) if it is (0) if not
 int		is_envp(t_envp **envp_mx, char *variable);
-
+//given a pointer to the list and a variable name returns its content if exits
+char	*get_content_envp_mx(t_envp **envp_mx, char *variable);
 //BUILT-IN
+//given a pointer to the list and a variable name it erase it from the list (keeping the list the same whiout the erased node)
+void	unset_mx(t_envp **envp_mx, char *variable);
 //built-in env prints the env
 void	env_mx(t_envp **envp_mx);
 //given a pointer to the list and a variable name change the bolean of exported  to true

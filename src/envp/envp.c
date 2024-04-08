@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:58:58 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 12:24:16 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 14:34:03 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	init_envp(t_envp **envp_mx, char **envp)
 		(ft_strchr(envp[i], '=') - envp[i])), \
 		ft_strdup(ft_strchr(envp[i], '=') + 1)));
 	current = *envp_mx;
-	envp_erase(envp_mx, "OLDPWD");
+	unset_mx(envp_mx, "OLDPWD");
 	while (current)
 	{
 		export_mx(envp_mx, current->variable);

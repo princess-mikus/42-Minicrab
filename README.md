@@ -16,7 +16,7 @@ Minis hell on Earth
   - [ ] cd
   - [ ] pwd
   - [x] export
-  - [ ] unset
+  - [x] unset
   - [x] env
   - [ ] exit
 - [ ] Manage piping
