@@ -6,13 +6,13 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:58:58 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 14:34:03 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 14:48:10 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	envp_add(t_envp **envp_mx, t_envp *new)
+void	envp_add_back(t_envp **envp_mx, t_envp *new)
 {
 	t_envp	*current;
 
@@ -36,7 +36,7 @@ void	init_envp(t_envp **envp_mx, char **envp)
 		return ;
 	i = -1;
 	while (envp[++i])
-		envp_add(envp_mx, new_envp(ft_substr(envp[i], 0, \
+		envp_add_back(envp_mx, new_envp(ft_substr(envp[i], 0, \
 		(ft_strchr(envp[i], '=') - envp[i])), \
 		ft_strdup(ft_strchr(envp[i], '=') + 1)));
 	current = *envp_mx;
@@ -60,4 +60,9 @@ t_envp	*new_envp(char *variable, char *content)
 	node->exported = false;
 	node->next = NULL;
 	return (node);
+}
+
+void	add_var_to_envp_mx(t_envp **envp_mx, char *variable, char *content)
+{
+	envp_add_back(envp_mx, new_envp(variable, content));
 }

@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 14:32:53 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 14:47:30 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@ typedef struct s_data
 }					t_data;
 
 //ENV
+//given a pointer to the list, a variable name and its content add its to the back of the list. if the list dosent exist inizialize it
+void	add_var_to_envp_mx(t_envp **envp_mx, char *variable, char *content);
 //recibes a null terminated &t_envp and the envp, inicialite the envp_mx list whit the shell variables - OLDPWD
 void	init_envp(t_envp **envp_mx, char **envp);
 //given a pointer to the envp_mx list and a new node adds it to the end of the list
-void	envp_add(t_envp **envp_mx, t_envp *new);
+void	envp_add_back(t_envp **envp_mx, t_envp *new);
 //create a t_envp node whit the variable and content and returns it
 t_envp	*new_envp(char *variable, char *content);
 //given a pointer to the list and a variable name checks if the variable is in the envp_mx return (1) if it is (0) if not
