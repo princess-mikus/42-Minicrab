@@ -15,7 +15,7 @@ Minis hell on Earth
   - [ ] echo (-n)
   - [ ] cd
   - [ ] pwd
-  - [ ] export
+  - [x] export
   - [ ] unset
   - [x] env
   - [ ] exit

@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 12:24:49 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 12:37:14 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ t_envp	*new_envp(char *variable, char *content);
 void	envp_erase(t_envp **envp_mx, char *variable);
 //given a pointer to the list and a variable name checks if the variable is in the envp_mx return (1) if it is (0) if not
 int		is_envp(t_envp **envp_mx, char *variable);
-//given a pointer to the list and a variable name change the bolean of exported  to true
-void	export_mx(t_envp **envp_mx, char *variable);
 
 //BUILT-IN
-//built-in env
+//built-in env prints the env
 void	env_mx(t_envp **envp_mx);
+//given a pointer to the list and a variable name change the bolean of exported  to true
+void	export_mx(t_envp **envp_mx, char *variable);
 #endif
