@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:53:23 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 12:01:22 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 12:20:04 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,4 @@ void	envp_erase(t_envp **envp_mx, char *variable)
 		current = current->next;
 		next = next->next;
 	}
-}
-
-t_envp	*new_envp(char *variable, char *content)
-{
-	t_envp	*node;
-
-	node = (t_envp *)malloc(sizeof(t_envp));
-	if (!node)
-		return (NULL);
-	node->content = content;
-	node->variable = variable;
-	node->exported = false;
-	node->next = NULL;
-	return (node);
 }

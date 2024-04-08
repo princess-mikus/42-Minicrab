@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:58:58 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 11:55:02 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 12:24:16 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,16 @@ void	init_envp(t_envp **envp_mx, char **envp)
 	}
 }
 
-void	print_envp(t_envp **envp_mx)
+t_envp	*new_envp(char *variable, char *content)
 {
-	t_envp	*current;
+	t_envp	*node;
 
-	current = *envp_mx;
-	while (current->next)
-	{
-		printf("VARIABLE:\t%s\n", current->variable);
-		printf("CONTENT:\t%s\n", current->content);
-		printf("EXPORT:\t%d\n", current->exported);
-		current = current->next;
-	}
+	node = (t_envp *)malloc(sizeof(t_envp));
+	if (!node)
+		return (NULL);
+	node->content = content;
+	node->variable = variable;
+	node->exported = false;
+	node->next = NULL;
+	return (node);
 }

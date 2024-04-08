@@ -1,36 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   env_mx.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 12:20:02 by xortega          ###   ########.fr       */
+/*   Created: 2024/04/08 12:19:18 by xortega           #+#    #+#             */
+/*   Updated: 2024/04/08 12:24:12 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char const *argv[])
+void	env_mx(t_envp **envp_mx)
 {
-	char	*str;
+	t_envp	*current;
 
-	//ft_initialize();
-	argv = NULL;
-	argc = 0;
-	while (!ft_strnstr(str, "exit", ft_strlen(str)))
+	if (!*envp_mx)
+		return ;
+	current = *envp_mx;
+	while (current->next)
 	{
-		str = readline("🦀\e[0;93mminicrab: \e[0;37m");
-			// PARSING_AND_EXECUTION
-				// PARSING
-
-				// END PARSING
-				// EXECUTION
-	
-				// END EXECUTION
-			// END PARSING AND EXECUTION
-		free(str);
+		if (current->exported)
+			printf("%s=%s\n", current->variable, current->content);
+		current = current->next;
 	}
-	return (0);
 }
