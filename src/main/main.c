@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 12:20:02 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 22:55:07 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char const *argv[])
+int	main(void)
 {
 	char	*str;
 
 	//ft_initialize();
-	argv = NULL;
-	argc = 0;
-	while (!ft_strnstr(str, "exit", ft_strlen(str)))
+	str = "";
+	while (str && !ft_strnstr(str, "exit", ft_strlen(str)))
 	{
 		str = readline("🦀\e[0;93mminicrab: \e[0;37m");
 			// PARSING_AND_EXECUTION

@@ -31,7 +31,7 @@ Minis hell on Earth
   - [ ] placeholder 
 - [ ] Signals
   - [ ] Ctrl + C
-  - [ ] Ctrl + D
+  - [x] Ctrl + D
   - [ ] Ctrl + \
   - [ ] Signal managing
 - [x] Makefile
