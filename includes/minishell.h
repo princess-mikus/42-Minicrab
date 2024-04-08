@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/04 15:44:33 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/08 11:52:17 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "libft.h"
 #include <stdio.h>
+#include <stdbool.h>
 //#include "../libs/readline/readline.h"
 //#include "readline.h"
 #include <readline/readline.h>
@@ -24,6 +25,7 @@ typedef struct s_envp
 {
 	char			*variable;
 	char			*content;
+	bool			exported;
 	struct s_envp	*next;	
 }				t_envp;
 
@@ -42,10 +44,20 @@ typedef struct s_data
 }					t_data;
 
 //ENV
+//recibes a null terminated &t_envp and the envp, inicialite the envp_mx list whit the shell variables - OLDPWD
 void	init_envp(t_envp **envp_mx, char **envp);
+//given a pointer to the envp_mx list and a new node adds it to the end of the list
 void	envp_add(t_envp **envp_mx, t_envp *new);
-void	envp_erase(t_envp **envp_mx, char *variable);
+//create a t_envp node whit the variable and content and returns it
 t_envp	*new_envp(char *variable, char *content);
-#endif
+//given a pointer to the list and a variable name it erase it from the list (keeping the list the same whiout the erased node)
+void	envp_erase(t_envp **envp_mx, char *variable);
+//given a pointer to the list and a variable name checks if the variable is in the envp_mx return (1) if it is (0) if not
+int		is_envp(t_envp **envp_mx, char *variable);
+//given a pointer to the list and a variable name change the bolean of exported  to true
+void	export_mx(t_envp **envp_mx, char *variable);
 
-//cargate el old_pwd;
+//BORRAR
+//PRINTEA TODAS LAS VARIABLES EN ENVP_MX
+void	print_envp(t_envp **envp_mx);
+#endif

@@ -23,7 +23,7 @@ Minis hell on Earth
   - [ ] Redirections (<, >, <<, >>)
   - [ ] || and && (Bonus)
 - [ ] Terminal variables:
-  - [ ] Environment variables
+  - [x] Environment variables
   - [ ] $?
   - [ ] Wildcard (Bonus)
 - [ ] History

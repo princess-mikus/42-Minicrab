@@ -6,7 +6,7 @@
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/04 11:40:05 by xortega          ###   ########.fr        #
+#    Updated: 2024/04/08 12:07:33 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,13 +25,15 @@ RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
 
 # SRCS #
 BUILT-IN 	:=
+ENVP	 	:= envp envp_utils
 HISTORY 	:=
 MAIN 		:= main
-PARSING 	:= parse
+PARSING 	:=
 PIPING 		:=
 SIGNALS 	:=
 
 PLAIN_SRCS =	$(addsuffix .c, $(addprefix built-in/,	$(BUILT-IN)))		\
+				$(addsuffix .c, $(addprefix envp/,		$(ENVP)))			\
 				$(addsuffix .c, $(addprefix history/,	$(HISTORY)))		\
 				$(addsuffix .c, $(addprefix main/,		$(MAIN)))			\
 				$(addsuffix .c, $(addprefix parsing/,	$(PARSING)))		\
