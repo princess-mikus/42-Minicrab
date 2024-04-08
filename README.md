@@ -17,7 +17,7 @@ Minis hell on Earth
   - [ ] pwd
   - [ ] export
   - [ ] unset
-  - [ ] env
+  - [x] env
   - [ ] exit
 - [ ] Manage piping
   - [ ] Redirections (<, >, <<, >>)
