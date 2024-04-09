@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 23:39:20 by mikus            ###   ########.fr       */
+/*   Updated: 2024/04/09 12:55:47 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
+	t_envp	*envp_mx;
 
-	//ft_initialize();
+	init_envp(&envp_mx, envp);
 	str = "";
-	while (str && !ft_strnstr(str, "exit", ft_strlen(str)))
+	while ((str && argc && argv) && !ft_strnstr(str, "exit", ft_strlen(str)))
 	{
 		str = readline("🦀\e[0;93mminicrab: \e[0;37m");
 		add_history(str);

@@ -6,7 +6,7 @@
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/08 14:33:21 by xortega          ###   ########.fr        #
+#    Updated: 2024/04/09 12:51:38 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
 
 # SRCS #
 BUILT-IN 	:= env_mx export_mx unset_mx
-ENVP	 	:= envp envp_utils
+ENVP	 	:= envp envp_utils envp_arg
 HISTORY 	:=
 MAIN 		:= main
 PARSING 	:=
