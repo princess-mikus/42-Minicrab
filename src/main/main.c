@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/09 12:55:47 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/09 13:44:27 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,27 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*str;
+	t_input input;
 	t_envp	*envp_mx;
 
+	envp_mx = NULL;
 	init_envp(&envp_mx, envp);
-	str = "";
-	while ((str && argc && argv) && !ft_strnstr(str, "exit", ft_strlen(str)))
+	input.line = "";
+	if (argc == 0 || !argv[0])
+		return (0);
+	while (input.line && !ft_strnstr(input.line, "exit", ft_strlen(input.line)))
 	{
-		str = readline("🦀\e[0;93mminicrab: \e[0;37m");
-		add_history(str);
-			// PARSING_AND_EXECUTION
-				// PARSING
-
-				// END PARSING
-				// EXECUTION
+		input.line = readline("🦀\e[0;93mminicrab: \e[0;37m");
+		add_history(input.line);
+		// PARSING_AND_EXECUTION
+			// PARSING
+		parse_commands(&input, envp_mx);
+			// END PARSING
+			// EXECUTION
 	
 				// END EXECUTION
 			// END PARSING AND EXECUTION
-		free(str);
+		free(input.line);
 	}
 	return (0);
 }
