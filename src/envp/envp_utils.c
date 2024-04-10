@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:53:23 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 14:34:24 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/10 11:18:13 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ char	*get_content_envp_mx(t_envp **envp_mx, char *variable)
 	current = *envp_mx;
 	while (current)
 	{
-		if (!ft_strncmp(current->variable, variable, ft_strlen(variable)))
+		if (!ft_strncmp(current->variable, variable, \
+			ft_strlen(variable)))
 			return (current->content);
 		current = current->next;
 	}

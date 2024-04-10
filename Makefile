@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
+#    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/09 14:10:08 by fcasaubo         ###   ########.fr        #
+#    Updated: 2024/04/10 10:29:52 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
 # SRCS #
 BUILT-IN 	:= env_mx export_mx unset_mx
 ENVP	 	:= envp envp_utils envp_arg
+EXPAND	 	:= expand
 HISTORY 	:=
 MAIN 		:= main
 PARSING 	:=
@@ -34,6 +35,7 @@ SIGNALS 	:=
 
 PLAIN_SRCS =	$(addsuffix .c, $(addprefix built-in/,	$(BUILT-IN)))		\
 				$(addsuffix .c, $(addprefix envp/,		$(ENVP)))			\
+				$(addsuffix .c, $(addprefix expand/,		$(EXPAND)))			\
 				$(addsuffix .c, $(addprefix history/,	$(HISTORY)))		\
 				$(addsuffix .c, $(addprefix main/,		$(MAIN)))			\
 				$(addsuffix .c, $(addprefix parsing/,	$(PARSING)))		\
