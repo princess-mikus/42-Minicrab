@@ -6,35 +6,35 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/10 10:47:17 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/15 14:49:36 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//nt	main(int argc, char **argv, char **envp)
-//
-//	t_input	input;
-//	t_envp	*envp_mx;
-//
-//	envp_mx = NULL;
-//	init_envp(&envp_mx, envp);
-//	input.line = "";
-//	if (argc == 0 || !argv[0])
-//		return (0);
-//	while (input.line && !ft_strnstr(input.line, "exit", ft_strlen(input.line)))
-//	{
-//		input.line = readline("🦀\e[0;93mminicrab: \e[0;37m");
-//		add_history(input.line);
-//		// PARSING_AND_EXECUTION
-//			// PARSING
-//		parse_commands(&input, envp_mx);
-//			// END PARSING
-//			// EXECUTION
-//	
-//				// END EXECUTION
-//			// END PARSING AND EXECUTION
-//		free(input.line);
-//	}
-//	return (0);
-//
+int	main(int argc, char **argv, char **envp)
+{
+	t_input	input;
+	t_envp	*envp_mx;
+
+	envp_mx = NULL;
+	init_envp(&envp_mx, envp);
+	input.line = ft_strdup("");
+	if (argc == 0 || !argv[0] || !envp)
+		return (0);
+	while (input.line)
+	{
+		free(input.line);
+		input.line = readline("🦀\e[0;93mminicrab: \e[0;37m");
+		if (!ft_strncmp(input.line, "exit", 5))
+			break ;
+		add_history(input.line);
+		parse_commands(&input, envp_mx);
+		//rl_on_new_line();
+	}
+	free_envp_mx(&envp_mx);
+	if (input.line)
+		free(input.line);
+	//clear_history();
+	return (0);
+}

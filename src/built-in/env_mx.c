@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:19:18 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/08 12:24:12 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/15 14:55:58 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	env_mx(t_envp **envp_mx)
 	while (current->next)
 	{
 		if (current->exported)
-			printf("%s=%s\n", current->variable, current->content);
+			ft_printf("%s=%s\n", current->variable, current->content);
 		current = current->next;
 	}
 }

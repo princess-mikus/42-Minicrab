@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/11 09:18:32 by mikus            ###   ########.fr       */
+/*   Updated: 2024/04/15 14:57:37 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,14 @@ char	**get_path_var(t_envp *envp_mx)
 	return (ft_split(envp_mx->content, ':'));
 }
 
-int	fork_and_execute(char *program, int readpipe, char **envp, char **path_env)
+int	fork_and_execute(char *program, __unused int readpipe, char **envp, char **path_env)
 {
 	char	**arguments;
 	char	*path;
 	int		pipefd[2];
-	int		status;
 
 	arguments = ft_split(program, ' ');
 	path = get_path(arguments[0], path_env);
-	status = 0;
 	pipe(pipefd);
 	if (!fork())
 	{
@@ -68,12 +66,10 @@ int	fork_and_execute(char *program, int readpipe, char **envp, char **path_env)
 		exit(2);
 	}
 	else
-		wait(&status);
+		wait(NULL);
 	close(readpipe);
 	close(pipefd[1]);
-	if (status)
-		return (free_array((void **)arguments), -1);
-	return (free_array((void **)arguments), pipefd[0]);
+	return (free_array((void **)arguments), /*pipefd[0]*/0);
 }
 
 int		get_total_len(char **temp)
@@ -125,9 +121,10 @@ void	print_results(int fd)
 		free(str);
 		str = get_next_line(fd);
 	}
+	printf("He terminado\n");
 }
 
-int execute_commands(char **commands, t_envp *envp_mx)
+int 	execute_commands(char **commands, t_envp *envp_mx)
 {
 	int 	i;
 	int 	readpipe[2];
@@ -141,14 +138,20 @@ int execute_commands(char **commands, t_envp *envp_mx)
 	while (commands[++i])
 	{
 		commands[i] = get_infiles(commands[i], &readpipe[1]);
-		if (!ft_strncmp(commands[i], "env", ft_strlen("env" + 1)))
+		if (!ft_strncmp(commands[i], "env", 4))
+		{
+			readpipe[1] = -1;
 			env_mx(&envp_mx);
+		}
 		else
 			readpipe[1] = fork_and_execute(commands[i], readpipe[1], envp, path);
 	}
-	print_results(readpipe[1]);
-	close(readpipe[0]);
-	close(readpipe[1]);
+	if (readpipe[1] != -1)
+	{
+		print_results(readpipe[1]);
+		close(readpipe[1]);
+		close(readpipe[0]);
+	}
 	free_array((void **)path);
 	free_array((void **)envp);
 	return (0);

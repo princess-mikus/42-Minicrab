@@ -36,3 +36,4 @@ Minis hell on Earth
   - [ ] Signal managing
 - [x] Makefile
       
+https://03-jon-perez.gitbook.io/coding-library/c/readline

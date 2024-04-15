@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_commands.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:49:25 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/10 17:21:00 by mikus            ###   ########.fr       */
+/*   Updated: 2024/04/15 13:50:57 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parse_commands(t_input *input, t_envp *envp_mx)
+void	parse_commands(t_input *input, __unused t_envp *envp_mx)
 {
 	int	i;
 
