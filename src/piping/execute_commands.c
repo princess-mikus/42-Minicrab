@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/15 14:57:37 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/15 15:34:03 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,6 @@ int	fork_and_execute(char *program, __unused int readpipe, char **envp, char **p
 	pipe(pipefd);
 	if (!fork())
 	{
-		dup2(readpipe, STDIN_FILENO);
-		close(readpipe);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
 		execve(path, arguments, envp);
 		exit(2);
 	}
@@ -107,6 +103,7 @@ char	*get_infiles(char *command_line, int *pipe)
 		}
 		return (free_array((void **)temp), to_return);
 	}
+	*pipe = dup(STDIN_FILENO);
 	return (command_line);
 }
 
@@ -121,7 +118,6 @@ void	print_results(int fd)
 		free(str);
 		str = get_next_line(fd);
 	}
-	printf("He terminado\n");
 }
 
 int 	execute_commands(char **commands, t_envp *envp_mx)
@@ -134,23 +130,13 @@ int 	execute_commands(char **commands, t_envp *envp_mx)
 	i = -1;
 	envp = envp_mx_to_arg(&envp_mx);
 	path = get_path_var(envp_mx);
-	readpipe[1] = STDIN_FILENO;
 	while (commands[++i])
 	{
 		commands[i] = get_infiles(commands[i], &readpipe[1]);
 		if (!ft_strncmp(commands[i], "env", 4))
-		{
-			readpipe[1] = -1;
 			env_mx(&envp_mx);
-		}
 		else
 			readpipe[1] = fork_and_execute(commands[i], readpipe[1], envp, path);
-	}
-	if (readpipe[1] != -1)
-	{
-		print_results(readpipe[1]);
-		close(readpipe[1]);
-		close(readpipe[0]);
 	}
 	free_array((void **)path);
 	free_array((void **)envp);
