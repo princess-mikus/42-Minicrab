@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 14:49:36 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/15 16:50:28 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	main(int argc, char **argv, char **envp)
 		input.line = readline("🦀\e[0;93mminicrab: \e[0;37m");
 		if (!ft_strncmp(input.line, "exit", 5))
 			break ;
-		add_history(input.line);
+		if (input.line[0])
+			add_history(input.line);
 		parse_commands(&input, envp_mx);
 		//rl_on_new_line();
 	}

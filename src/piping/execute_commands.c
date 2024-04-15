@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/15 15:34:03 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:47:25 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	**get_path_var(t_envp *envp_mx)
 	return (ft_split(envp_mx->content, ':'));
 }
 
-int	fork_and_execute(char *program, __unused int readpipe, char **envp, char **path_env)
+int	fork_and_execute(char *program, int *readpipe, char **envp, char **path_env, bool last)
 {
 	char	**arguments;
 	char	*path;
@@ -56,16 +56,22 @@ int	fork_and_execute(char *program, __unused int readpipe, char **envp, char **p
 	arguments = ft_split(program, ' ');
 	path = get_path(arguments[0], path_env);
 	pipe(pipefd);
+	if (last == true)
+		pipefd[1] = dup(STDOUT_FILENO);
 	if (!fork())
 	{
+		dup2(readpipe[1], STDIN_FILENO);
+		close(readpipe[1]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
 		execve(path, arguments, envp);
 		exit(2);
 	}
 	else
 		wait(NULL);
-	close(readpipe);
+	close(readpipe[1]);
 	close(pipefd[1]);
-	return (free_array((void **)arguments), /*pipefd[0]*/0);
+	return (free_array((void **)arguments), pipefd[0]);
 }
 
 int		get_total_len(char **temp)
@@ -98,12 +104,13 @@ char	*get_infiles(char *command_line, int *pipe)
 		j = 0;
 		while (temp[++j])
 		{
+			int size = ft_strlcat(to_return, " ", ft_strlen(to_return));
+			to_return[size] = '\0';
 			ft_strlcat(to_return, temp[j], ft_strlen(to_return));
-			ft_strlcat(to_return, " ", ft_strlen(to_return));
 		}
+		printf("%s\n", to_return);
 		return (free_array((void **)temp), to_return);
 	}
-	*pipe = dup(STDIN_FILENO);
 	return (command_line);
 }
 
@@ -130,13 +137,16 @@ int 	execute_commands(char **commands, t_envp *envp_mx)
 	i = -1;
 	envp = envp_mx_to_arg(&envp_mx);
 	path = get_path_var(envp_mx);
+	readpipe[1] = dup(STDIN_FILENO);
 	while (commands[++i])
 	{
 		commands[i] = get_infiles(commands[i], &readpipe[1]);
 		if (!ft_strncmp(commands[i], "env", 4))
 			env_mx(&envp_mx);
+		if (!commands[i + 1])
+			fork_and_execute(commands[i], readpipe, envp, path, true);
 		else
-			readpipe[1] = fork_and_execute(commands[i], readpipe[1], envp, path);
+			readpipe[1] = fork_and_execute(commands[i], readpipe, envp, path, false);
 	}
 	free_array((void **)path);
 	free_array((void **)envp);
