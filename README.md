@@ -20,6 +20,7 @@ Minis hell on Earth
   - [x] env
   - [ ] exit
 - [ ] Manage piping
+  - [x] Basic piping
   - [ ] Redirections (<, >, <<, >>)
   - [ ] || and && (Bonus)
 - [ ] Terminal variables:
@@ -27,6 +28,7 @@ Minis hell on Earth
   - [ ] $?
   - [ ] Wildcard (Bonus)
 - [ ] History
+  - [x] Don't add empty lines
   - [ ] Command history
   - [ ] placeholder 
 - [ ] Signals
