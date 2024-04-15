@@ -10,7 +10,6 @@ Minis hell on Earth
   - [ ] " quotes (except $())
   - [ ] \
   - [ ] ; 
-- [ ] Execute command
 - [ ] Create built-in commands
   - [ ] echo (-n)
   - [ ] cd
@@ -19,20 +18,25 @@ Minis hell on Earth
   - [x] unset
   - [x] env
   - [ ] exit
-- [ ] Manage piping
+- [ ] Manage piping 
+  - [x] Basic piping
   - [ ] Redirections (<, >, <<, >>)
   - [ ] || and && (Bonus)
+  - [ ] Exit & error status  
 - [ ] Terminal variables:
+  - [ ] Valid variables names & contents (characters)
   - [x] Environment variables
+    - [ ] ~
+    - [ ] . & ..  
   - [ ] $?
   - [ ] Wildcard (Bonus)
-- [ ] History
-  - [ ] Command history
-  - [ ] placeholder 
+- [x] History
+  - [x] Don't add empty lines
+  - [x] Command history 
 - [ ] Signals
   - [ ] Ctrl + C
   - [x] Ctrl + D
   - [ ] Ctrl + \
+  - [ ] \t (tab)
   - [ ] Signal managing
 - [x] Makefile
-      
