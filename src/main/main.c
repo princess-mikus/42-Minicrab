@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 16:50:28 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:54:04 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int	main(int argc, char **argv, char **envp)
 		//rl_on_new_line();
 	}
 	free_envp_mx(&envp_mx);
-	if (input.line)
-		free(input.line);
 	//clear_history();
 	return (0);
 }

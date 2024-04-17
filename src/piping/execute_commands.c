@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/15 16:47:25 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:34:03 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int 	execute_commands(char **commands, t_envp *envp_mx)
 		commands[i] = get_infiles(commands[i], &readpipe[1]);
 		if (!ft_strncmp(commands[i], "env", 4))
 			env_mx(&envp_mx);
-		if (!commands[i + 1])
+		else if (!commands[i + 1])
 			fork_and_execute(commands[i], readpipe, envp, path, true);
 		else
 			readpipe[1] = fork_and_execute(commands[i], readpipe, envp, path, false);

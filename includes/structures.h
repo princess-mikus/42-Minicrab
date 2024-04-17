@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/09 13:11:24 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:41:36 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_envp
 typedef struct s_input
 {
 	char		*line;
+	char		*line_exp;
 	char		**line_sp;
 	char		**command;
 }					t_input;

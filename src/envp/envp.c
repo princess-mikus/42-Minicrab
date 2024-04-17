@@ -64,5 +64,11 @@ t_envp	*new_envp(char *variable, char *content)
 
 void	add_var_to_envp_mx(t_envp **envp_mx, char *variable, char *content)
 {
-	envp_add_back(envp_mx, new_envp(variable, content));
+	if (!is_envp(envp_mx, variable))
+		envp_add_back(envp_mx, new_envp(variable, content));
+	else
+	{
+		free(get_node_envp_mx(envp_mx, variable)->content);0
+		get_node_envp_mx(envp_mx, variable)->content = content;
+	}
 }

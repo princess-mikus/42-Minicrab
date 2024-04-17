@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:53:23 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 13:22:32 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/15 16:07:27 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,23 @@ int	is_envp(t_envp **envp_mx, char *variable)
 		current = current->next;
 	}
 	return (0);
+}
+
+t_envp	*get_node_envp_mx(t_envp **envp_mx, char *variable)
+{
+	t_envp	*current;
+
+	if (!*envp_mx || !variable)
+		return (NULL);
+	current = *envp_mx;
+	while (current)
+	{
+		if (!ft_strncmp(current->variable, variable, \
+			ft_strlen(variable)))
+			return (current);
+		current = current->next;
+	}
+	return (NULL);
 }
 
 char	*get_content_envp_mx(t_envp **envp_mx, char *variable)
