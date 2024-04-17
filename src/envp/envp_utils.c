@@ -44,6 +44,7 @@ t_envp	*get_node_envp_mx(t_envp **envp_mx, char *variable)
 	}
 	return (NULL);
 }
+
 char	*get_content_envp_mx(t_envp **envp_mx, char *variable)
 {
 	t_envp	*current;

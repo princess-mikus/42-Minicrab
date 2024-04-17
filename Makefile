@@ -6,7 +6,7 @@
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/04 11:40:05 by xortega          ###   ########.fr        #
+#    Updated: 2024/04/15 13:47:19 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,20 +18,23 @@ RLINE_PATH	:=	readline
 LIBFT		:=	libft.a
 RLINE		:=	readline.a
 CC			:=	gcc
-CFLAGS		:=	-Wall -Wextra -Werror -I./includes
-#  -Wno-error=unused-command-line-argument
+CFLAGS		:=	-Wall -Wextra -Werror -I./includes -g3
 RLINE_FLAGS	:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib/
 RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
 
 # SRCS #
-BUILT-IN 	:=
+BUILT-IN 	:= env_mx export_mx unset_mx
+ENVP	 	:= envp envp_utils envp_arg
+EXPAND	 	:= expand
 HISTORY 	:=
 MAIN 		:= main
-PARSING 	:= parse
-PIPING 		:=
+PARSING 	:=
+PIPING 		:= parse_commands execute_commands
 SIGNALS 	:=
 
 PLAIN_SRCS =	$(addsuffix .c, $(addprefix built-in/,	$(BUILT-IN)))		\
+				$(addsuffix .c, $(addprefix envp/,		$(ENVP)))			\
+				$(addsuffix .c, $(addprefix expand/,		$(EXPAND)))			\
 				$(addsuffix .c, $(addprefix history/,	$(HISTORY)))		\
 				$(addsuffix .c, $(addprefix main/,		$(MAIN)))			\
 				$(addsuffix .c, $(addprefix parsing/,	$(PARSING)))		\

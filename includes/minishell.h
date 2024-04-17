@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 16:07:51 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/15 13:28:55 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	*get_content_envp_mx(t_envp **envp_mx, char *variable);
 void	free_envp_mx(t_envp **envp_mx);
 // A
 char	**envp_mx_to_arg(t_envp **envp_mx);
+// B
 t_envp	*get_node_envp_mx(t_envp **envp_mx, char *variable);
 //BUILT-IN
 //given a pointer to the list and a variable name it erase it from the list (keeping the list the same whiout the erased node)
@@ -47,7 +48,6 @@ void	unset_mx(t_envp **envp_mx, char *variable);
 void	env_mx(t_envp **envp_mx);
 //given a pointer to the list and a variable name change the bolean of exported  to true
 void	export_mx(t_envp **envp_mx, char *variable);
-
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *imput);
 /* PIPING (NOT FINAL) */
