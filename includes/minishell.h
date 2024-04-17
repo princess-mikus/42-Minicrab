@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/09 13:35:44 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/04/15 13:28:55 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ t_envp	*new_envp(char *variable, char *content);
 int		is_envp(t_envp **envp_mx, char *variable);
 //given a pointer to the list and a variable name returns its content if exits
 char	*get_content_envp_mx(t_envp **envp_mx, char *variable);
+//free the envp_mx
+void	free_envp_mx(t_envp **envp_mx);
 // A
 char	**envp_mx_to_arg(t_envp **envp_mx);
 //BUILT-IN

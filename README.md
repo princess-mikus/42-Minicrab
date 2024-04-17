@@ -18,7 +18,7 @@ Minis hell on Earth
   - [x] unset
   - [x] env
   - [ ] exit
-- [ ] Manage piping 
+- [ ] Manage piping
   - [x] Basic piping
   - [ ] Redirections (<, >, <<, >>)
   - [ ] || and && (Bonus)
@@ -40,3 +40,5 @@ Minis hell on Earth
   - [ ] \t (tab)
   - [ ] Signal managing
 - [x] Makefile
+https://03-jon-perez.gitbook.io/coding-library/c/readline
+

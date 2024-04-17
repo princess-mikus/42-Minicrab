@@ -6,7 +6,7 @@
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/10 10:29:52 by xortega          ###   ########.fr        #
+#    Updated: 2024/04/15 13:47:19 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,7 @@ RLINE_PATH	:=	readline
 LIBFT		:=	libft.a
 RLINE		:=	readline.a
 CC			:=	gcc
-CFLAGS		:=	-Wall -Wextra -Werror -I./includes
-#  -Wno-error=unused-command-line-argument
+CFLAGS		:=	-Wall -Wextra -Werror -I./includes -g3
 RLINE_FLAGS	:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib/
 RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
 
