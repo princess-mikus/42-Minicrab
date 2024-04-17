@@ -10,7 +10,6 @@ Minis hell on Earth
   - [ ] " quotes (except $())
   - [ ] \
   - [ ] ; 
-- [ ] Execute command
 - [ ] Create built-in commands
   - [ ] echo (-n)
   - [ ] cd
@@ -23,19 +22,23 @@ Minis hell on Earth
   - [x] Basic piping
   - [ ] Redirections (<, >, <<, >>)
   - [ ] || and && (Bonus)
+  - [ ] Exit & error status  
 - [ ] Terminal variables:
+  - [ ] Valid variables names & contents (characters)
   - [x] Environment variables
+    - [ ] ~
+    - [ ] . & ..  
   - [ ] $?
   - [ ] Wildcard (Bonus)
-- [ ] History
+- [x] History
   - [x] Don't add empty lines
-  - [ ] Command history
-  - [ ] placeholder 
+  - [x] Command history 
 - [ ] Signals
   - [ ] Ctrl + C
   - [x] Ctrl + D
   - [ ] Ctrl + \
+  - [ ] \t (tab)
   - [ ] Signal managing
 - [x] Makefile
-      
 https://03-jon-perez.gitbook.io/coding-library/c/readline
+
