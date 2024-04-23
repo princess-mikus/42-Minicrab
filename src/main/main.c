@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 15:54:04 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/23 14:08:53 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+/* int	main(int argc, char **argv, char **envp)
 {
 	t_input	input;
 	t_envp	*envp_mx;
@@ -36,4 +36,4 @@ int	main(int argc, char **argv, char **envp)
 	free_envp_mx(&envp_mx);
 	//clear_history();
 	return (0);
-}
+} */
