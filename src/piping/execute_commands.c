@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/23 16:04:33 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/04/24 18:18:42 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,17 @@ char	**get_path_var(char **envp)
 	return (free_array((void **)splited), to_return);
 }
 
-void	fork_and_execute(char *program, int *inpipe, int *outpipe, char **envp)
+void	fork_and_execute(t_command *program, int *inpipe, int *outpipe, char **envp)
 {
 	char	**arguments;
 	char	*path;
 
-	arguments = ft_split(program, ' ');
-	path = get_path(arguments[0], get_path_var(envp));
+	// Malloc the arguments array;
+	arguments[0] = program->command;
+	arguments[1, n - 1] = program->flags;
+	arguments[n] = NULL;
+	// ---
+	path = get_path(program->command, get_path_var(envp));
 	if (!fork())
 	{
 		dup2(*inpipe, STDIN_FILENO);
@@ -91,29 +95,32 @@ void	print_results(int fd)
 	}
 }
 
-int 	execute_commands(char **commands, t_envp *envp_mx)
+int 	execute_commands(t_command **commands, t_envp *envp_mx)
 {
-	int 	i;
-	int 	outpipe[2];
-	int		inpipe;
-	char	**envp;
+	int 		i;
+	int 		outpipe[2];
+	int			inpipe;
+	t_command	*current;
+	char		**envp;
 
 	i = 0;
 	envp = envp_mx_to_arg(&envp_mx);
 	inpipe = dup(STDIN_FILENO);
-	while (commands[i])
+	current = *commands;
+	while (current)
 	{
-		if (commands[i + 1])
+		if (current->next)
 			pipe(outpipe);
 		else
 			outpipe[1] = dup(STDIN_FILENO);
 		//commands[i] = get_infile(commands[i], &inpipe[1]);
 		//commands[i] = get_outfile(commands[i], &outpipe[1]);
-		fork_and_execute(commands[i], &inpipe, outpipe, envp);
-		i++;
+		fork_and_execute(current, &inpipe, outpipe, envp);
 		inpipe = outpipe[0];
 		printf("%d (%d) & %d\n", outpipe[0], inpipe, outpipe[1]);
+		current = current->next;
 	}
+	// Free the commands list
 	free_array((void **)envp);
 	return (0);
 }
