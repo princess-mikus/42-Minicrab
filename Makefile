@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
+#    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/15 13:47:19 by xortega          ###   ########.fr        #
+#    Updated: 2024/04/29 09:23:28 by fcasaubo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ RLINE_FLAGS	:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib/
 RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
 
 # SRCS #
-BUILT-IN 	:= env_mx export_mx unset_mx
+BUILT-IN 	:= env_mx export_mx unset_mx echo_mx
 ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
