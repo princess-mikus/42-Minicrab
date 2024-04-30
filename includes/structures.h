@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/23 13:34:52 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/30 11:16:53 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ typedef struct s_input
 
 typedef	struct s_command
 {
-	char				*command;
-	char				*flags;
 	char				*infile;
+	char				*command;
+	char				*arg;
 	char				*outfile;
 	struct s_command	*next;
 }						t_command;
