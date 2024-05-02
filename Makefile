@@ -6,7 +6,7 @@
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/23 14:11:53 by xortega          ###   ########.fr        #
+#    Updated: 2024/05/02 11:18:14 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ MAIN 		:= main
 PARSING 	:= parsing
 PIPING 		:= parse_commands execute_commands
 SIGNALS 	:=
+
 
 PLAIN_SRCS =	$(addsuffix .c, $(addprefix built-in/,	$(BUILT-IN)))		\
 				$(addsuffix .c, $(addprefix envp/,		$(ENVP)))			\
@@ -85,12 +86,18 @@ $(GREEN)                        ████$(RED)▒▒$(GREEN)████$(RE
 endef                                                                                                                                                                                                                                                                                          
 export ASCII
 
+
 $(NAME): $(OBJS) $(LIBFT)
 	@sleep 0.2;
 	@$(CC) $(CFLAGS) $(RLINE_FLAGS) $(RLINE) $(OBJS) $(LIBFT) -o $(NAME)
 #@printf "$(RED)"
 	@echo "$$ASCII"
 	@printf "\033[0;32;3mMINISHELL ✅\n\n"
+
+ifeq ($(USER), $(filter $(USER), fcasaubo))
+	@osascript -e "set Volume 4"
+	@say --voice="Diego" Hola amigos de Gutube, en este video de Jutube, aprenderemos a hacer la minishell, yo no la descargo que ya la tengo .
+endif
 
 $(OBJ_DIR)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(@D)

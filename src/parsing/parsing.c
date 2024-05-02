@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/30 13:03:24 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/02 12:11:35 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*rsearch_alpha(char *str)
 	int i;
 
 	i  = ft_strlen(str);
-	while (i > 0)
+	while (str && i > 0)
 	{
 		if (ft_isalnum(str[i]) || str[i] == '-')
 			return (str + i);
@@ -31,7 +31,7 @@ char	*search_alpha(char *str)
 	int i;
 
 	i  = 0;
-	while (str[i])
+	while (str && str[i] != '\0')
 	{
 		if (ft_isalnum(str[i]) || str[i] == '-')
 			return (str + i);
@@ -65,17 +65,22 @@ void	new_arg(char *line, t_command *node)
 	else
 	{
 		node->arg = ft_substr(line, 0, 
-			rsearch_alpha(line) - line);
+			rsearch_alpha(line) + 1 - line);
 	}
 }
 int	new_cmd(char *line, t_command *node)
 {
-	node->command = ft_substr(line, 0, ft_strchr(line, ' ') - line);
-	return (search_alpha(ft_strchr(line, ' ')) - line); // + 1 ?????
+	if (ft_strchr(line, ' '))
+	{
+		node->command = ft_substr(line, 0, ft_strchr(line, ' ') - line);	
+		return (search_alpha(ft_strchr(line, ' ')) - line);
+	}
+	node->command = ft_substr(line, 0, ft_strlen(line));
+	return (ft_strlen(line));
 }
+
 int	new_infile(char *line, t_command *node)
 {
-	printf("search ; [%ld]\n", ft_strchr(search_alpha(line), ' ') - line);
 	if (ft_strchr(line, '<')) //haz una funcion que devuelva true cuando un caracter c esta en el str pero esta fuera de dobles comillas
 	{	
 		if (!ft_strchr(line , '"')) //no hay caracter '"' : " hola ls"
@@ -148,17 +153,16 @@ void	parse(char *line_expanded, t_command **commands)
 
 int main(void)
 {
-	char *line1 = "hey    <    hola    -s    -l      jiji    >    hihi    ";
-	//char *line2 = " \" hola \"jiji";
+	char *line1 = "outfile < ls -la > infile ";
+	//char *line2 = " \" hola \" jiji  ";
 	//char *line3 = " hola \"jiji\"";
 	t_command *command;
 	
-	command = new_command(line1);
-	printf("%s\n", line1);
+	command = new_command(ft_strtrim(line1, " "));
+	
 	printf("infile:[%s]\n", command->infile);
 	printf("command:[%s]\n", command->command);
 	printf("arg:[%s]\n", command->arg);
-	ft_strt
 	printf("outfile:[%s]\n", command->outfile);
 	return (0);
 }
