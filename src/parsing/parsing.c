@@ -43,7 +43,6 @@ char	*search_alpha(char *str)
 
 void	new_arg(char *line, t_command *node)
 {
-	printf("line in new_arg: [%s]\n", line);
 	char *temp;
 
 	if (search_alpha(line) == NULL)
@@ -71,7 +70,6 @@ int	new_cmd(char *line, t_command *node)
 	if (ft_strchr(line, ' '))
 	{
 		node->command = ft_substr(line, 0, ft_strchr(line, ' ') - line);
-		printf("aaa [%s]\n", search_alpha(ft_strchr(line, ' ')));
 		return (ft_strchr(line, ' ') - line);
 	}
 	node->command = ft_substr(line, 0, ft_strlen(line));
@@ -143,8 +141,6 @@ t_command *new_command(char *line)
 	// < infile commmand flags > outfile
 	offset += new_infile(line, new);
 	offset += new_outfile(line, new);
-	printf("offset: %d\n", offset);
-	printf("new_cmd return : %d\n", new_cmd(line + offset, new));
 	offset += new_cmd(line + offset, new);
 	new_arg(search_alpha(line + offset), new);
 	return(new);
@@ -183,7 +179,7 @@ void	parse(char *line_expanded, t_command **commands)
 
 int main(void)
 {
-	char *line1 = "   > outfile    ls    -la    < infile ";
+	char *line1 = "   > outfile    ls    -l   -a    < infile ";
 	//char *line1 = "   > o    l    a    < i ";
 	//char *line1 = " <     infile    ls    -la    >    outfile";
 	//char *line1 = " <      infile    ls   -la    ";
