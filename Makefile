@@ -29,7 +29,7 @@ EXPAND	 	:= expand
 HISTORY 	:=
 MAIN 		:= main
 PARSING 	:= parsing
-PIPING 		:= parse_commands execute_commands
+PIPING 		:= #parse_commands execute_commands
 SIGNALS 	:=
 
 
