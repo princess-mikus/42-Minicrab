@@ -75,9 +75,11 @@ void	new_arg(char *line, t_command *node)
 		free(temp);
 	}
 	else
+		node->arg = ft_strtrim(line, " ");
+	if (ft_strlen(node->arg) == 0) //si exite algun caso en el que un string vacio difiere de no mandar argumentos ahi que cambiar la chapuza esta
 	{
-		node->arg = ft_substr(line, 0, 
-			rsearch_alpha(line) + 1 - line);
+		free(node->arg);
+		node->arg = NULL;
 	}
 }
 int	new_cmd(char *line, t_command *node)
@@ -168,7 +170,7 @@ t_command *new_command(char *line)
 	if (line[offset] == '<' || line[offset] == '>' || !search_alpha(line + offset))
 		return (new);
 	offset += new_cmd(line + offset, new);
-	new_arg(search_alpha(line + offset), new);
+	new_arg(line + offset, new);
 	return (new);
 	//repite el modelo de funcion que devuelve el offset, que reciba line + offset y que busque con la misma logica el comando, repite con las flags y con el outfile
 	//haz una funcion que devuelva true cuando un caracter c esta en el str pero esta fuera de dobles comillas
@@ -205,7 +207,7 @@ void	parse(char *line_expanded, t_command **commands)
 
 int main(void)
 {
-	//char *line1 = "   >    outfile    ls    -l   -a    < infile ";
+	char *line1 = "   >    outfile    ls  < infile ";
 	//char *line1 = "  <     infile    ls    -l   a    >    outfile";
 	//char *line1 = "   > o    l    a  u  < i ";
 	//char *line1 = " <      infile    ls   -la    ";
@@ -216,7 +218,7 @@ int main(void)
 	//char *line1 = " >  o <  i";
 	//char *line1 = " ls -la ";
 	//char *line1 = " ls -l     a ";
-	char *line1 = " ls ";
+	//char *line1 = " ls ";
 	char *line;
 	t_command *command;
 	
