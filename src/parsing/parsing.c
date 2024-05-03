@@ -39,6 +39,21 @@ char	*search_alpha(char *str)
 	}
 	return (NULL);
 }
+int	next_is_file(char *str)
+{
+	int i;
+
+	i  = 0;
+	while (str && str[i] != '\0')
+	{
+		if (str[i] == '<' || str[i] == '>')
+			return (true);
+		else if (str[i] != ' ')
+			return (false);
+		i++;
+	}
+	return (false);
+}
 
 
 void	new_arg(char *line, t_command *node)
@@ -75,22 +90,38 @@ int	new_cmd(char *line, t_command *node)
 	node->command = ft_substr(line, 0, ft_strlen(line));
 	return (ft_strlen(line));
 }
+
+int	get_offset(char *line, char c)
+{
+	if (line[0] == c)
+	{
+		if (line[0] == c && (!ft_strchr(line, ' ')
+			|| (!ft_strchr(search_alpha(line + 1), ' ')))) // the file is the only part of the line
+			return (ft_strlen(line));
+		if (next_is_file(ft_strchr(line, ' ')) || 
+		next_is_file(ft_strchr(search_alpha(line + 1), ' '))) //the infile and the outfile are the only parts of the line
+			return (ft_strlen(line));
+		if (line[0] == c  && ft_strchr(search_alpha(
+			ft_strchr(line, c)), ' ') && line[1] == ' ') // the file is at the beggining and there are spaces betwen the >|< and the filename
+			return (search_alpha(ft_strchr(
+				search_alpha(line + 1), ' ')) - line);
+		else if (line[0] == c  && ft_strchr(
+			search_alpha(ft_strchr(line, c)), ' ')) // the file is at the beggining and there are not spaces betwen the >|< and the filename
+			return (search_alpha(ft_strchr(line, ' ')) - line);
+		printf("check : %d\n", next_is_file(ft_strchr(search_alpha(line + 1), ' ')));
+	}
+	return (0); //the file is at the end of the line
+}
+
 int	new_outfile(char *line, t_command *node)
 {
 	if (ft_strchr(line, '>') && ft_strchr(search_alpha(
 		ft_strchr(line, '>')), ' ') && ft_strchr(line, '>')[1] == ' ') // the outfile is at the beggining and there are spaces betwen the > and the filename
-	{
 		node->outfile = ft_substr(line, search_alpha(line + 1) - line, 
 		ft_strchr(search_alpha(line + 1), ' ') - search_alpha(line + 1));
-		return (search_alpha(ft_strchr(
-			search_alpha(ft_strchr(line, '>')), ' ')) - line);
-	}
 	else if (ft_strchr(line, '>') && ft_strchr(
 		search_alpha(ft_strchr(line, '>')), ' ')) // the outfile is at the beggining and there are not spaces betwen the > and the filename
-	{
 		node->outfile = ft_substr(line, 1, ft_strchr(line, ' ') - line - 1);
-		return (search_alpha(ft_strchr(line, ' ')) - line);
-	}
 	else if (ft_strchr(line, '>') && ft_strchr(line, '>')[1] == ' ')  // the outfile is at the end and there are spaces betwen the > and the filename
 		node->outfile = ft_substr(line,
 			search_alpha(ft_strchr(line, '>')) - line,
@@ -99,33 +130,26 @@ int	new_outfile(char *line, t_command *node)
 		node->outfile = ft_substr(line,
 			ft_strchr(line, '>') - line + 1,
 			ft_strlen(search_alpha(ft_strchr(line, '>'))));
-	return (0);
+	return (get_offset(line ,'>'));
 }
 int	new_infile(char *line, t_command *node)
 {
 	if (ft_strchr(line, '<') && ft_strchr(search_alpha(
-		ft_strchr(line, '<')), ' ') && ft_strchr(line, '<')[1] == ' ') // the infile is at the beggining and there are spaces betwen the > and the filename
-	{
+		ft_strchr(line, '<')), ' ') && ft_strchr(line, '<')[1] == ' ') // the infile is at the beggining and there are spaces betwen the < and the filename
 		node->infile = ft_substr(line, search_alpha(line + 1) - line, 
 		ft_strchr(search_alpha(line + 1), ' ') - search_alpha(line + 1));
-		return (search_alpha(ft_strchr(
-			search_alpha(ft_strchr(line, '<')), ' ')) - line);
-	}
 	else if (ft_strchr(line, '<') && ft_strchr(
-		search_alpha(ft_strchr(line, '<')), ' ')) // the infile is at the beggining and there are not spaces betwen the > and the filename
-	{
+		search_alpha(ft_strchr(line, '<')), ' ')) // the infile is at the beggining and there are not spaces betwen the < and the filename
 		node->infile = ft_substr(line, 1, ft_strchr(line, ' ') - line - 1);
-		return (search_alpha(ft_strchr(line, ' ')) - line);
-	}
-	else if (ft_strchr(line, '<') && ft_strchr(line, '<')[1] == ' ')  // the infile is at the end and there are spaces betwen the > and the filename
+	else if (ft_strchr(line, '<') && ft_strchr(line, '<')[1] == ' ')  // the infile is at the end and there are spaces betwen the < and the filename
 		node->infile = ft_substr(line,
-			search_alpha(ft_strchr(line, '<')) - line,
-			ft_strlen(search_alpha(ft_strchr(line, '<'))));	
-	else if (ft_strchr(line, '<'))// the infile is at the end and there are not spaces betwen the > and the filename
+			search_alpha(ft_strchr(line, '<') + 1) - line,
+			ft_strlen(search_alpha(ft_strchr(line, '<') + 1)));	
+	else if (ft_strchr(line, '<'))// the infile is at the end and there are not spaces betwen the < and the filename
 		node->infile = ft_substr(line,
 			ft_strchr(line, '<') - line + 1,
 			ft_strlen(search_alpha(ft_strchr(line, '<'))));
-	return (0);
+	return (get_offset(line, '<'));
 }
 t_command *new_command(char *line)
 {
@@ -141,9 +165,11 @@ t_command *new_command(char *line)
 	// < infile commmand flags > outfile
 	offset += new_infile(line, new);
 	offset += new_outfile(line, new);
+	if (line[offset] == '<' || line[offset] == '>' || !search_alpha(line + offset))
+		return (new);
 	offset += new_cmd(line + offset, new);
 	new_arg(search_alpha(line + offset), new);
-	return(new);
+	return (new);
 	//repite el modelo de funcion que devuelve el offset, que reciba line + offset y que busque con la misma logica el comando, repite con las flags y con el outfile
 	//haz una funcion que devuelva true cuando un caracter c esta en el str pero esta fuera de dobles comillas
 }
@@ -179,13 +205,18 @@ void	parse(char *line_expanded, t_command **commands)
 
 int main(void)
 {
-	char *line1 = "   > outfile    ls    -l   -a    < infile ";
-	//char *line1 = "   > o    l    a    < i ";
-	//char *line1 = " <     infile    ls    -la    >    outfile";
+	//char *line1 = "   >    outfile    ls    -l   -a    < infile ";
+	//char *line1 = "  <     infile    ls    -l   a    >    outfile";
+	//char *line1 = "   > o    l    a  u  < i ";
 	//char *line1 = " <      infile    ls   -la    ";
 	//char *line1 = " ls -la  > outfile";
+	//char *line1 = " >outfile    <infile";
+	//char *line1 = " >   outfile    <   infile";
+	//char *line1 = " >o <i";
+	//char *line1 = " >  o <  i";
 	//char *line1 = " ls -la ";
-	//char *line1 = " ls ";
+	//char *line1 = " ls -l     a ";
+	char *line1 = " ls ";
 	char *line;
 	t_command *command;
 	
