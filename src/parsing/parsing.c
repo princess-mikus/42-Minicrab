@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char	*rsearch_alpha(char *str)
+char	*rsearch_alpha(char *str) // search for the first non space caracter from end to beggining and returns it position //HAS TO BE CHANGED 
 {
 	int i;
 
@@ -26,7 +26,7 @@ char	*rsearch_alpha(char *str)
 	return (NULL);
 }
 
-char	*search_alpha(char *str)
+char	*search_alpha(char *str) // search for the next non space caracter and returns it position //HAS TO BE CHANGED 
 {
 	int i;
 
@@ -39,7 +39,7 @@ char	*search_alpha(char *str)
 	}
 	return (NULL);
 }
-int	next_is_file(char *str)
+int	next_is_file(char *str) //checks if the next caracter other than the space is a >|<
 {
 	int i;
 
@@ -60,23 +60,23 @@ void	new_arg(char *line, t_command *node)
 {
 	char *temp;
 
-	if (search_alpha(line) == NULL)
+	if (search_alpha(line) == NULL) //bastante seguro de que esto sobra pero who knows
 		return ;
-	if (ft_strchr(line, '>'))
+	if (ft_strchr(line, '>')) // if a outfile exist the arg goes until the '>' whiout trimming the spaces
 	{
 		temp = ft_substr(line, 0, (ft_strchr(line, '>')) - line);
 		node->arg = ft_strtrim(temp, " ");
 		free(temp);
 	}
-	else if (ft_strchr(line, '<'))
+	else if (ft_strchr(line, '<')) // if a infile exist the arg goes until the '<' whiout trimming the spaces
 	{
 		temp = ft_substr(line, 0, (ft_strchr(line, '<')) - line);
 		node->arg = ft_strtrim(temp, " ");
 		free(temp);
 	}
-	else
+	else //if the arg is the last thing in the line it trimmes the spaces at the end
 		node->arg = ft_strtrim(line, " ");
-	if (ft_strlen(node->arg) == 0) //si exite algun caso en el que un string vacio difiere de no mandar argumentos ahi que cambiar la chapuza esta
+	if (ft_strlen(node->arg) == 0) // under circunstances i dont remenber the trimming can produce a empty line of size 1, erase it
 	{
 		free(node->arg);
 		node->arg = NULL;
@@ -84,12 +84,19 @@ void	new_arg(char *line, t_command *node)
 }
 int	new_cmd(char *line, t_command *node)
 {
-	if (ft_strchr(line, ' '))
+	if (ft_strchr(line, ' ') - line < ft_strchr(line, '<') - line
+	|| ft_strchr(line, ' ') - line < ft_strchr(line, '>') - line
+	|| !ft_strchr(line, '>') || !ft_strchr(line, '<')) //the command ist the end of the line, there is a ' ' just after it
 	{
 		node->command = ft_substr(line, 0, ft_strchr(line, ' ') - line);
 		return (ft_strchr(line, ' ') - line);
 	}
-	node->command = ft_substr(line, 0, ft_strlen(line));
+	if (ft_strchr(line, '<')) //the < if abjacent to the comand whit no spaces in betewn
+		node->command = ft_substr(line, 0, ft_strchr(line, '<') - line);
+	else if (ft_strchr(line, '>')) //the > if abjacent to the comand whit no spaces in betewn
+		node->command = ft_substr(line, 0, ft_strchr(line, '>') - line);
+	else //the command is the end of the line
+		node->command = ft_substr(line, 0, ft_strlen(line));
 	return (ft_strlen(line));
 }
 
@@ -172,7 +179,6 @@ t_command *new_command(char *line)
 	offset += new_cmd(line + offset, new);
 	new_arg(line + offset, new);
 	return (new);
-	//repite el modelo de funcion que devuelve el offset, que reciba line + offset y que busque con la misma logica el comando, repite con las flags y con el outfile
 	//haz una funcion que devuelva true cuando un caracter c esta en el str pero esta fuera de dobles comillas
 }
 
@@ -194,42 +200,53 @@ void	add_command(char *line_expanded, t_command **commands)
 void	parse(char *line_expanded, t_command **commands)
 {
 	char	**splited;
+	char	*trim;
 	int		i;
 
 	splited = ft_split(line_expanded, '|');
 	i = 0;
 	while (splited[i])
 	{
-		add_command(splited[i], commands);
+		trim = ft_strtrim(splited[i], " ");
+		add_command(trim, commands);
+		free(trim);
 		i++;
 	}
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
-	char *line1 = "   >    outfile    ls  < infile ";
-	//char *line1 = "  <     infile    ls    -l   a    >    outfile";
-	//char *line1 = "   > o    l    a  u  < i ";
-	//char *line1 = " <      infile    ls   -la    ";
-	//char *line1 = " ls -la  > outfile";
-	//char *line1 = " >outfile    <infile";
-	//char *line1 = " >   outfile    <   infile";
-	//char *line1 = " >o <i";
-	//char *line1 = " >  o <  i";
-	//char *line1 = " ls -la ";
-	//char *line1 = " ls -l     a ";
-	//char *line1 = " ls ";
-	char *line;
+	//./minishell "<   in ls -l a   >    out   |   <   out  cat -l>    in | aaaaa aaa"
+	//char *line = "   >    outfile    ls  < infile ";
+	//char *line = "  <     infile    ls    -l   a    >    outfile";
+	//char *line = "   > o    l    a  u  < i ";
+	//char *line = " <      infile    ls   -la    ";
+	//char *line = " ls -la  > outfile";
+	//char *line = " >outfile    <infile";
+	//char *line = " >   outfile    <   infile";
+	//char *line = " >o <i";
+	//char *line = " >  o <  i";
+	//char *line = " ls -la ";
+	//char *line = " ls -l     a ";
+	//char *line = " ls ";
 	t_command *command;
-	
-	line = ft_strtrim(line1, " ");
-	command = new_command(line);
-	
+	if (argc < 2)
+		return (0);
 
-	printf("line:[%s]\n", line);
-	printf("infile:[%s]\n", command->infile);
-	printf("command:[%s]\n", command->command);
-	printf("arg:[%s]\n", command->arg);
-	printf("outfile:[%s]\n", command->outfile);
+	command = NULL;
+	parse(argv[1], &command);
+	//command = new_command(line);
+	
+	printf("line:[%s]\n", argv[1]);
+	while (command)
+	{
+		printf("-----------------------------------------\n");
+		printf("infile:[%s]\n", command->infile);
+		printf("command:[%s]\n", command->command);
+		printf("arg:[%s]\n", command->arg);
+		printf("outfile:[%s]\n", command->outfile);
+		command = command->next;
+	}
+	printf("-----------------------------------------\n");
 	return (0);
 }
