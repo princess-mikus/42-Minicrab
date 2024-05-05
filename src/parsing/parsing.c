@@ -26,6 +26,19 @@ char	*rsearch_alpha(char *str) // search for the first non space caracter from e
 	return (NULL);
 }
 
+char	*search_quotation(char *str) // search for the next non space caracter and returns it position //HAS TO BE CHANGED 
+{
+	int i;
+
+	i  = 0;
+	while (str && str[i] != '\0')
+	{
+		if (str[i] == '"')
+			return (str + i);
+		i++;
+	}
+	return (NULL);
+}
 char	*search_alpha(char *str) // search for the next non space caracter and returns it position //HAS TO BE CHANGED 
 {
 	int i;
@@ -33,12 +46,14 @@ char	*search_alpha(char *str) // search for the next non space caracter and retu
 	i  = 0;
 	while (str && str[i] != '\0')
 	{
-		if (ft_isalnum(str[i]) || str[i] == '-')
+		if (ft_isalnum(str[i]) || str[i] == '-'
+		|| str[i] == '"')
 			return (str + i);
 		i++;
 	}
 	return (NULL);
 }
+
 int	next_is_file(char *str) //checks if the next caracter other than the space is a >|<
 {
 	int i;
@@ -55,25 +70,26 @@ int	next_is_file(char *str) //checks if the next caracter other than the space i
 	return (false);
 }
 
-
-void	new_arg(char *line, t_command *node)
+void	arg_aux(char *line, t_command *node, char c)
 {
 	char *temp;
 
+		temp = ft_substr(line, 0, (ft_strchr(line, c)) - line);
+		node->arg = ft_strtrim(temp, " ");
+		free(temp);
+		temp = ft_strtrim(node->arg, "\"");
+		free(node->arg);
+		node->arg = temp;
+}
+
+void	new_arg(char *line, t_command *node)
+{
 	if (search_alpha(line) == NULL) //bastante seguro de que esto sobra pero who knows
 		return ;
 	if (ft_strchr(line, '>')) // if a outfile exist the arg goes until the '>' whiout trimming the spaces
-	{
-		temp = ft_substr(line, 0, (ft_strchr(line, '>')) - line);
-		node->arg = ft_strtrim(temp, " ");
-		free(temp);
-	}
+		arg_aux(line, node, '>');
 	else if (ft_strchr(line, '<')) // if a infile exist the arg goes until the '<' whiout trimming the spaces
-	{
-		temp = ft_substr(line, 0, (ft_strchr(line, '<')) - line);
-		node->arg = ft_strtrim(temp, " ");
-		free(temp);
-	}
+		arg_aux(line, node, '<');
 	else //if the arg is the last thing in the line it trimmes the spaces at the end
 		node->arg = ft_strtrim(line, " ");
 	if (ft_strlen(node->arg) == 0) // under circunstances i dont remenber the trimming can produce a empty line of size 1, erase it
@@ -82,11 +98,26 @@ void	new_arg(char *line, t_command *node)
 		node->arg = NULL;
 	}
 }
+int cmd_quoutes(char *line, t_command *node)
+{
+	if (search_quotation(line)[1] == ' ' || search_quotation(line)[1] == '"')
+	{
+		node->command = ft_substr(line, 0, search_quotation(line) - line);
+		return(((search_quotation(line) + 2) - line) + 1);
+	}
+	if (search_quotation(line)[1] == '<' || search_quotation(line)[1] == '>')
+		node->command = ft_substr(line, 0, search_quotation(line) - line);
+	if (search_quotation(line)[1] == '\0')
+		node->command = ft_substr(line, 0, ft_strlen(line) - 1);
+	return (ft_strlen(line) + 1);
+}
 int	new_cmd(char *line, t_command *node)
 {
+	if (line[0] == '"')
+		return(cmd_quoutes(line + 1, node));
 	if (ft_strchr(line, ' ') - line < ft_strchr(line, '<') - line
 	|| ft_strchr(line, ' ') - line < ft_strchr(line, '>') - line
-	|| !ft_strchr(line, '>') || !ft_strchr(line, '<')) //the command ist the end of the line, there is a ' ' just after it
+	|| !ft_strchr(line, '>') || !ft_strchr(line, '<')) //the command isnt the end of the line, there is a ' ' just after it
 	{
 		node->command = ft_substr(line, 0, ft_strchr(line, ' ') - line);
 		return (ft_strchr(line, ' ') - line);
@@ -104,6 +135,8 @@ int	get_offset(char *line, char c)
 {
 	if (line[0] == c)
 	{
+		if (*search_alpha(ft_strchr(line, c)) == '"')
+			return ((search_alpha(search_quotation(search_quotation(ft_strchr(line, c)) + 1) + 1) - line));
 		if (line[0] == c && (!ft_strchr(line, ' ')
 			|| (!ft_strchr(search_alpha(line + 1), ' ')))) // the file is the only part of the line
 			return (ft_strlen(line));
@@ -124,7 +157,10 @@ int	get_offset(char *line, char c)
 
 int	new_outfile(char *line, t_command *node)
 {
-	if (ft_strchr(line, '>') && ft_strchr(search_alpha(
+	if (ft_strchr(line, '>') && *search_alpha(ft_strchr(line, '>')) == '"')
+		node->outfile = ft_substr(line, search_quotation(ft_strchr(line, '>'))
+- line + 1, search_quotation(search_quotation(ft_strchr(line, '>')) + 1) - (search_quotation(ft_strchr(line, '>')) + 1));
+	else if (ft_strchr(line, '>') && ft_strchr(search_alpha(
 		ft_strchr(line, '>')), ' ') && ft_strchr(line, '>')[1] == ' ') // the outfile is at the beggining and there are spaces betwen the > and the filename
 		node->outfile = ft_substr(line, search_alpha(line + 1) - line, 
 		ft_strchr(search_alpha(line + 1), ' ') - search_alpha(line + 1));
@@ -139,11 +175,15 @@ int	new_outfile(char *line, t_command *node)
 		node->outfile = ft_substr(line,
 			ft_strchr(line, '>') - line + 1,
 			ft_strlen(search_alpha(ft_strchr(line, '>'))));
+	printf("prueba: [%s]\n", node->outfile);
 	return (get_offset(line ,'>'));
 }
 int	new_infile(char *line, t_command *node)
-{
-	if (ft_strchr(line, '<') && ft_strchr(search_alpha(
+{	
+	if (ft_strchr(line, '<') && *search_alpha(ft_strchr(line, '<')) == '"')
+		node->infile = ft_substr(line, search_quotation(ft_strchr(line, '<'))
+- line + 1, search_quotation(search_quotation(ft_strchr(line, '<')) + 1) - (search_quotation(ft_strchr(line, '<')) + 1));
+	else if (ft_strchr(line, '<') && ft_strchr(search_alpha(
 		ft_strchr(line, '<')), ' ') && ft_strchr(line, '<')[1] == ' ') // the infile is at the beggining and there are spaces betwen the < and the filename
 		node->infile = ft_substr(line, search_alpha(line + 1) - line, 
 		ft_strchr(search_alpha(line + 1), ' ') - search_alpha(line + 1));
@@ -174,6 +214,7 @@ t_command *new_command(char *line)
 	// < infile commmand flags > outfile
 	offset += new_infile(line, new);
 	offset += new_outfile(line, new);
+	printf("offset [%s]\n", line + offset);
 	if (line[offset] == '<' || line[offset] == '>' || !search_alpha(line + offset))
 		return (new);
 	offset += new_cmd(line + offset, new);
