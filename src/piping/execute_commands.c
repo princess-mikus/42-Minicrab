@@ -3,40 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/24 18:18:42 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/05/06 18:20:48 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_array(void **array)
-{
-	int	i;
-
-	i = -1;
-	while (array[++i])
-		free(array[i]);
-	free(array);
-}
-
 char	*get_path(char	*program, char **path)
 {
 	char	*candidate;
-	char	*program_2_la_venganza;
+	char	*appended;
 	int		i;
 
-	i = -1;
-	while (path[++i])
+	i = 0;
+	appended = ft_strjoin("/", program);
+	while (path && path[++i])
 	{
-		program_2_la_venganza = ft_strjoin("/", program);
-		candidate = ft_strjoin(path[i], program_2_la_venganza);
+		candidate = ft_strjoin(path[i], appended);
 		if (!access(candidate, F_OK))
-			return (free_array((void **)path), candidate);
+			return (free_array((void **)path), free(appended), candidate);
+		free(candidate);
+		i++;
 	}
-	return (free_array((void **)path), NULL);
+	return (free_array((void **)path), free(appended), NULL);
 }
 
 char	**get_path_var(char **envp)
@@ -55,72 +47,95 @@ char	**get_path_var(char **envp)
 	return (free_array((void **)splited), to_return);
 }
 
-void	fork_and_execute(t_command *program, int *inpipe, int *outpipe, char **envp)
+char **get_arguments(t_command *current)
 {
-	char	**arguments;
+	char	**temp;
+	char	**to_return;
+	int		i;
+
+	i = 0;
+	temp = ft_split(current->arg, ' ');
+	while (temp[i])
+		i++;
+	to_return = malloc(sizeof(char *) * (i + 2));
+	to_return[0] = ft_strdup(current->command);
+	i = 0;
+	while (temp[i])
+	{
+		to_return[i + 1] = ft_strdup(temp[i]);
+		i++;
+	}
+	to_return[i + 1] = NULL;
+	return (free_array((void **)temp), to_return);
+}
+
+void	fork_and_execute(t_command *current, int *inpipe, int *outpipe, char **envp)
+{
+	char	**program;
 	char	*path;
 
-	// Malloc the arguments array;
-	arguments[0] = program->command;
-	arguments[1, n - 1] = program->flags;
-	arguments[n] = NULL;
-	// ---
-	path = get_path(program->command, get_path_var(envp));
+	program = get_arguments(current);
+	path = get_path(current->command, get_path_var(envp));
 	if (!fork())
 	{
 		dup2(*inpipe, STDIN_FILENO);
 		close(*inpipe);
 		dup2(outpipe[1], STDOUT_FILENO);
 		close(outpipe[1]);
-		execve(path, arguments, envp);
+		execve(path, program, envp);
 		exit(2);
 	}
 	else
 		wait(NULL);
 	close(*inpipe);
 	close(outpipe[1]);
-	free_array((void **)arguments);
+	free_array((void **)program);
 }
 
-void	print_results(int fd)
+void	resolve_infile(int *outpipe, int *inpipe, t_command *current)
 {
-	char	*str;
-
-	str = get_next_line(fd);
-	while (str)
+	if (current->infile)
 	{
-		write(1, str, ft_strlen(str));
-		free(str);
-		str = get_next_line(fd);
+		close(*inpipe);
+		*inpipe = open(current->infile, O_RDONLY);
 	}
+	else if (outpipe[0] > 0)
+	{
+		close(*inpipe);
+		*inpipe = outpipe[0];
+	}
+}
+
+void	resolve_outfile(int *outpipe, t_command *current)
+{
+	if (current->outfile)
+		outpipe[1] = open(current->outfile, O_CREAT, 0644);
+	else if (!current->next)
+		outpipe[1] = dup(STDOUT_FILENO);
+	else
+		pipe(outpipe);
 }
 
 int 	execute_commands(t_command **commands, t_envp *envp_mx)
 {
-	int 		i;
 	int 		outpipe[2];
 	int			inpipe;
 	t_command	*current;
 	char		**envp;
 
-	i = 0;
 	envp = envp_mx_to_arg(&envp_mx);
 	inpipe = dup(STDIN_FILENO);
 	current = *commands;
+	outpipe[0] = -1;
+	outpipe[1] = -1;
 	while (current)
 	{
-		if (current->next)
-			pipe(outpipe);
-		else
-			outpipe[1] = dup(STDIN_FILENO);
-		//commands[i] = get_infile(commands[i], &inpipe[1]);
-		//commands[i] = get_outfile(commands[i], &outpipe[1]);
+		resolve_infile(outpipe, &inpipe, current);
+		resolve_outfile(outpipe, current);
+		ft_printf("Inpipe: %d, Outpipe: [0]: %d [1]: %d\n", inpipe, outpipe[0], outpipe[1]);
 		fork_and_execute(current, &inpipe, outpipe, envp);
-		inpipe = outpipe[0];
-		printf("%d (%d) & %d\n", outpipe[0], inpipe, outpipe[1]);
 		current = current->next;
 	}
-	// Free the commands list
 	free_array((void **)envp);
 	return (0);
 }

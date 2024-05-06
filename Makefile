@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
+#    By: mikus <mikus@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/04/15 13:47:19 by xortega          ###   ########.fr        #
+#    Updated: 2024/05/06 14:15:35 by mikus            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,23 +23,26 @@ RLINE_FLAGS	:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib/
 RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
 
 # SRCS #
-BUILT-IN 	:= env_mx export_mx unset_mx
+BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx
 ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
 MAIN 		:= main
-PARSING 	:=
+PARSING 	:= parsing
 PIPING 		:= parse_commands execute_commands
 SIGNALS 	:=
+UTILS		:= free
+
 
 PLAIN_SRCS =	$(addsuffix .c, $(addprefix built-in/,	$(BUILT-IN)))		\
 				$(addsuffix .c, $(addprefix envp/,		$(ENVP)))			\
-				$(addsuffix .c, $(addprefix expand/,		$(EXPAND)))			\
+				$(addsuffix .c, $(addprefix expand/,	$(EXPAND)))			\
 				$(addsuffix .c, $(addprefix history/,	$(HISTORY)))		\
 				$(addsuffix .c, $(addprefix main/,		$(MAIN)))			\
 				$(addsuffix .c, $(addprefix parsing/,	$(PARSING)))		\
 				$(addsuffix .c, $(addprefix piping/,	$(PIPING)))			\
-				$(addsuffix .c, $(addprefix signals/,	$(SIGNALS)))
+				$(addsuffix .c, $(addprefix signals/,	$(SIGNALS)))		\
+				$(addsuffix .c, $(addprefix utils/,		$(UTILS)))
 
 SRCS := $(addprefix $(SRC_PATH), $(PLAIN_SRCS))
 OBJS := $(addprefix $(OBJ_DIR), $(PLAIN_SRCS:.c=.o))
@@ -85,12 +88,18 @@ $(GREEN)                        ████$(RED)▒▒$(GREEN)████$(RE
 endef                                                                                                                                                                                                                                                                                          
 export ASCII
 
+
 $(NAME): $(OBJS) $(LIBFT)
 	@sleep 0.2;
 	@$(CC) $(CFLAGS) $(RLINE_FLAGS) $(RLINE) $(OBJS) $(LIBFT) -o $(NAME)
 #@printf "$(RED)"
 	@echo "$$ASCII"
 	@printf "\033[0;32;3mMINISHELL ✅\n\n"
+
+ifeq ($(USER), $(filter $(USER), fcasaubo))
+	@osascript -e "set Volume 4"
+	@say --voice="Diego" Hola amigos de Gutube, en este video de Jutube, aprenderemos a hacer la minishell, yo no la descargo que ya la tengo .
+endif
 
 $(OBJ_DIR)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(@D)

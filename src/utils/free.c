@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/20 15:02:38 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/23 14:05:53 by xortega          ###   ########.fr       */
+/*   Created: 2024/05/06 13:57:30 by mikus             #+#    #+#             */
+/*   Updated: 2024/05/06 13:57:35 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_isalpha(int a)
+void	free_array(void **array)
 {
-	if ((a >= 65 && a <= 90) || (a >= 97 && a <= 122))
-		return (1);
-	else
-		return (0);
+	int	i;
+
+	i = -1;
+	while (array[++i])
+		free(array[i]);
+	free(array);
 }

@@ -51,3 +51,13 @@ ft_movidas(char *line_sp[line])
 
 }
 
+
+
+OUTFILE E INFILE REGLAS:
+
+Puede ir en cualquier orden (outfile comando infile || infile comando outfile)
+> outfile
+< infile
+
+despues del infile/outfile simpre va el cmd a menos que el infile/outfile sea lo unico en la linea
+

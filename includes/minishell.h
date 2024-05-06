@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 13:28:55 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/06 14:06:37 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "structures.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <wait.h>
 //#include "../libs/readline/readline.h"
 //#include "readline.h"
 #include <readline/readline.h>
@@ -48,14 +49,17 @@ void	unset_mx(t_envp **envp_mx, char *variable);
 void	env_mx(t_envp **envp_mx);
 //given a pointer to the list and a variable name change the bolean of exported  to true
 void	export_mx(t_envp **envp_mx, char *variable);
+// PARSING
+// Parse and add to command list
+void    parse(char *line_expanded, t_command **commands);
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *imput);
 /* PIPING (NOT FINAL) */
 // Parse commands by ; then by |
-void	parse_commands(t_input *input, t_envp *envp_mx);
+void	parse_commands(char *line, t_envp *envp_mx);
 
 // Pipex pero mejorao
-int 	execute_commands(char **commands, t_envp *envp_mx);
+int 	execute_commands(t_command **commands, t_envp *envp_mx);
 
 //UTILS
 void	free_array(void **array);
