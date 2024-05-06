@@ -16,11 +16,10 @@ SRC_PATH	:=	src/
 LIBFT_PATH	:=	libft
 RLINE_PATH	:=	readline
 LIBFT		:=	libft.a
-RLINE		:=	readline.a
+#READLINE	:=	/usr/lib/x86_64-linux-gnu/libreadline.so
 CC			:=	gcc
-CFLAGS		:=	-Wall -Wextra -Werror -I./includes -g3
-RLINE_FLAGS	:= -lreadline -L/Users/$(USER)/.brew/opt/readline/lib/
-RLINE		:= -I/Users/$(USER)/.brew/opt/readline/include/
+CFLAGS		:=	-Wall -Wextra -Werror -Iincludes
+RLINE_FLAGS	:= -I/usr/include/readline -lreadline #-L/Users/$(USER)/.brew/opt/readline/lib/
 
 # SRCS #
 BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx
@@ -91,19 +90,19 @@ export ASCII
 
 $(NAME): $(OBJS) $(LIBFT)
 	@sleep 0.2;
-	@$(CC) $(CFLAGS) $(RLINE_FLAGS) $(RLINE) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(RLINE) $(OBJS) $(LIBFT) $(RLINE_FLAGS) -o $(NAME)
 #@printf "$(RED)"
 	@echo "$$ASCII"
 	@printf "\033[0;32;3mMINISHELL ✅\n\n"
 
-ifeq ($(USER), $(filter $(USER), fcasaubo))
+ifeq ($(USER), $(filter $(USER), xortega))
 	@osascript -e "set Volume 4"
 	@say --voice="Diego" Hola amigos de Gutube, en este video de Jutube, aprenderemos a hacer la minishell, yo no la descargo que ya la tengo .
 endif
 
 $(OBJ_DIR)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) $(READLINE) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(RLINE_FLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT):
 	@make -C $(LIBFT_PATH)

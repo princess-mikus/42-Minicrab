@@ -20,7 +20,7 @@ char	*get_path(char	*program, char **path)
 
 	i = 0;
 	appended = ft_strjoin("/", program);
-	while (path && path[++i])
+	while (path && path[i])
 	{
 		candidate = ft_strjoin(path[i], appended);
 		if (!access(candidate, F_OK))
@@ -134,8 +134,11 @@ int 	execute_commands(t_command **commands, t_envp *envp_mx)
 		resolve_outfile(outpipe, current);
 		ft_printf("Inpipe: %d, Outpipe: [0]: %d [1]: %d\n", inpipe, outpipe[0], outpipe[1]);
 		fork_and_execute(current, &inpipe, outpipe, envp);
+
 		current = current->next;
 	}
+	close(outpipe[0]);
+	close(outpipe[1]);
 	free_array((void **)envp);
 	return (0);
 }

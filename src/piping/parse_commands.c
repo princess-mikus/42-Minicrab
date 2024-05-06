@@ -17,9 +17,10 @@ void	parse_commands(char *line, t_envp *envp_mx)
 	char		*line_expanded;
 	t_command	*commands;
 
+	commands = NULL;
 	line_expanded = expansion(&envp_mx, line);
 	parse(line_expanded, &commands);
 	execute_commands(&commands, envp_mx);
 	free(line_expanded);
-	// Free command list;
+	//free_command_list(&commands);
 }
