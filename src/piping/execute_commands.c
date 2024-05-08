@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/06 18:20:48 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/06 20:06:18 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ char **get_arguments(t_command *current)
 
 	i = 0;
 	temp = ft_split(current->arg, ' ');
-	while (temp[i])
+	while (temp && temp[i])
 		i++;
 	to_return = malloc(sizeof(char *) * (i + 2));
 	to_return[0] = ft_strdup(current->command);
 	i = 0;
-	while (temp[i])
+	while (temp && temp[i])
 	{
 		to_return[i + 1] = ft_strdup(temp[i]);
 		i++;
