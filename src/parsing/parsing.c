@@ -217,6 +217,7 @@ t_command *new_command(char *line)
 	new->command = NULL;
 	new->arg = NULL;
 	new->outfile = NULL;
+	new->next = NULL;
 	// < infile commmand flags > outfile
 	offset += new_infile(line, new);
 	offset += new_outfile(line, new);
