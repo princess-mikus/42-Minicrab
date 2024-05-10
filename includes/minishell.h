@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/06 14:06:37 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/10 15:26:42 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,5 @@ int 	execute_commands(t_command **commands, t_envp *envp_mx);
 
 //UTILS
 void	free_array(void **array);
+void	free_command_list(t_command **list);
 #endif

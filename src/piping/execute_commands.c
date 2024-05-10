@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/06 20:06:18 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/10 15:22:39 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	resolve_infile(int *outpipe, int *inpipe, t_command *current)
 void	resolve_outfile(int *outpipe, t_command *current)
 {
 	if (current->outfile)
-		outpipe[1] = open(current->outfile, O_CREAT, 0644);
+		outpipe[1] = open(current->outfile, O_CREAT|O_TRUNC|O_WRONLY, 0644);
 	else if (!current->next)
 		outpipe[1] = dup(STDOUT_FILENO);
 	else
@@ -132,9 +132,7 @@ int 	execute_commands(t_command **commands, t_envp *envp_mx)
 	{
 		resolve_infile(outpipe, &inpipe, current);
 		resolve_outfile(outpipe, current);
-		ft_printf("Inpipe: %d, Outpipe: [0]: %d [1]: %d\n", inpipe, outpipe[0], outpipe[1]);
 		fork_and_execute(current, &inpipe, outpipe, envp);
-
 		current = current->next;
 	}
 	close(outpipe[0]);
