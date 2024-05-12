@@ -6,46 +6,11 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/10 15:22:39 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/12 21:17:29 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*get_path(char	*program, char **path)
-{
-	char	*candidate;
-	char	*appended;
-	int		i;
-
-	i = 0;
-	appended = ft_strjoin("/", program);
-	while (path && path[i])
-	{
-		candidate = ft_strjoin(path[i], appended);
-		if (!access(candidate, F_OK))
-			return (free_array((void **)path), free(appended), candidate);
-		free(candidate);
-		i++;
-	}
-	return (free_array((void **)path), free(appended), NULL);
-}
-
-char	**get_path_var(char **envp)
-{
-	int		i;
-	char	**splited;
-	char	**to_return;
-
-	i = 0;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", ft_strlen("PATH=")))
-		i++;
-	if (!envp[i])
-		return (NULL);
-	splited = ft_split(envp[i], '=');
-	to_return = ft_split(splited[1], ':');
-	return (free_array((void **)splited), to_return);
-}
 
 char **get_arguments(t_command *current)
 {
@@ -54,6 +19,7 @@ char **get_arguments(t_command *current)
 	int		i;
 
 	i = 0;
+	ft_printf("%s\n", current->command);
 	temp = ft_split(current->arg, ' ');
 	while (temp && temp[i])
 		i++;
@@ -72,17 +38,15 @@ char **get_arguments(t_command *current)
 void	fork_and_execute(t_command *current, int *inpipe, int *outpipe, char **envp)
 {
 	char	**program;
-	char	*path;
 
 	program = get_arguments(current);
-	path = get_path(current->command, get_path_var(envp));
 	if (!fork())
 	{
 		dup2(*inpipe, STDIN_FILENO);
 		close(*inpipe);
 		dup2(outpipe[1], STDOUT_FILENO);
 		close(outpipe[1]);
-		execve(path, program, envp);
+		execve(current->path, program, envp);
 		exit(2);
 	}
 	else
@@ -104,6 +68,20 @@ void	resolve_infile(int *outpipe, int *inpipe, t_command *current)
 		close(*inpipe);
 		*inpipe = outpipe[0];
 	}
+}
+
+bool	get_builtin(char *program)
+{
+	if ( \
+	!ft_strncmp(program, "echo", ft_strlen("echo") + 1) || \
+	!ft_strncmp(program, "cd", ft_strlen("cd") + 1) || \
+	!ft_strncmp(program, "env", ft_strlen("env") + 1) || \
+	!ft_strncmp(program, "export", ft_strlen("export") + 1) || \
+	!ft_strncmp(program, "pwd", ft_strlen("pwd") + 1) || \
+	!ft_strncmp(program, "unset", ft_strlen("unset") + 1)
+	)
+		return (true);
+	return (false);
 }
 
 void	resolve_outfile(int *outpipe, t_command *current)
@@ -132,13 +110,15 @@ int 	execute_commands(t_command **commands, t_envp *envp_mx)
 	{
 		resolve_infile(outpipe, &inpipe, current);
 		resolve_outfile(outpipe, current);
-		fork_and_execute(current, &inpipe, outpipe, envp);
+		if (!resolve_path(current, get_path_var(envp)))
+			break ;
+		if (get_builtin(current->command))
+			execute_builtin(current, &inpipe, outpipe, envp);
+		else
+			fork_and_execute(current, &inpipe, outpipe, envp);
 		current = current->next;
 	}
-	close(outpipe[0]);
-	close(outpipe[1]);
-	free_array((void **)envp);
-	return (0);
+	return (close(outpipe[0]), close(outpipe[1]), free_array((void **)envp), 0);
 }
 
 /*

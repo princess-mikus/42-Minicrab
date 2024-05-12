@@ -6,7 +6,7 @@
 #    By: mikus <mikus@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/06 14:15:35 by mikus            ###   ########.fr        #
+#    Updated: 2024/05/12 21:20:28 by mikus            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,9 +28,9 @@ EXPAND	 	:= expand
 HISTORY 	:=
 MAIN 		:= main
 PARSING 	:= parsing
-PIPING 		:= parse_commands execute_commands
+PIPING 		:= parse_commands execute_commands path built-in.c
 SIGNALS 	:=
-UTILS		:= free
+UTILS		:= free error
 
 
 PLAIN_SRCS =	$(addsuffix .c, $(addprefix built-in/,	$(BUILT-IN)))		\
