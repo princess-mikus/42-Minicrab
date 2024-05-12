@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:47:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 17:58:14 by xortega          ###   ########.fr       */
+/*   Updated: 2024/04/17 12:02:21 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,5 @@ int	cd_mx(t_envp **envp_mx, char *args)
 	if (args[0] == '-' && args[1] == '\0')
 		return(dash_case(envp_mx));
 	chdir(args);
+	return(0);
 }
