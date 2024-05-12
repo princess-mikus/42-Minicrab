@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_mx.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:30:15 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/24 18:58:18 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/05/12 21:29:32 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	get_flag(char *arguments, int *i)
 	return (true);
 }
 
-int	echo_mx(char *arguments/*, int pipe?*/)
+int	echo_mx(char *arguments)
 {
 	int		i;
 	bool	nl;

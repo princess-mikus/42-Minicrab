@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/12 21:17:29 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/12 21:34:02 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,24 +101,25 @@ int 	execute_commands(t_command **commands, t_envp *envp_mx)
 	t_command	*current;
 	char		**envp;
 
-	envp = envp_mx_to_arg(&envp_mx);
 	inpipe = dup(STDIN_FILENO);
 	current = *commands;
 	outpipe[0] = -1;
 	outpipe[1] = -1;
 	while (current)
 	{
+		envp = envp_mx_to_arg(&envp_mx);
 		resolve_infile(outpipe, &inpipe, current);
 		resolve_outfile(outpipe, current);
-		if (!resolve_path(current, get_path_var(envp)))
-			break ;
 		if (get_builtin(current->command))
-			execute_builtin(current, &inpipe, outpipe, envp);
+			execute_builtin(current, &inpipe, outpipe, &envp_mx);
+		else if (!resolve_path(current, get_path_var(envp)))
+			break ;
 		else
 			fork_and_execute(current, &inpipe, outpipe, envp);
 		current = current->next;
+		free_array((void **)envp);
 	}
-	return (close(outpipe[0]), close(outpipe[1]), free_array((void **)envp), 0);
+	return (close(outpipe[0]), close(outpipe[1]), 0);
 }
 
 /*
