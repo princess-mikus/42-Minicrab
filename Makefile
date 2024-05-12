@@ -22,13 +22,13 @@ CFLAGS		:=	-Wall -Wextra -Werror -Iincludes
 RLINE_FLAGS	:= -I/usr/include/readline -lreadline #-L/Users/$(USER)/.brew/opt/readline/lib/
 
 # SRCS #
-BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx
+BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx echo_mx
 ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
 MAIN 		:= main
 PARSING 	:= parsing
-PIPING 		:= parse_commands execute_commands path built-in.c
+PIPING 		:= parse_commands execute_commands path built-in
 SIGNALS 	:=
 UTILS		:= free error
 
