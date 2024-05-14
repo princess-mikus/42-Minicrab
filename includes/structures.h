@@ -30,6 +30,9 @@ typedef struct s_input
 
 typedef	struct s_command
 {
+	bool				hdoc;
+	bool				apend;
+	char				**dec;
 	char				*infile;
 	char				*command;
 	char				*arg;

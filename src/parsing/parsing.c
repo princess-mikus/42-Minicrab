@@ -12,235 +12,151 @@
 
 #include "minishell.h"
 
-char	*rsearch_alpha(char *str) // search for the first non space caracter from end to beggining and returns it position //HAS TO BE CHANGED 
-{
-	int i;
-
-	i  = ft_strlen(str);
-	while (str && i > 0)
-	{
-		if (ft_isalnum(str[i]) || str[i] == '-')
-			return (str + i);
-		i--;
-	}
-	return (NULL);
-}
-
-char	*search_quotation(char *str) // search for the next non space caracter and returns it position //HAS TO BE CHANGED 
+char	*jmp_spaces(char *str)
 {
 	int i;
 
 	i  = 0;
-	while (str && str[i] != '\0')
+	while (str[i])
 	{
-		if (str[i] == '"')
-			return (str + i);
-		i++;
-	}
-	return (NULL);
-}
-char	*search_alpha(char *str) // search for the next non space caracter and returns it position //HAS TO BE CHANGED 
-{
-	int i;
-
-	i  = 0;
-	while (str && str[i] != '\0')
-	{
-		if (ft_isalnum(str[i]) || str[i] == '-'
-		|| str[i] == '"')
+		if (str[i] != ' ')
 			return (str + i);
 		i++;
 	}
 	return (NULL);
 }
 
-char	*next_is_file(char *str) //checks if the next caracter other than the space is a >|<
+char *search_out_quotes(char *line, char c)
 {
 	int i;
+	int status;
 
-	i  = 0;
-	while (str && str[i] != '\0')
+	i = 0;
+	status = 0;
+	while (line[i])
 	{
-		if (str[i] == '<' || str[i] == '>')
-			return (str + i);
-		else if (str[i] != ' ')
-			return (NULL);
+		if (line[i] == '\"')
+			status++;
+		if (line[i] == c && status % 2 == 0)
+		{
+			return (line + i);
+		}
 		i++;
 	}
 	return (NULL);
 }
 
-void	arg_aux(char *line, t_command *node, char c)
+char *line_cutter(char *line, char *to_cut)
 {
-	char *temp;
+    char	*new_line;
+	 char	*part_1;
+	 char	*part_2;
+	 int	start;
+	 int	end;
 
-		temp = ft_substr(line, 0, (ft_strchr(line, c)) - line);
-		node->arg = ft_strtrim(temp, " ");
-		free(temp);
-		temp = ft_strtrim(node->arg, "\"");
-		free(node->arg);
-		node->arg = temp;
-}
-
-void	new_arg(char *line, t_command *node)
-{
-	if (search_alpha(line) == NULL) //bastante seguro de que esto sobra pero who knows
-		return ;
-	if (ft_strchr(line, '>') && ((!ft_strchr(line, '<')) 
-	|| ft_strchr(line, '>') < ft_strchr(line, '<'))) // if a outfile exist the arg goes until the '>' whiout trimming the spaces
-		arg_aux(line, node, '>');
-	else if (ft_strchr(line, '<')) // if a infile exist the arg goes until the '<' whiout trimming the spaces
-		arg_aux(line, node, '<');
-	else //if the arg is the last thing in the line it trimmes the spaces at the end
-		node->arg = ft_strtrim(line, " ");
-	if (ft_strlen(node->arg) == 0) // under circunstances i dont remenber the trimming can produce a empty line of size 1, erase it
-	{
-		free(node->arg);
-		node->arg = NULL;
-	}
-}
-int cmd_quoutes(char *line, t_command *node)
-{
-	if (search_quotation(line)[1] == ' ' || search_quotation(line)[1] == '"')
-	{
-		node->command = ft_substr(line, 0, search_quotation(line) - line);
-		return(((search_quotation(line) + 2) - line) + 1);
-	}
-	if (search_quotation(line)[1] == '<' || search_quotation(line)[1] == '>')
-		node->command = ft_substr(line, 0, search_quotation(line) - line);
-	if (search_quotation(line)[1] == '\0')
-		node->command = ft_substr(line, 0, ft_strlen(line) - 1);
-	return (ft_strlen(line) + 1);
-}
-int	new_cmd(char *line, t_command *node)
-{
-	printf("line at new_cmd [%s]\n", line);
-	if (line[0] == '"')
-		return(cmd_quoutes(line + 1, node));
-	if (ft_strchr(line, ' ')) //the command isnt the end of the line, there is a ' ' just after it
-	{
-		node->command = ft_substr(line, 0, ft_strchr(line, ' ') - line);
-		return (ft_strchr(line, ' ') - line);
-	}
-	write(1, "hii\n", 4);
-	if (ft_strchr(line, '<')) //the < if abjacent to the comand whit no spaces in betewn
-		node->command = ft_substr(line, 0, ft_strchr(line, '<') - line);
-	else if (ft_strchr(line, '>')) //the > if abjacent to the comand whit no spaces in betewn
-		node->command = ft_substr(line, 0, ft_strchr(line, '>') - line);
-	else //the command is the end of the line
-		node->command = ft_substr(line, 0, ft_strlen(line));
-	return (ft_strlen(line));
+    if (to_cut && line)
+    {
+		start = ft_strnstr(line, to_cut, ft_strlen(line)) - line;
+		end = ft_strlen(to_cut);
+		part_1 = ft_substr(line, 0, start);
+		part_2 = ft_substr(line, start + end, ft_strlen(line) - (end + start));
+		new_line = ft_strjoin(part_1, part_2);
+		free(line);
+		free(part_1);
+		free(part_2);
+		return(new_line);
+    }
+	return(line);
 }
 
-int	get_offset(char *line, char c)
+char *get_outfile(char *line, t_command *node)
 {
-	if (line[0] == c)
-	{
-		if (*search_alpha(ft_strchr(line, c)) == '"') //quotation case
-			return ((search_alpha(search_quotation(search_quotation(ft_strchr(line, c)) + 1) + 1) - line));
-		if (!ft_strchr(search_alpha(line + 1), ' ')) // the file|files are the only part of the line
-			return (ft_strlen(line));
-		if (ft_strchr(search_alpha(line + 1), '<') && ft_strchr(search_alpha(line + 1), '<') < ft_strchr(search_alpha(line + 1), ' '))
-			return (search_alpha(ft_strchr(search_alpha(line + 1), ' ')) - line);
-		if (ft_strchr(search_alpha(line + 1), '>') && ft_strchr(search_alpha(line + 1), '>') < ft_strchr(search_alpha(line + 1), ' '))
-			return (search_alpha(ft_strchr(search_alpha(line + 1), ' ')) - line);
-		if (next_is_file(ft_strchr(search_alpha(line + 1), ' ')) && 
-		ft_strchr(search_alpha(next_is_file(ft_strchr(search_alpha(line + 1), ' '))), ' ')) //the infile and the outfile one after the other but there is a cmd
-			return(search_alpha(ft_strchr(search_alpha(next_is_file(ft_strchr(search_alpha(line + 1), ' ')) + 1), ' ')) - line);
-		if (next_is_file(ft_strchr(search_alpha(line + 1), ' '))) //the infile and the outfile are the only parts of the line
-			return (ft_strlen(line));
-		if (line[0] == c  && ft_strchr(search_alpha(
-			ft_strchr(line, c)), ' ') && line[1] == ' ') // the file is at the beggining and there are spaces betwen the >|< and the filename
-			return (search_alpha(ft_strchr(
-				search_alpha(line + 1), ' ')) - line);
-		else if (line[0] == c  && ft_strchr(
-			search_alpha(ft_strchr(line, c)), ' ')) // the file is at the beggining and there are not spaces betwen the >|< and the filename
-			return (search_alpha(ft_strchr(line, ' ')) - line);
-	}
-	return (0); //the file is at the end of the line
+	int	start;
+	int	end;
+	char	*temp;
+
+	if (!search_out_quotes(line, '>'))
+		return(line);
+	start = jmp_spaces(search_out_quotes(line, '>')) - line;
+	if (line[start + 1 + node->apend] == '"')
+		end = ft_strchr(ft_strchr(line + start + 2 + node->apend, '"'), ' ') - line;
+	else
+		end = ft_strchr(line + start + 1, ' ') - line;
+	temp = ft_substr(line, start, end - start);
+	if (search_out_quotes(temp, '<'))
+		node->outfile = ft_substr(temp, 0, search_out_quotes(temp, '<') - temp);
+	else
+		node->outfile = ft_strdup(temp);
+	free(temp);
+	return(line_cutter(line, node->outfile));
+}
+char *get_infile(char *line, t_command *node)
+{
+	int	start;
+	int	end;
+	char	*temp;
+
+	if (!search_out_quotes(line, '<'))
+		return(line);
+	start = jmp_spaces(search_out_quotes(line, '<')) - line;
+	if (line[start + 1 + node->hdoc] == '"')
+		end = ft_strchr(ft_strchr(line + start + 2 + node->hdoc, '"'), ' ') - line;
+	else
+		end = ft_strchr(line + start + 1, ' ') - line;
+	temp = ft_substr(line, start, end - start);
+	if (search_out_quotes(temp, '>'))
+		node->infile = ft_substr(temp, 0, search_out_quotes(temp, '>') - temp);
+	else
+		node->infile = ft_strdup(temp);
+	free(temp);
+	return(line_cutter(line, node->infile));
 }
 
-int	new_outfile(char *line, t_command *node)
-{	
-	if (ft_strchr(line, '>') && *search_alpha(ft_strchr(line, '>')) == '"') //quotation
-		node->outfile = ft_substr(line, search_quotation(ft_strchr(line, '>'))
-- line + 1, search_quotation(search_quotation(ft_strchr(line, '>')) + 1) - (search_quotation(ft_strchr(line, '>')) + 1));
-	else if (ft_strchr(line, '>') && ft_strchr(line, '<') && 
-	((!ft_strchr(search_alpha(ft_strchr(line, '>') + 1), ' ')) || 
-	ft_strchr(search_alpha(ft_strchr(line, '>') + 1), '<') < ft_strchr(search_alpha(ft_strchr(line, '>') + 1), ' '))) // the infile and the outfile are together
-	node->outfile = ft_substr(line, search_alpha(ft_strchr(line, '>') + 1) - line, 
-    ft_strchr(search_alpha(ft_strchr(line, '>') + 1), '<') - search_alpha(ft_strchr(line, '>') + 1));
-	else if (line[0] == '>' && line[1] == ' ') // the outfile is at the beggining and there are spaces betwen the < and the filename
-		node->outfile = ft_substr(line, search_alpha(line + 1) - line, 
-		ft_strchr(search_alpha(line + 1), ' ') - search_alpha(line + 1));
-	else if (line[0] == '>' && line[1] != ' ') // the outfile is at the beggining and there are not spaces betwen the < and the filename
-		node->outfile = ft_substr(line, 1, ft_strchr(line, ' ') - line - 1);
-	else if (ft_strchr(line, '>') && ft_strchr(search_alpha(ft_strchr(line, '>') + 1), ' '))  // the outfile isnt at the beggining
-		node->outfile = ft_substr(line, search_alpha(ft_strchr(line, '>') + 1) - line,
-			ft_strchr((search_alpha(ft_strchr(line, '>') + 1)), ' ') - search_alpha(ft_strchr(line, '>') + 1));
-	else if (ft_strchr(line, '>') && !ft_strchr(search_alpha(ft_strchr(line, '>') + 1), ' '))  // the outfile is at the end
-		node->outfile = ft_substr(line, search_alpha(ft_strchr(line, '>') + 1) - line,
-			ft_strlen(search_alpha(ft_strchr(line, '>') + 1)));
-	return (get_offset(line, '>'));
+void	init_node(t_command *node)
+{
+	node->apend = 0;
+	node->hdoc = 0;
+	node->infile = NULL;
+	node->outfile = NULL;
+	node->dec = NULL;
+	node->command = NULL;
+	node->arg = NULL;
+	node->next = NULL;
 }
-int	new_infile(char *line, t_command *node)
-{	
-	if (ft_strchr(line, '<') && *search_alpha(ft_strchr(line, '<')) == '"') //quotation
-		node->infile = ft_substr(line, search_quotation(ft_strchr(line, '<'))
-- line + 1, search_quotation(search_quotation(ft_strchr(line, '<')) + 1) - (search_quotation(ft_strchr(line, '<')) + 1));
-	else if ((ft_strchr(line, '<') && ft_strchr(line, '>')) && 
-	((!ft_strchr(search_alpha(ft_strchr(line, '<') + 1), ' ')) || 
-	(ft_strchr(search_alpha(ft_strchr(line, '<') + 1), '>') < ft_strchr(search_alpha(ft_strchr(line, '<') + 1), ' ')))) // the infile and the outfile are together
-	node->infile = ft_substr(line, search_alpha(ft_strchr(line, '<') + 1) - line, 
-    ft_strchr(search_alpha(ft_strchr(line, '<') + 1), '>') - search_alpha(ft_strchr(line, '<') + 1));
-	else if (line[0] == '<' && line[1] == ' ') // the infile is at the beggining and there are spaces betwen the < and the filename
-		node->infile = ft_substr(line, search_alpha(line + 1) - line, 
-		ft_strchr(search_alpha(line + 1), ' ') - search_alpha(line + 1));
-	else if (line[0] == '<' && line[1] != ' ') // the infile is at the beggining and there are not spaces betwen the < and the filename
-		node->infile = ft_substr(line, 1, ft_strchr(line, ' ') - line - 1);
-	else if (ft_strchr(line, '<') && ft_strchr(search_alpha(ft_strchr(line, '<') + 1), ' '))  // the infile isnt at the beggining
-		node->infile = ft_substr(line, search_alpha(ft_strchr(line, '<') + 1) - line,
-			ft_strchr((search_alpha(ft_strchr(line, '<') + 1)), ' ') - search_alpha(ft_strchr(line, '<') + 1));
-	else if (ft_strchr(line, '<') && !ft_strchr(search_alpha(ft_strchr(line, '<') + 1), ' '))  // the infile is at the end
-		node->infile = ft_substr(line, search_alpha(ft_strchr(line, '<') + 1) - line,
-			ft_strlen(search_alpha(ft_strchr(line, '<') + 1)));
-	return (get_offset(line, '<'));
-}
+
 t_command *new_command(char *line)
 {
 	t_command	*new;
-	int			offset;
 
-	offset = 0;
 	new = malloc(sizeof(t_command));
-	new->infile = NULL;
-	new->command = NULL;
-	new->arg = NULL;
-	new->outfile = NULL;
-	// < infile commmand flags > outfile
-	offset += new_infile(line, new);
-	offset += new_outfile(line, new);
-	printf("offset [%d]\n", offset);
-	if (line[offset] == '<' || line[offset] == '>' || !search_alpha(line + offset))
-		return (new);
-	offset += new_cmd(line + offset, new);
-	new_arg(line + offset, new);
+	init_node(new);
+	if (search_out_quotes(line, '<') && search_out_quotes(line, '<')[1] == '<')
+		new->hdoc = 1;
+	if (search_out_quotes(line, '>') && search_out_quotes(line, '>')[1] == '>')
+		new->apend = 1;
+   line = get_infile(line, new);
+   printf("line after infile [%s]\n", line);
+   line = get_outfile(line, new);
+   printf("line after outfile [%s]\n", line);
+   //get_outfile(line, new);
+   //get_declaration(line, new);
+   //get_command(line, new);
+   //get_argument(line, new);
 	return (new);
-	//haz una funcion que devuelva true cuando un caracter c esta en el str pero esta fuera de dobles comillas
 }
 
-void	add_command(char *line_expanded, t_command **commands)
+void	add_command(char *line_splited, t_command **commands)
 {
 	t_command	*current;
 
 	current = *commands;
 	if (!current)
-		*commands = new_command(line_expanded);
+		*commands = new_command(line_splited);
 	else
 	{
 		while (current->next)
 			current = current->next;
-		current->next = new_command(line_expanded);
+		current->next = new_command(line_splited);
 	}
 }
 
@@ -261,7 +177,7 @@ void	parse(char *line_expanded, t_command **commands)
 	}
 }
 
-int main(int argc, char **argv)
+int main(void)//int argc, char **argv
 {
 	//./minishell "<   in ls -l a   >    out   |   <   out  cat -l>    in | aaaaa aaa"
 	//char *line = "   >    outfile    ls  < infile ";
@@ -276,22 +192,28 @@ int main(int argc, char **argv)
 	//char *line = " ls -la ";
 	//char *line = " ls -l     a ";
 	//char *line = " ls ";
+	char *line = ft_strdup("<<\"ho  \"la>>\"que tal\"");
+	//line = line_cutter(line, "que");
+	//printf("[%s]\n", line);
 	t_command *command;
-	if (argc < 2)
-		return (0);
-
+//	if (argc < 2)
+//		return (0);
+//
 	command = NULL;
-	parse(argv[1], &command);
-	//command = new_command(line);
-	
-	printf("line:[%s]\n", argv[1]);
+//	parse(argv[1], &command);
+	command = new_command(line);
+//	
+	printf("line:[%s]\n", line);
 	while (command)
 	{
 		printf("-----------------------------------------\n");
+		printf("hdoc:[%d]\n", command->hdoc);
+		printf("apend:[%d]\n", command->apend);
 		printf("infile:[%s]\n", command->infile);
+		printf("outfile:[%s]\n", command->outfile);
+		//printf("dec:[%s]\n", command->dec);
 		printf("command:[%s]\n", command->command);
 		printf("arg:[%s]\n", command->arg);
-		printf("outfile:[%s]\n", command->outfile);
 		command = command->next;
 	}
 	printf("-----------------------------------------\n");
