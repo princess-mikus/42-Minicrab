@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/10 15:26:42 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/14 21:12:24 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <wait.h>
+#include <errno.h>
 //#include "../libs/readline/readline.h"
 //#include "readline.h"
 #include <readline/readline.h>
@@ -49,19 +50,35 @@ void	unset_mx(t_envp **envp_mx, char *variable);
 void	env_mx(t_envp **envp_mx);
 //given a pointer to the list and a variable name change the bolean of exported  to true
 void	export_mx(t_envp **envp_mx, char *variable);
+// Prints current working directory
+int		pwd_mx(void);
+// Changes current working directory
+int		cd_mx(t_envp **envp_mx, char *args);
+// Prints whatever trash you pass him
+int		echo_mx(char *arguments);
 // PARSING
 // Parse and add to command list
 void    parse(char *line_expanded, t_command **commands);
 //EXPAND
-char	*expansion(t_envp **envp_mx, char *imput);
-/* PIPING (NOT FINAL) */
-// Parse commands by ; then by |
-void	parse_commands(char *line, t_envp *envp_mx);
+char	*expansion(t_envp **envp_mx, char *input);
+// PIPING
+// Calls parse and then passes command for execution
+void	parse_commands(char *line, t_envp **envp_mx);
 
-// Pipex pero mejorao
-int 	execute_commands(t_command **commands, t_envp *envp_mx);
+// Executes commands, either local files marked as executable, builtins or PATH programs
+int 	execute_commands(t_command **commands, t_envp **envp_mx);
+
+// Executes mx_ built-ins
+void	execute_builtin(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
+
+// Takes PATH var and splits it into a double pointer with every PATH path
+char	**get_path_var(char **envp);
+
+// Checks if file exists on PATH or if is a local file (Relative & Absolute paths)
+bool	resolve_path(t_command *current, char **path);
 
 //UTILS
 void	free_array(void **array);
 void	free_command_list(t_command **list);
+void    mx_error(int error_number);
 #endif
