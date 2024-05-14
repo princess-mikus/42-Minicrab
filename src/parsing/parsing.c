@@ -26,6 +26,25 @@ char	*jmp_spaces(char *str)
 	return (NULL);
 }
 
+int	count_out_quotes(char *line, char c)
+{
+	int i;
+	int	n;
+	int status;
+
+	i = 0;
+	status = 0;
+	n = 0;
+	while (line[i])
+	{
+		if (line[i] == '\"')
+			status++;
+		if (line[i] == c && status % 2 == 0)
+			n++;
+		i++;
+	}
+	return (n);
+}
 char *search_out_quotes(char *line, char c)
 {
 	int i;
@@ -66,6 +85,43 @@ char *line_cutter(char *line, char *to_cut)
 		free(part_2);
 		return(new_line);
     }
+	return(line);
+}
+
+int start_dec(char *line)
+{
+	int i;
+
+	i = search_out_quotes(line, '=') - line;
+	while(line[i] != ' ' && i > 0)
+		i--;
+	if (i > 0)
+		i++;
+	return (i);
+}
+
+char *get_dec(char *line, t_command *node)
+{
+	int i;
+	int start;
+	int end;
+
+	if (count_out_quotes(line, '=') == 0)
+		return(line);
+	node->dec = malloc(sizeof(char *) * (count_out_quotes(line, '=') + 1));
+	i = 0;
+	while (count_out_quotes(line, '=') > 0)
+	{
+		start = start_dec(line);
+		if (search_out_quotes(line, '=')[1] == '"')
+			end = (ft_strchr(search_out_quotes(line, '=') + 2, '"') - line) + 1;
+		else
+			end = ft_strchr(search_out_quotes(line, '='), ' ') - line;
+		node->dec[i] = ft_substr(line, start, end - start);
+		line = line_cutter(line, node->dec[i]);
+		i++;
+	}
+	node->dec[i] = NULL;
 	return(line);
 }
 
@@ -138,8 +194,8 @@ t_command *new_command(char *line)
    printf("line after infile [%s]\n", line);
    line = get_outfile(line, new);
    printf("line after outfile [%s]\n", line);
-   //get_outfile(line, new);
-   //get_declaration(line, new);
+   line = get_dec(line, new);
+   printf("line after dec [%s]\n", line);
    //get_command(line, new);
    //get_argument(line, new);
 	return (new);
@@ -192,7 +248,7 @@ int main(void)//int argc, char **argv
 	//char *line = " ls -la ";
 	//char *line = " ls -l     a ";
 	//char *line = " ls ";
-	char *line = ft_strdup("<<\"ho  \"la>>\"que tal\"");
+	char *line = ft_strdup("<<\"ho  \"la>>\"que tal\" jaja c=que b=\"lol\" c=que b=\"lo\"l");
 	//line = line_cutter(line, "que");
 	//printf("[%s]\n", line);
 	t_command *command;
@@ -202,7 +258,7 @@ int main(void)//int argc, char **argv
 	command = NULL;
 //	parse(argv[1], &command);
 	command = new_command(line);
-//	
+	int i = -1;
 	printf("line:[%s]\n", line);
 	while (command)
 	{
@@ -211,7 +267,8 @@ int main(void)//int argc, char **argv
 		printf("apend:[%d]\n", command->apend);
 		printf("infile:[%s]\n", command->infile);
 		printf("outfile:[%s]\n", command->outfile);
-		//printf("dec:[%s]\n", command->dec);
+		while (command->dec[++i])
+			printf("declaration %d:[%s]\n", i, command->dec[i]);
 		printf("command:[%s]\n", command->command);
 		printf("arg:[%s]\n", command->arg);
 		command = command->next;
@@ -219,5 +276,5 @@ int main(void)//int argc, char **argv
 	printf("-----------------------------------------\n");
 	return (0);
 }
-//no funcia un solo infile/outfile ni solo infile y outfile
-//checkea si se puede poner < infile > outfile comando args
+//el end de los substrings va a fallar sin espacio al final, asi que arreglalo
+//las declaraciones de tipo b="ho"la tambien van mal
