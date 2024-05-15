@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 20:16:46 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/12 21:05:13 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/15 07:12:19 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,6 @@ bool	resolve_path(t_command *current, char **path)
 		current->path = get_path(current->command, path);
 	//free_array((void **)path);
 	if (!current->path)
-		return (mx_error(ENOENT), false);
+		return (false);
 	return (true);
 }
