@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/02 13:58:13 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/15 13:09:02 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,38 @@ int start_dec(char *line)
 	return (i);
 }
 
+void get_arg(char *line, t_command *node)
+{
+	if(!line)
+		return ;
+	if (jmp_spaces(line))
+		node->arg = ft_strdup(jmp_spaces(line));
+	free(line);
+}
+
+char *get_cmd(char *line, t_command *node)
+{
+	int	start;
+	int	end;
+
+	if (!line || !jmp_spaces(line))
+		return(line);
+	start = jmp_spaces(line) - line;
+	if (line[0] == '"')
+		end = (ft_strchr(line + 1, '"') - line) + 1;
+	else if (jmp_spaces(line)[0] == '"')
+	{	
+		if (ft_strchr(ft_strchr(jmp_spaces(line), '"'), ' '))
+			end = ft_strchr(ft_strchr(jmp_spaces(line), '"'), ' ') - line;
+	}
+	else if (ft_strchr(jmp_spaces(line), ' '))
+		end = ft_strchr(jmp_spaces(line), ' ') - line;
+	else
+		end = ft_strlen(jmp_spaces(line));
+	node->command = ft_substr(line, start, end - start);
+	return(line_cutter(line, node->command));
+}
+
 char *get_dec(char *line, t_command *node)
 {
 	int i;
@@ -114,12 +146,16 @@ char *get_dec(char *line, t_command *node)
 	{
 		start = start_dec(line);
 		if (search_out_quotes(line, '=')[1] == '"')
-			end = (ft_strchr(search_out_quotes(line, '=') + 2, '"') - line) + 1;
+		{
+			if (ft_strchr(ft_strchr(search_out_quotes(line, '=') + 2, '"'), ' '))
+				end = (ft_strchr(ft_strchr(search_out_quotes(line, '=') + 2, '"'), ' ') - line);
+			else
+				end = ft_strlen(search_out_quotes(line, '=') - 1);
+		}
 		else
 			end = ft_strchr(search_out_quotes(line, '='), ' ') - line;
 		node->dec[i] = ft_substr(line, start, end - start);
-		line = line_cutter(line, node->dec[i]);
-		i++;
+		line = line_cutter(line, node->dec[i++]);
 	}
 	node->dec[i] = NULL;
 	return(line);
@@ -190,14 +226,15 @@ t_command *new_command(char *line)
 		new->hdoc = 1;
 	if (search_out_quotes(line, '>') && search_out_quotes(line, '>')[1] == '>')
 		new->apend = 1;
-   line = get_infile(line, new);
-   printf("line after infile [%s]\n", line);
-   line = get_outfile(line, new);
-   printf("line after outfile [%s]\n", line);
-   line = get_dec(line, new);
-   printf("line after dec [%s]\n", line);
-   //get_command(line, new);
-   //get_argument(line, new);
+	line = get_infile(line, new);
+	printf("line after infile [%s]\n", line);
+	line = get_outfile(line, new);
+	printf("line after outfile [%s]\n", line);
+	line = get_dec(line, new);
+	printf("line after dec [%s]\n", line);
+	line = get_cmd(line, new);
+	printf("line after cmd [%s]\n", line);
+	get_arg(line, new);
 	return (new);
 }
 
@@ -248,7 +285,8 @@ int main(void)//int argc, char **argv
 	//char *line = " ls -la ";
 	//char *line = " ls -l     a ";
 	//char *line = " ls ";
-	char *line = ft_strdup("<<\"ho  \"la>>\"que tal\" jaja c=que b=\"lol\" c=que b=\"lo\"l");
+	//char *line = ft_strdup("<<\"ho  \"la>>\"que tal\" \"ja\"ja c=que b=\"lol\" c=que b=\"lo\"l creo \"que me\" cago    ");
+	char *line = ft_strtrim("\"              \"", " ");
 	//line = line_cutter(line, "que");
 	//printf("[%s]\n", line);
 	t_command *command;
@@ -267,8 +305,9 @@ int main(void)//int argc, char **argv
 		printf("apend:[%d]\n", command->apend);
 		printf("infile:[%s]\n", command->infile);
 		printf("outfile:[%s]\n", command->outfile);
-		while (command->dec[++i])
-			printf("declaration %d:[%s]\n", i, command->dec[i]);
+		if (command->dec)
+			while (command->dec[++i])
+				printf("declaration %d:[%s]\n", i, command->dec[i]);
 		printf("command:[%s]\n", command->command);
 		printf("arg:[%s]\n", command->arg);
 		command = command->next;
@@ -278,3 +317,5 @@ int main(void)//int argc, char **argv
 }
 //el end de los substrings va a fallar sin espacio al final, asi que arreglalo
 //las declaraciones de tipo b="ho"la tambien van mal
+// Outfile no se saltea los espacios
+// Infile no se saltea los espacios
