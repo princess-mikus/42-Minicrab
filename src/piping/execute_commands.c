@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/12 21:34:02 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 00:29:58 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ char **get_arguments(t_command *current)
 	int		i;
 
 	i = 0;
-	ft_printf("%s\n", current->command);
 	temp = ft_split(current->arg, ' ');
 	while (temp && temp[i])
 		i++;
@@ -94,6 +93,13 @@ void	resolve_outfile(int *outpipe, t_command *current)
 		pipe(outpipe);
 }
 
+void	resolve_exec_error(int *inpipe, int *outpipe)
+{
+	close(*inpipe);
+	close(outpipe[1]);
+	mx_error(ENOENT);
+}
+
 int 	execute_commands(t_command **commands, t_envp *envp_mx)
 {
 	int 		outpipe[2];
@@ -113,7 +119,7 @@ int 	execute_commands(t_command **commands, t_envp *envp_mx)
 		if (get_builtin(current->command))
 			execute_builtin(current, &inpipe, outpipe, &envp_mx);
 		else if (!resolve_path(current, get_path_var(envp)))
-			break ;
+			resolve_exec_error(&inpipe, outpipe);
 		else
 			fork_and_execute(current, &inpipe, outpipe, envp);
 		current = current->next;
@@ -121,30 +127,3 @@ int 	execute_commands(t_command **commands, t_envp *envp_mx)
 	}
 	return (close(outpipe[0]), close(outpipe[1]), 0);
 }
-
-/*
-int main't(void)
-{
-			| < comando > |
-
-Switch (linea):
-	Infile:
-		Si:  infile < comando | comando2
-			close(infile[1])
-			dup2(infile[1], open(archivo))
-		No: comando | comando2
-			Primer caso: comando
-				inpipe[1] = dup(STDIN_FILENO);
-			Demás casos: comandoN
-				close(inpipe[0], inpipe[1]);
-				dup2(inpipe[0], outpipe[1]);
-	Outfile:
-		Si: comando > outfile | comando2
-			outpipe[0] = dup2(open(archivo);
-		No: comando | comando2
-			0 a n - 1 iteraciones: comandoX
-				outpipefd[1] = ?
-			Ultima: comandoN
-				outpipefd[1] = dup(STDOUT_FILENO)
-}
-*/

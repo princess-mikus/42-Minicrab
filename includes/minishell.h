@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/14 21:12:24 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/15 07:11:13 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ void    parse(char *line_expanded, t_command **commands);
 char	*expansion(t_envp **envp_mx, char *input);
 // PIPING
 // Calls parse and then passes command for execution
-void	parse_commands(char *line, t_envp **envp_mx);
+void	parse_commands(char *line, t_envp *envp_mx);
 
 // Executes commands, either local files marked as executable, builtins or PATH programs
-int 	execute_commands(t_command **commands, t_envp **envp_mx);
+int 	execute_commands(t_command **commands, t_envp *envp_mx);
 
 // Executes mx_ built-ins
 void	execute_builtin(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
