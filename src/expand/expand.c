@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 15:40:12 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/14 21:15:09 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	line_len(t_envp **envp_mx, char *imput)
+int	line_len(t_envp **envp_mx, char *input)
 {
 	int		len;
 	int		i;
@@ -20,16 +20,16 @@ int	line_len(t_envp **envp_mx, char *imput)
 
 	len = 0;
 	i = 0;
-	while (imput[i])
+	while (input[i])
 	{
-		if (imput[i] == '$')
+		if (input[i] == '$')
 		{
 			i++;
-			variable = ft_substr(imput, i, \
-				(ft_strchr(imput + i, ' ') - imput) - i);
+			variable = ft_substr(input, i, \
+				(ft_strchr(input + i, ' ') - input) - i);
 			len += ft_strlen(get_content_envp_mx(envp_mx, variable));
 			free(variable);
-			while (imput[i] && imput[i] != ' ')
+			while (input[i] && input[i] != ' ')
 				i++;
 		}
 		else
@@ -41,7 +41,7 @@ int	line_len(t_envp **envp_mx, char *imput)
 	return (len);
 }
 
-char	*expansion(t_envp **envp_mx, char *imput)
+char	*expansion(t_envp **envp_mx, char *input)
 {
 	char	*line;
 	char	*variable;
@@ -50,22 +50,22 @@ char	*expansion(t_envp **envp_mx, char *imput)
 
 	i = 0;
 	k = 0;
-	line = ft_calloc(sizeof(char), line_len(envp_mx, imput));
-	while (imput[i])
+	line = ft_calloc(sizeof(char), line_len(envp_mx, input) + 1);
+	while (input[i])
 	{
-		if (imput[i] == '$')
+		if (input[i] == '$')
 		{
 			i++;
-			variable = ft_substr(imput, i, \
-				(ft_strchr(imput + i, ' ') - imput) - i);
+			variable = ft_substr(input, i, \
+			(ft_strchr(input + i, ' ') - input) - i);
 			k = ft_strlcat(line, get_content_envp_mx(envp_mx, variable), \
-	(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, variable)) + 1));
+			(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, variable)) + 1));
 			free(variable);
-			while (imput[i] && imput[i] != ' ')
+			while (input[i] && input[i] != ' ')
 				i++;
 		}
 		else
-			line[k++] = imput[i++];
+			line[k++] = input[i++];
 	}
 	return (line);
 }

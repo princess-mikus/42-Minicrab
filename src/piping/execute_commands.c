@@ -3,152 +3,166 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/04/15 15:34:03 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/05/16 12:38:24 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_array(void **array)
+char **get_arguments(t_command *current)
 {
-	int	i;
-
-	i = -1;
-	while (array[++i])
-		free(array[i]);
-	free(array);
-}
-
-char	*get_path(char	*program, char **path)
-{
-	char	*candidate;
-	char	*program_2_la_venganza;
+	char	**temp;
+	char	**to_return;
 	int		i;
 
-	i = -1;
-	while (path[++i])
+	i = 0;
+	temp = ft_split(current->arg, ' ');
+	while (temp && temp[i])
+		i++;
+	to_return = malloc(sizeof(char *) * (i + 2));
+	to_return[0] = ft_strdup(current->command);
+	i = 0;
+	while (temp && temp[i])
 	{
-		program_2_la_venganza = ft_strjoin("/", program);
-		candidate = ft_strjoin(path[i], program_2_la_venganza);
-		if (!access(candidate, F_OK))
-			return (candidate);
+		to_return[i + 1] = ft_strdup(temp[i]);
+		i++;
 	}
-	return (NULL);
+	to_return[i + 1] = NULL;
+	return (free_array((void **)temp), to_return);
 }
 
-char	**get_path_var(t_envp *envp_mx)
+void	fork_and_execute(t_command *current, int *inpipe, int *outpipe, char **envp)
 {
-	while (envp_mx && \
-	ft_strncmp(envp_mx->variable, "PATH", ft_strlen(envp_mx->variable)))
-		envp_mx = envp_mx->next;
-	return (ft_split(envp_mx->content, ':'));
-}
+	char	**program;
 
-int	fork_and_execute(char *program, int *readpipe, char **envp, char **path_env, bool last)
-{
-	char	**arguments;
-	char	*path;
-	int		pipefd[2];
-
-	arguments = ft_split(program, ' ');
-	path = get_path(arguments[0], path_env);
-	pipe(pipefd);
-	if (last == true)
-		pipefd[1] = dup(STDOUT_FILENO);
+	program = get_arguments(current);
 	if (!fork())
 	{
-		dup2(readpipe[1], STDIN_FILENO);
-		close(readpipe[1]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-		execve(path, arguments, envp);
+		dup2(*inpipe, STDIN_FILENO);
+		close(*inpipe);
+		dup2(outpipe[1], STDOUT_FILENO);
+		close(outpipe[1]);
+		execve(current->path, program, envp);
 		exit(2);
 	}
 	else
 		wait(NULL);
-	close(readpipe[1]);
-	close(pipefd[1]);
-	return (free_array((void **)arguments), pipefd[0]);
+	close(*inpipe);
+	close(outpipe[1]);
+	free_array((void **)program);
 }
 
-int		get_total_len(char **temp)
+void	resolve_infile(int *outpipe, int *inpipe, t_command *current)
 {
-	int	i;
-	int	len;
-
-	i = 0;
-	len = 0;
-	while (temp[++i])
-		len += ft_strlen(temp[i]) + 1;
-	return (len);
+	if (current->infile)
+	{
+		close(*inpipe);
+		*inpipe = open(current->infile, O_RDONLY);
+	}
+	else if (outpipe[0] > 0)
+	{
+		close(*inpipe);
+		*inpipe = outpipe[0];
+	}
 }
 
-char	*get_infiles(char *command_line, int *pipe)
+bool	get_builtin(char *program)
+{
+	if ( \
+	!ft_strncmp(program, "echo", ft_strlen("echo") + 1) || \
+	!ft_strncmp(program, "cd", ft_strlen("cd") + 1) || \
+	!ft_strncmp(program, "env", ft_strlen("env") + 1) || \
+	!ft_strncmp(program, "export", ft_strlen("export") + 1) || \
+	!ft_strncmp(program, "pwd", ft_strlen("pwd") + 1) || \
+	!ft_strncmp(program, "unset", ft_strlen("unset") + 1)
+	)
+		return (true);
+	return (false);
+}
+
+void	resolve_outfile(int *outpipe, t_command *current)
+{
+	if (current->outfile)
+		outpipe[1] = open(current->outfile, O_CREAT|O_TRUNC|O_WRONLY, 0644);
+	else if (!current->next)
+		outpipe[1] = dup(STDOUT_FILENO);
+	else
+		pipe(outpipe);
+}
+
+void	resolve_exec_error(int *inpipe, int *outpipe)
+{
+	close(*inpipe);
+	close(outpipe[1]);
+	mx_error(ENOENT);
+}
+
+void	dec_to_env(char **dec, t_envp **envp_mx_temp)
 {
 	int		i;
-	int		j;
+	char	*variable;
+	char	*content;
 	char	**temp;
-	char	*to_return;
 
 	i = 0;
-	while (command_line[i] == ' ')
+	while (dec[i])
+	{
+		temp = ft_split(dec[i], '=');
+		variable = ft_strdup(temp[0]);
+		content = ft_strdup(temp[1]);
+		free_array((void **)temp);
+		add_var_to_envp_mx(envp_mx_temp, variable, content);
+		free(variable);
+		free(content);
 		i++;
-	if (command_line[i] == '<')
-	{
-		temp = ft_split(command_line + i + 1, ' ');
-		to_return = ft_calloc(get_total_len(temp), sizeof(char));
-		*pipe = open(temp[0], O_RDONLY);
-		j = 0;
-		while (temp[++j])
-		{
-			int size = ft_strlcat(to_return, " ", ft_strlen(to_return));
-			to_return[size] = '\0';
-			ft_strlcat(to_return, temp[j], ft_strlen(to_return));
-		}
-		printf("%s\n", to_return);
-		return (free_array((void **)temp), to_return);
-	}
-	return (command_line);
-}
-
-void	print_results(int fd)
-{
-	char	*str;
-
-	str = get_next_line(fd);
-	while (str)
-	{
-		write(1, str, ft_strlen(str));
-		free(str);
-		str = get_next_line(fd);
 	}
 }
 
-int 	execute_commands(char **commands, t_envp *envp_mx)
+char	**update_environment(t_command *current, t_envp **envp_mx)
 {
-	int 	i;
-	int 	readpipe[2];
+	t_envp	**envp_mx_temp;
 	char	**envp;
-	char	**path;
-
-	i = -1;
-	envp = envp_mx_to_arg(&envp_mx);
-	path = get_path_var(envp_mx);
-	readpipe[1] = dup(STDIN_FILENO);
-	while (commands[++i])
+	
+	envp_mx_temp = NULL;
+	envp = envp_mx_to_arg(envp_mx);
+	if (current->dec && *current->dec)
 	{
-		commands[i] = get_infiles(commands[i], &readpipe[1]);
-		if (!ft_strncmp(commands[i], "env", 4))
-			env_mx(&envp_mx);
-		else if (!commands[i + 1])
-			fork_and_execute(commands[i], readpipe, envp, path, true);
-		else
-			readpipe[1] = fork_and_execute(commands[i], readpipe, envp, path, false);
+		init_envp(envp_mx_temp, envp);
+		free(envp);
+		dec_to_env(current->dec, envp_mx_temp);
+		envp = envp_mx_to_arg(envp_mx_temp);
+		free_envp_mx(envp_mx_temp);
 	}
-	free_array((void **)path);
-	free_array((void **)envp);
-	return (0);
+	return (envp);
+}
+
+int 	execute_commands(t_command **commands, t_envp *envp_mx)
+{
+	int 		outpipe[2];
+	int			inpipe;
+	t_command	*current;
+	char		**envp;
+
+	inpipe = dup(STDIN_FILENO);
+	current = *commands;
+	outpipe[0] = -1;
+	outpipe[1] = -1;
+	while (current)
+	{
+		resolve_infile(outpipe, &inpipe, current);
+		resolve_outfile(outpipe, current);
+		envp = update_environment(current, &envp_mx);
+		if (get_builtin(current->command))
+			execute_builtin(current, &inpipe, outpipe, &envp_mx);
+		else if (!resolve_path(current, get_path_var(envp)))
+			resolve_exec_error(&inpipe, outpipe);
+		else
+			fork_and_execute(current, &inpipe, outpipe, envp);
+		current = current->next;
+		free_array((void **)envp);
+	}
+	return (close(outpipe[0]), close(outpipe[1]), 0);
 }

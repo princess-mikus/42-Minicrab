@@ -14,6 +14,6 @@
 
 int	pwd_mx(void)
 {
-	printf("%s\n", getcwd(NULL, 0));
+	ft_printf("%s\n", getcwd(NULL, 0));
 	return (0);
 }
