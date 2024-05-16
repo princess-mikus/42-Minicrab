@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/15 13:09:02 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/16 16:17:41 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,11 +169,11 @@ char *get_outfile(char *line, t_command *node)
 
 	if (!search_out_quotes(line, '>'))
 		return(line);
-	start = jmp_spaces(search_out_quotes(line, '>')) - line;
-	if (line[start + 1 + node->apend] == '"')
-		end = ft_strchr(ft_strchr(line + start + 2 + node->apend, '"'), ' ') - line;
+	start = search_out_quotes(line, '>') - line;
+	if (jmp_spaces(line + start + 1 + node->apend)[0] == '"')
+		end = ft_strchr(ft_strchr(jmp_spaces(line + start + 2 + node->apend) + 1, '"'), ' ') - line;
 	else
-		end = ft_strchr(line + start + 1, ' ') - line;
+		end = ft_strchr(jmp_spaces(line + start + 1), ' ') - line;
 	temp = ft_substr(line, start, end - start);
 	if (search_out_quotes(temp, '<'))
 		node->outfile = ft_substr(temp, 0, search_out_quotes(temp, '<') - temp);
@@ -190,11 +190,12 @@ char *get_infile(char *line, t_command *node)
 
 	if (!search_out_quotes(line, '<'))
 		return(line);
-	start = jmp_spaces(search_out_quotes(line, '<')) - line;
-	if (line[start + 1 + node->hdoc] == '"')
-		end = ft_strchr(ft_strchr(line + start + 2 + node->hdoc, '"'), ' ') - line;
+	start = search_out_quotes(line, '<') - line;
+	if (jmp_spaces(line + start + node->hdoc + 1)[0] == '"')
+		end = ft_strchr(ft_strchr(jmp_spaces(line + start + node->hdoc + 2) + 1, '"'), ' ') - line;
 	else
-		end = ft_strchr(line + start + 1, ' ') - line;
+		end = ft_strchr(jmp_spaces(line + start + node->hdoc + 1), ' ') - line;
+	printf("end :  [%d]\n", end);
 	temp = ft_substr(line, start, end - start);
 	if (search_out_quotes(temp, '>'))
 		node->infile = ft_substr(temp, 0, search_out_quotes(temp, '>') - temp);
@@ -226,6 +227,7 @@ t_command *new_command(char *line)
 		new->hdoc = 1;
 	if (search_out_quotes(line, '>') && search_out_quotes(line, '>')[1] == '>')
 		new->apend = 1;
+	printf("line [%s]\n", line);
 	line = get_infile(line, new);
 	printf("line after infile [%s]\n", line);
 	line = get_outfile(line, new);
@@ -286,7 +288,7 @@ int main(void)//int argc, char **argv
 	//char *line = " ls -l     a ";
 	//char *line = " ls ";
 	//char *line = ft_strdup("<<\"ho  \"la>>\"que tal\" \"ja\"ja c=que b=\"lol\" c=que b=\"lo\"l creo \"que me\" cago    ");
-	char *line = ft_strtrim("\"              \"", " ");
+	char *line = ft_strtrim("<   \" infile\"57 l\"s\"asdfghjkl -la> \" jiji\"jija", " ");
 	//line = line_cutter(line, "que");
 	//printf("[%s]\n", line);
 	t_command *command;
@@ -297,7 +299,6 @@ int main(void)//int argc, char **argv
 //	parse(argv[1], &command);
 	command = new_command(line);
 	int i = -1;
-	printf("line:[%s]\n", line);
 	while (command)
 	{
 		printf("-----------------------------------------\n");
