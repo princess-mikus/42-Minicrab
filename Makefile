@@ -6,7 +6,7 @@
 #    By: mikus <mikus@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/12 21:20:28 by mikus            ###   ########.fr        #
+#    Updated: 2024/05/16 21:25:18 by mikus            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,14 +23,14 @@ RLINE_FLAGS	:= -I/usr/include/readline -lreadline #-L/Users/$(USER)/.brew/opt/re
 
 # SRCS #
 BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx echo_mx
-ENVP	 	  := envp envp_utils envp_arg
+ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
-MAIN 		  := main
+MAIN		:= main
 PARSING 	:= parsing
-PIPING 		:= parse_commands execute_commands path built-in
+PIPING 		:= parse_commands execute_commands path built-in change_envp
 SIGNALS 	:=
-UTILS		  := free error
+UTILS		:= free error
 
 
 
