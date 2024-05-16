@@ -33,6 +33,7 @@ typedef	struct s_command
 	struct s_command	*next;
 }						t_command;
 
+
 typedef struct s_data
 {
 	char			**envp;

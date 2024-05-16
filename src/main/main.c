@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+/* int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	t_envp		*envp_mx;
@@ -36,4 +36,4 @@ int	main(int argc, char **argv, char **envp)
 	free_envp_mx(&envp_mx);
 	//clear_history();
 	return (0);
-}
+} */
