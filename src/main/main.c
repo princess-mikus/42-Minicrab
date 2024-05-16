@@ -6,13 +6,13 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/06 13:38:47 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 20:26:38 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	t_envp		*envp_mx;
@@ -36,4 +36,4 @@
 	free_envp_mx(&envp_mx);
 	//clear_history();
 	return (0);
-} */
+}
