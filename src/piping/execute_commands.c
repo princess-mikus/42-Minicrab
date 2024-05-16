@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/16 00:29:58 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 12:35:41 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,43 @@ void	resolve_exec_error(int *inpipe, int *outpipe)
 	mx_error(ENOENT);
 }
 
+void	dec_to_env(char **dec, t_envp **envp_mx_temp)
+{
+	int		i;
+	char	*variable;
+	char	*content;
+	char	**temp;
+
+	i = 0;
+	while (dec[i])
+	{
+		temp = ft_split(dec[i], '=');
+		variable = temp[0];
+		content = temp[1];
+		free(temp);
+		add_var_to_envp_mx(envp_mx_temp, variable, content);
+		i++;
+	}
+}
+
+char	**update_environment(t_command *current, t_envp **envp_mx)
+{
+	t_envp	**envp_mx_temp;
+	char	**envp;
+	
+	envp_mx_temp = NULL;
+	envp = envp_mx_to_arg(envp_mx);
+	if (current->dec && *current->dec)
+	{
+		init_envp(envp_mx_temp, envp);
+		free(envp);
+		dec_to_env(current->dec, envp_mx_temp);
+		envp = envp_mx_to_arg(envp_mx_temp);
+		free_envp_mx(envp_mx_temp);
+	}
+	return (envp);
+}
+
 int 	execute_commands(t_command **commands, t_envp *envp_mx)
 {
 	int 		outpipe[2];
@@ -113,9 +150,9 @@ int 	execute_commands(t_command **commands, t_envp *envp_mx)
 	outpipe[1] = -1;
 	while (current)
 	{
-		envp = envp_mx_to_arg(&envp_mx);
 		resolve_infile(outpipe, &inpipe, current);
 		resolve_outfile(outpipe, current);
+		envp = update_environment(current, &envp_mx);
 		if (get_builtin(current->command))
 			execute_builtin(current, &inpipe, outpipe, &envp_mx);
 		else if (!resolve_path(current, get_path_var(envp)))

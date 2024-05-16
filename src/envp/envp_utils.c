@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:53:23 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 16:07:27 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/16 12:16:56 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,24 +60,4 @@ char	*get_content_envp_mx(t_envp **envp_mx, char *variable)
 		current = current->next;
 	}
 	return (NULL);
-}
-
-void	free_envp_mx(t_envp **envp_mx)
-{
-	t_envp	*current;
-	t_envp	*next;
-
-	if (!envp_mx || !*envp_mx)
-		return ;
-	current = *envp_mx;
-	next = current->next;
-	while (current)
-	{
-		free(current->variable);
-		free(current->content);
-		free(current);
-		current = next;
-		if (current)
-			next = current->next;
-	}
 }
