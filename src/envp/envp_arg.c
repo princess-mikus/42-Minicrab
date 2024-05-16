@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:53:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/06 15:04:47 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 20:53:15 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ char	*make_line_envp(char *variable, char *content)
 	ft_strlcat(line, variable, variable_len + 1);
 	ft_strlcat(line, "=", variable_len + 2);
 	ft_strlcat(line, content, variable_len + 2 + content_len);
-	//line[content_len + variable_len + 2] = '\0'
-	// Esta línea segfaultea el programa a la mierda
 	return (line);
 }
 

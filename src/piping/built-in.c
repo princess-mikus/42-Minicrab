@@ -6,11 +6,24 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:02 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/12 21:30:11 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 20:46:16 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	get_builtin(char *program)
+{
+	if (\
+		!ft_strncmp(program, "echo", ft_strlen("echo") + 1) || \
+		!ft_strncmp(program, "cd", ft_strlen("cd") + 1) || \
+		!ft_strncmp(program, "env", ft_strlen("env") + 1) || \
+		!ft_strncmp(program, "export", ft_strlen("export") + 1) || \
+		!ft_strncmp(program, "pwd", ft_strlen("pwd") + 1) || \
+		!ft_strncmp(program, "unset", ft_strlen("unset") + 1))
+		return (true);
+	return (false);
+}
 
 int	choose_builtin(t_command *current, t_envp **envp_mx)
 {
@@ -29,7 +42,8 @@ int	choose_builtin(t_command *current, t_envp **envp_mx)
 	return (2);
 }
 
-void	execute_builtin(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
+void	execute_builtin( \
+t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 {
 	int	status;
 

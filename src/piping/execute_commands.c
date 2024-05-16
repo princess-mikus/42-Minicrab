@@ -6,13 +6,13 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/16 12:38:24 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 20:48:59 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **get_arguments(t_command *current)
+char	**get_arguments(t_command *current)
 {
 	char	**temp;
 	char	**to_return;
@@ -34,7 +34,8 @@ char **get_arguments(t_command *current)
 	return (free_array((void **)temp), to_return);
 }
 
-void	fork_and_execute(t_command *current, int *inpipe, int *outpipe, char **envp)
+void	fork_and_execute( \
+t_command *current, int *inpipe, int *outpipe, char **envp)
 {
 	char	**program;
 
@@ -69,79 +70,19 @@ void	resolve_infile(int *outpipe, int *inpipe, t_command *current)
 	}
 }
 
-bool	get_builtin(char *program)
-{
-	if ( \
-	!ft_strncmp(program, "echo", ft_strlen("echo") + 1) || \
-	!ft_strncmp(program, "cd", ft_strlen("cd") + 1) || \
-	!ft_strncmp(program, "env", ft_strlen("env") + 1) || \
-	!ft_strncmp(program, "export", ft_strlen("export") + 1) || \
-	!ft_strncmp(program, "pwd", ft_strlen("pwd") + 1) || \
-	!ft_strncmp(program, "unset", ft_strlen("unset") + 1)
-	)
-		return (true);
-	return (false);
-}
-
 void	resolve_outfile(int *outpipe, t_command *current)
 {
 	if (current->outfile)
-		outpipe[1] = open(current->outfile, O_CREAT|O_TRUNC|O_WRONLY, 0644);
+		outpipe[1] = open(current->outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	else if (!current->next)
 		outpipe[1] = dup(STDOUT_FILENO);
 	else
 		pipe(outpipe);
 }
 
-void	resolve_exec_error(int *inpipe, int *outpipe)
+int	execute_commands(t_command **commands, t_envp *envp_mx)
 {
-	close(*inpipe);
-	close(outpipe[1]);
-	mx_error(ENOENT);
-}
-
-void	dec_to_env(char **dec, t_envp **envp_mx_temp)
-{
-	int		i;
-	char	*variable;
-	char	*content;
-	char	**temp;
-
-	i = 0;
-	while (dec[i])
-	{
-		temp = ft_split(dec[i], '=');
-		variable = ft_strdup(temp[0]);
-		content = ft_strdup(temp[1]);
-		free_array((void **)temp);
-		add_var_to_envp_mx(envp_mx_temp, variable, content);
-		free(variable);
-		free(content);
-		i++;
-	}
-}
-
-char	**update_environment(t_command *current, t_envp **envp_mx)
-{
-	t_envp	**envp_mx_temp;
-	char	**envp;
-	
-	envp_mx_temp = NULL;
-	envp = envp_mx_to_arg(envp_mx);
-	if (current->dec && *current->dec)
-	{
-		init_envp(envp_mx_temp, envp);
-		free(envp);
-		dec_to_env(current->dec, envp_mx_temp);
-		envp = envp_mx_to_arg(envp_mx_temp);
-		free_envp_mx(envp_mx_temp);
-	}
-	return (envp);
-}
-
-int 	execute_commands(t_command **commands, t_envp *envp_mx)
-{
-	int 		outpipe[2];
+	int			outpipe[2];
 	int			inpipe;
 	t_command	*current;
 	char		**envp;

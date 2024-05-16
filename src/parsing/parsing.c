@@ -1,22 +1,22 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/16 20:26:14 by mikus            ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   parsing.c										  :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: mikus <mikus@student.42.fr>				+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2024/04/10 10:29:05 by xortega		   #+#	#+#			 */
+/*   Updated: 2024/05/16 20:57:28 by mikus			###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	*jmp_spaces(char *str)
 {
-	int i;
+	int	i;
 
-	i  = 0;
+	i = 0;
 	while (str[i])
 	{
 		if (str[i] != ' ')
@@ -28,9 +28,9 @@ char	*jmp_spaces(char *str)
 
 int	count_out_quotes(char *line, char c)
 {
-	int i;
+	int	i;
 	int	n;
-	int status;
+	int	status;
 
 	i = 0;
 	status = 0;
@@ -45,10 +45,11 @@ int	count_out_quotes(char *line, char c)
 	}
 	return (n);
 }
-char *search_out_quotes(char *line, char c)
+
+char	*search_out_quotes(char *line, char c)
 {
-	int i;
-	int status;
+	int	i;
+	int	status;
 
 	i = 0;
 	status = 0;
@@ -65,16 +66,16 @@ char *search_out_quotes(char *line, char c)
 	return (NULL);
 }
 
-char *line_cutter(char *line, char *to_cut)
+char	*line_cutter(char *line, char *to_cut)
 {
-    char	*new_line;
-	 char	*part_1;
-	 char	*part_2;
-	 int	start;
-	 int	end;
+	char	*new_line;
+	char	*part_1;
+	char	*part_2;
+	int		start;
+	int		end;
 
-    if (to_cut && line)
-    {
+	if (to_cut && line)
+	{
 		start = ft_strnstr(line, to_cut, ft_strlen(line)) - line;
 		end = ft_strlen(to_cut);
 		part_1 = ft_substr(line, 0, start);
@@ -83,44 +84,44 @@ char *line_cutter(char *line, char *to_cut)
 		free(line);
 		free(part_1);
 		free(part_2);
-		return(new_line);
-    }
-	return(line);
+		return (new_line);
+	}
+	return (line);
 }
 
-int start_dec(char *line)
+int	start_dec(char *line)
 {
-	int i;
+	int	i;
 
 	i = search_out_quotes(line, '=') - line;
-	while(line[i] != ' ' && i > 0)
+	while (line[i] != ' ' && i > 0)
 		i--;
 	if (i > 0)
 		i++;
 	return (i);
 }
 
-void get_arg(char *line, t_command *node)
+void	get_arg(char *line, t_command *node)
 {
-	if(!line)
+	if (!line)
 		return ;
 	if (jmp_spaces(line))
 		node->arg = ft_strdup(jmp_spaces(line));
 	free(line);
 }
 
-char *get_cmd(char *line, t_command *node)
+char	*get_cmd(char *line, t_command *node)
 {
 	int	start;
 	int	end;
 
 	if (!line || !jmp_spaces(line))
-		return(line);
+		return (line);
 	start = jmp_spaces(line) - line;
 	if (line[0] == '"')
 		end = (ft_strchr(line + 1, '"') - line) + 1;
 	else if (jmp_spaces(line)[0] == '"')
-	{	
+	{
 		if (ft_strchr(ft_strchr(jmp_spaces(line), '"'), ' '))
 			end = ft_strchr(ft_strchr(jmp_spaces(line), '"'), ' ') - line;
 	}
@@ -129,17 +130,17 @@ char *get_cmd(char *line, t_command *node)
 	else
 		end = ft_strlen(jmp_spaces(line));
 	node->command = ft_substr(line, start, end - start);
-	return(line_cutter(line, node->command));
+	return (line_cutter(line, node->command));
 }
 
-char *get_dec(char *line, t_command *node)
+char	*get_dec(char *line, t_command *node)
 {
-	int i;
-	int start;
-	int end;
+	int	i;
+	int	start;
+	int	end;
 
 	if (count_out_quotes(line, '=') == 0)
-		return(line);
+		return (line);
 	node->dec = malloc(sizeof(char *) * (count_out_quotes(line, '=') + 1));
 	i = 0;
 	while (count_out_quotes(line, '=') > 0)
@@ -158,17 +159,17 @@ char *get_dec(char *line, t_command *node)
 		line = line_cutter(line, node->dec[i++]);
 	}
 	node->dec[i] = NULL;
-	return(line);
+	return (line);
 }
 
-char *get_outfile(char *line, t_command *node)
+char	*get_outfile(char *line, t_command *node)
 {
-	int	start;
-	int	end;
+	int		start;
+	int		end;
 	char	*temp;
 
 	if (!search_out_quotes(line, '>'))
-		return(line);
+		return (line);
 	start = search_out_quotes(line, '>') - line;
 	if (jmp_spaces(line + start + 1 + node->apend)[0] == '"')
 		end = ft_strchr(ft_strchr(jmp_spaces(line + start + 2 + node->apend) + 1, '"'), ' ') - line;
@@ -180,29 +181,29 @@ char *get_outfile(char *line, t_command *node)
 	else
 		node->outfile = ft_strdup(temp);
 	free(temp);
-	return(line_cutter(line, node->outfile));
+	return (line_cutter(line, node->outfile));
 }
-char *get_infile(char *line, t_command *node)
+
+char	*get_infile(char *line, t_command *node)
 {
-	int	start;
-	int	end;
+	int		start;
+	int		end;
 	char	*temp;
 
 	if (!search_out_quotes(line, '<'))
-		return(line);
+		return (line);
 	start = search_out_quotes(line, '<') - line;
 	if (jmp_spaces(line + start + node->hdoc + 1)[0] == '"')
 		end = ft_strchr(ft_strchr(jmp_spaces(line + start + node->hdoc + 2) + 1, '"'), ' ') - line;
 	else
 		end = ft_strchr(jmp_spaces(line + start + node->hdoc + 1), ' ') - line;
-	printf("end :  [%d]\n", end);
 	temp = ft_substr(line, start, end - start);
 	if (search_out_quotes(temp, '>'))
 		node->infile = ft_substr(temp, 0, search_out_quotes(temp, '>') - temp);
 	else
 		node->infile = ft_strdup(temp);
 	free(temp);
-	return(line_cutter(line, node->infile));
+	return (line_cutter(line, node->infile));
 }
 
 void	init_node(t_command *node)
@@ -217,7 +218,7 @@ void	init_node(t_command *node)
 	node->next = NULL;
 }
 
-t_command *new_command(char *line)
+t_command	*new_command(char *line)
 {
 	t_command	*new;
 
@@ -227,15 +228,10 @@ t_command *new_command(char *line)
 		new->hdoc = 1;
 	if (search_out_quotes(line, '>') && search_out_quotes(line, '>')[1] == '>')
 		new->apend = 1;
-	printf("line [%s]\n", line);
 	line = get_infile(line, new);
-	printf("line after infile [%s]\n", line);
 	line = get_outfile(line, new);
-	printf("line after outfile [%s]\n", line);
 	line = get_dec(line, new);
-	printf("line after dec [%s]\n", line);
 	line = get_cmd(line, new);
-	printf("line after cmd [%s]\n", line);
 	get_arg(line, new);
 	return (new);
 }
@@ -267,7 +263,7 @@ void	parse(char *line_expanded, t_command **commands)
 	{
 		trim = ft_strtrim(splited[i], " ");
 		add_command(trim, commands);
-		free(trim);
+		//free(trim);
 		i++;
 	}
 }

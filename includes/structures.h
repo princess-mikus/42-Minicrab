@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/16 12:23:51 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 21:04:05 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_envp
 	struct s_envp	*next;	
 }					t_envp;
 
-typedef	struct s_command
+typedef struct s_command
 {
 	bool				hdoc;
 	bool				apend;
@@ -32,7 +32,6 @@ typedef	struct s_command
 	char				*outfile;
 	struct s_command	*next;
 }						t_command;
-
 
 typedef struct s_data
 {

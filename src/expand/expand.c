@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/14 21:15:09 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 20:54:39 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	line_len(t_envp **envp_mx, char *input)
 {
 	int		len;
 	int		i;
-	char	*variable;
+	char	*var;
 
 	len = 0;
 	i = 0;
@@ -25,10 +25,10 @@ int	line_len(t_envp **envp_mx, char *input)
 		if (input[i] == '$')
 		{
 			i++;
-			variable = ft_substr(input, i, \
+			var = ft_substr(input, i, \
 				(ft_strchr(input + i, ' ') - input) - i);
-			len += ft_strlen(get_content_envp_mx(envp_mx, variable));
-			free(variable);
+			len += ft_strlen(get_content_envp_mx(envp_mx, var));
+			free(var);
 			while (input[i] && input[i] != ' ')
 				i++;
 		}
@@ -44,7 +44,7 @@ int	line_len(t_envp **envp_mx, char *input)
 char	*expansion(t_envp **envp_mx, char *input)
 {
 	char	*line;
-	char	*variable;
+	char	*var;
 	int		i;
 	int		k;
 
@@ -56,11 +56,11 @@ char	*expansion(t_envp **envp_mx, char *input)
 		if (input[i] == '$')
 		{
 			i++;
-			variable = ft_substr(input, i, \
+			var = ft_substr(input, i, \
 			(ft_strchr(input + i, ' ') - input) - i);
-			k = ft_strlcat(line, get_content_envp_mx(envp_mx, variable), \
-			(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, variable)) + 1));
-			free(variable);
+			k = ft_strlcat(line, get_content_envp_mx(envp_mx, var), \
+			(ft_strlen(line), ft_strlen(get_content_envp_mx(envp_mx, var)) + 1));
+			free(var);
 			while (input[i] && input[i] != ' ')
 				i++;
 		}

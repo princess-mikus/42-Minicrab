@@ -5,24 +5,24 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/22 11:24:31 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/15 07:11:13 by mikus            ###   ########.fr       */
+/*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
+/*   Updated: 2024/05/16 21:05:44 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "libft.h"
-#include "structures.h"
-#include <stdio.h>
-#include <stdbool.h>
-#include <wait.h>
-#include <errno.h>
+# include "libft.h"
+# include "structures.h"
+# include <stdio.h>
+# include <stdbool.h>
+# include <wait.h>
+# include <errno.h>
 //#include "../libs/readline/readline.h"
 //#include "readline.h"
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 //ENV
 //given a pointer to the list, a variable name and its content add its to the back of the list. if the list dosent exist inizialize it
@@ -58,7 +58,7 @@ int		cd_mx(t_envp **envp_mx, char *args);
 int		echo_mx(char *arguments);
 // PARSING
 // Parse and add to command list
-void    parse(char *line_expanded, t_command **commands);
+void	parse(char *line_expanded, t_command **commands);
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *input);
 // PIPING
@@ -66,7 +66,7 @@ char	*expansion(t_envp **envp_mx, char *input);
 void	parse_commands(char *line, t_envp *envp_mx);
 
 // Executes commands, either local files marked as executable, builtins or PATH programs
-int 	execute_commands(t_command **commands, t_envp *envp_mx);
+int		execute_commands(t_command **commands, t_envp *envp_mx);
 
 // Executes mx_ built-ins
 void	execute_builtin(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
@@ -80,5 +80,5 @@ bool	resolve_path(t_command *current, char **path);
 //UTILS
 void	free_array(void **array);
 void	free_command_list(t_command **list);
-void    mx_error(int error_number);
+void	mx_error(int error_number);
 #endif
