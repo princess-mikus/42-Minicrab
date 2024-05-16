@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/16 16:17:41 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/16 20:26:14 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,6 +272,7 @@ void	parse(char *line_expanded, t_command **commands)
 	}
 }
 
+/*
 int main(void)//int argc, char **argv
 {
 	//./minishell "<   in ls -l a   >    out   |   <   out  cat -l>    in | aaaaa aaa"
@@ -316,6 +317,7 @@ int main(void)//int argc, char **argv
 	printf("-----------------------------------------\n");
 	return (0);
 }
+*/
 //el end de los substrings va a fallar sin espacio al final, asi que arreglalo
 //las declaraciones de tipo b="ho"la tambien van mal
 // Outfile no se saltea los espacios
