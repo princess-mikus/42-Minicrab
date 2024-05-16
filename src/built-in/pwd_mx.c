@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_commands.c                                   :+:      :+:    :+:   */
+/*   pwd_mx.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 10:49:25 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/10 15:26:55 by mikus            ###   ########.fr       */
+/*   Created: 2024/04/17 11:38:35 by xortega           #+#    #+#             */
+/*   Updated: 2024/05/10 15:28:37 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parse_commands(char *line, t_envp *envp_mx)
+int	pwd_mx(void)
 {
-	char		*line_expanded;
-	t_command	*commands;
-
-	commands = NULL;
-	line_expanded = expansion(&envp_mx, line);
-	parse(line_expanded, &commands);
-	execute_commands(&commands, envp_mx);
-	free(line_expanded);
-	free_command_list(&commands);
+	ft_printf("%s\n", getcwd(NULL, 0));
+	return (0);
 }

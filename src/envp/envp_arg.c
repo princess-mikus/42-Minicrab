@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_arg.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:53:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/15 11:55:51 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/06 15:04:47 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ char	*make_line_envp(char *variable, char *content)
 	ft_strlcat(line, variable, variable_len + 1);
 	ft_strlcat(line, "=", variable_len + 2);
 	ft_strlcat(line, content, variable_len + 2 + content_len);
-	line[content_len + variable_len + 2] = '\0';
+	//line[content_len + variable_len + 2] = '\0'
+	// Esta línea segfaultea el programa a la mierda
 	return (line);
 }
 
@@ -55,7 +56,7 @@ char	**envp_mx_to_arg(t_envp **envp_mx)
 	current = *envp_mx;
 	envp_new = malloc(sizeof(char *) * (envp_mx_num(envp_mx) + 1));
 	i = 0;
-	while (i < 7 && current)
+	while (current)
 	{
 		envp_new[i] = make_line_envp(current->variable, current->content);
 		current = current->next;
