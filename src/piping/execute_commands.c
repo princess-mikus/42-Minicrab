@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/16 12:35:41 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 12:38:24 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,12 @@ void	dec_to_env(char **dec, t_envp **envp_mx_temp)
 	while (dec[i])
 	{
 		temp = ft_split(dec[i], '=');
-		variable = temp[0];
-		content = temp[1];
-		free(temp);
+		variable = ft_strdup(temp[0]);
+		content = ft_strdup(temp[1]);
+		free_array((void **)temp);
 		add_var_to_envp_mx(envp_mx_temp, variable, content);
+		free(variable);
+		free(content);
 		i++;
 	}
 }
