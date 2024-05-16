@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/16 21:05:44 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/16 21:32:55 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,17 @@ void	parse_commands(char *line, t_envp *envp_mx);
 // Executes commands, either local files marked as executable, builtins or PATH programs
 int		execute_commands(t_command **commands, t_envp *envp_mx);
 
+// Updates envp before execution, with optional same-line vars
+char	**update_environment(t_command *current, t_envp **envp_mx);
+
+// Puts optional same-line vars to temp envp_mx
+void	dec_to_env(char **dec, t_envp **envp_mx_temp);
+
 // Executes mx_ built-ins
 void	execute_builtin(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
+
+// Checks if input is subject-mandated mx_ built-in
+bool	get_builtin(char *program);
 
 // Takes PATH var and splits it into a double pointer with every PATH path
 char	**get_path_var(char **envp);
@@ -81,4 +90,5 @@ bool	resolve_path(t_command *current, char **path);
 void	free_array(void **array);
 void	free_command_list(t_command **list);
 void	mx_error(int error_number);
+void	resolve_exec_error(int *inpipe, int *outpipe);
 #endif
