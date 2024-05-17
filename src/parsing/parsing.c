@@ -102,7 +102,7 @@ int main(void)//int argc, char **argv
 	//char *line = " ls -la ";
 	//char *line = " ls -l     a ";
 	//char *line = " ls ";
-	char *line = ft_strdup("<< \"in  fi\"le>>  out_file \"com \"ando c=uno b=\"do s   \" c=uno2 b=\" tre \"s soy \"el argu\" mento");
+	char *line = ft_strdup("<   infile");
 	//char *line = ft_strtrim("<    in\"  file\"57 l\"s\"a -l\" a\"> \" jiji\"jija", " ");
 	//char *line = ft_strtrim("<    in\"  file\"57 ", " ");
 	//line = line_cutter(line, "que");

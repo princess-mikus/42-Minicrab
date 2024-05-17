@@ -28,7 +28,6 @@ char	*get_cmd(char *line, t_command *node)
 
 	if (!line || !jmp_spaces(line))
 		return (line);
-    printf("antes de cmd [%s]\n", line);
 	start = jmp_spaces(line) - line;
 	end = start;
 	if (line[start] == '"')
@@ -81,19 +80,18 @@ char	*get_outfile(char *line, t_command *node)
 	if (!search_out_quotes(line, '>'))
 		return (line);
 	start = search_out_quotes(line, '>') - line;
-	if (jmp_spaces(line + start + node->apend + 1)[0] == '"')
-		end = ft_strchr(jmp_spaces(line + start + node->apend + 2) + 1, '"') - line;
-    else if (strchr(line + start, '"' && strchr(line + start, ' ')
-    && strchr(line + start, '"') > strchr(line + start, ' ')))
-        end = ft_strchr(ft_strchr(line + start, '"') + 1, '"') - line;
-	else
-		end = jmp_spaces(line + start + node->apend + 1) - line;
+	end = jmp_spaces(line + start + node->apend + 1) - line;
+	if (line[end] == '"')
+		end = ft_strchr(line + end + 1, '"') - line;
+    else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
+    && ft_strchr(line + end, '"') > ft_strchr(line + end, ' '))
+        end = ft_strchr(ft_strchr(line + start, '"') + 2, '"') - line;
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
-	if (search_out_quotes(temp, '>'))
+	if (search_out_quotes(temp, '<'))
 		node->outfile = ft_substr(temp, 0, search_out_quotes(temp, '<') - temp);
 	else
 		node->outfile = ft_strdup(temp);
@@ -110,16 +108,15 @@ char	*get_infile(char *line, t_command *node)
 	if (!search_out_quotes(line, '<'))
 		return (line);
 	start = search_out_quotes(line, '<') - line;
-	if (jmp_spaces(line + start + node->hdoc + 1)[0] == '"')
-		end = ft_strchr(jmp_spaces(line + start + node->hdoc + 2) + 1, '"') - line;
-    else if (strchr(line + start, '"' && strchr(line + start, ' ')
-    && strchr(line + start, '"') > strchr(line + start, ' ')))
+	end = jmp_spaces(line + start + node->hdoc + 1) - line;
+	if (line[end] == '"')
+		end = ft_strchr(line + end + 1, '"') - line;
+    else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
+    && ft_strchr(line + end, '"') > ft_strchr(line + end, ' '))
         end = ft_strchr(ft_strchr(line + start, '"') + 2, '"') - line;
-	else
-		end = jmp_spaces(line + start + node->hdoc + 1) - line;
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
-    else 
+    else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
 	if (search_out_quotes(temp, '>'))
