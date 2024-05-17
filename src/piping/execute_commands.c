@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/17 11:29:56 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/17 14:31:05 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 	char	**program;
 
 	program = get_arguments(current);
-	if (!fork())
+	current->pid = fork();
+	if (!current->pid)
 	{
 		dup2(*inpipe, STDIN_FILENO);
 		close(*inpipe);
@@ -90,6 +91,7 @@ int	execute_commands(t_command **commands, t_envp *envp_mx)
 	current = *commands;
 	outpipe[0] = -1;
 	outpipe[1] = -1;
+	signal_sender(*commands);
 	while (current)
 	{
 		resolve_infile(outpipe, &inpipe, current);

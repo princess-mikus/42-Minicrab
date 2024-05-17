@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/16 21:32:55 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/17 14:31:18 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <wait.h>
+# include <signal.h>
 # include <errno.h>
 //#include "../libs/readline/readline.h"
 //#include "readline.h"
@@ -85,6 +86,10 @@ char	**get_path_var(char **envp);
 
 // Checks if file exists on PATH or if is a local file (Relative & Absolute paths)
 bool	resolve_path(t_command *current, char **path);
+
+// SIGNALS
+void    signal_management(void);
+void	signal_sender(t_command *command);
 
 //UTILS
 void	free_array(void **array);

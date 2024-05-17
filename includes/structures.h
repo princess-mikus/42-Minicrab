@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/16 21:04:05 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/17 14:06:17 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_command
 {
 	bool				hdoc;
 	bool				apend;
+	pid_t				pid;
 	char				**dec;
 	char				*infile;
 	char				*command;
