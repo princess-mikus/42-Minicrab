@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mikus <mikus@student.42.fr>                +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/16 21:25:18 by mikus            ###   ########.fr        #
+#    Updated: 2024/05/17 10:57:00 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,11 +26,11 @@ BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx echo_mx
 ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
-MAIN		:= main
-PARSING 	:= parsing
+MAIN		:= #main
+PARSING 	:= parsing token cleaning
 PIPING 		:= parse_commands execute_commands path built-in change_envp
 SIGNALS 	:=
-UTILS		:= free error
+UTILS		:= free error strings
 
 
 

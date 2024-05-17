@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/16 21:32:55 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/17 10:56:28 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,19 @@ int		echo_mx(char *arguments);
 // PARSING
 // Parse and add to command list
 void	parse(char *line_expanded, t_command **commands);
+	//listing
+void	init_node(t_command *node);
+t_command	*new_command(char *line);
+void	add_command(char *line_splited, t_command **commands);
+	//tokenicing
+char	*get_infile(char *line, t_command *node);
+char	*get_outfile(char *line, t_command *node);
+int	start_dec(char *line);
+char	*get_dec(char *line, t_command *node);
+char	*get_cmd(char *line, t_command *node);
+void	get_arg(char *line, t_command *node);
+    //cleaning
+void	cleaning(t_command *node);
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *input);
 // PIPING
@@ -87,8 +100,15 @@ char	**get_path_var(char **envp);
 bool	resolve_path(t_command *current, char **path);
 
 //UTILS
+	//free
 void	free_array(void **array);
 void	free_command_list(t_command **list);
+	//error-handeling
 void	mx_error(int error_number);
 void	resolve_exec_error(int *inpipe, int *outpipe);
+	//strings
+char	*jmp_spaces(char *str);
+int	count_out_quotes(char *line, char c);
+char	*search_out_quotes(char *line, char c);
+char	*line_cutter(char *line, char *to_cut);
 #endif
