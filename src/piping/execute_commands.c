@@ -50,8 +50,7 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 		execve(current->path, program, envp);
 		exit(2);
 	}
-	else
-		wait(NULL);
+	waitpid(0, NULL, WNOHANG);
 	close(*inpipe);
 	close(outpipe[1]);
 	free_array((void **)program);
@@ -107,5 +106,6 @@ int	execute_commands(t_command **commands, t_envp *envp_mx)
 		current = current->next;
 		free_array((void **)envp);
 	}
+	wait(NULL);
 	return (close(outpipe[0]), close(outpipe[1]), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:30:15 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/12 21:29:32 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/17 13:15:51 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 bool	get_flag(char *arguments, int *i)
 {
+	if (!arguments)
+		return (true);
 	while (arguments[*i] == ' ')
 		*i += 1;
 	if (arguments[*i] == '-' && arguments[*i + 1] == 'n')
@@ -34,7 +36,7 @@ int	echo_mx(char *arguments)
 
 	i = 0;
 	nl = get_flag(arguments, &i);
-	while (arguments[i])
+	while (arguments && arguments[i])
 	{
 		if (write(1, &arguments[i], 1) != 1)
 			return (1);
