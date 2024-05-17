@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/16 20:48:59 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/17 11:29:56 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 		execve(current->path, program, envp);
 		exit(2);
 	}
-	else
-		wait(NULL);
+	waitpid(0, NULL, WNOHANG);
 	close(*inpipe);
 	close(outpipe[1]);
 	free_array((void **)program);
@@ -105,5 +104,6 @@ int	execute_commands(t_command **commands, t_envp *envp_mx)
 		current = current->next;
 		free_array((void **)envp);
 	}
+	wait(NULL);
 	return (close(outpipe[0]), close(outpipe[1]), 0);
 }
