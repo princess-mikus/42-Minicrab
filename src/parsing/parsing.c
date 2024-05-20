@@ -210,6 +210,7 @@ void	init_node(t_command *node)
 {
 	node->apend = 0;
 	node->hdoc = 0;
+	node->status = 0;
 	node->infile = NULL;
 	node->outfile = NULL;
 	node->dec = NULL;

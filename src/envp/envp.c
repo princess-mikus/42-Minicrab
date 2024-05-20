@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:58:58 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/17 12:24:17 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/20 12:14:21 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	init_envp(t_envp **envp_mx, char **envp)
 		envp_add_back(envp_mx, new_envp(ft_substr(envp[i], 0, \
 		(ft_strchr(envp[i], '=') - envp[i])), \
 		ft_strdup(ft_strchr(envp[i], '=') + 1)));
+	envp_add_back(envp_mx, new_envp("~", get_content_envp_mx(envp_mx, "HOME")));
+	envp_add_back(envp_mx, new_envp("?", ft_strdup("0")));
 	current = *envp_mx;
 	unset_mx(envp_mx, "OLDPWD");
 	while (current)

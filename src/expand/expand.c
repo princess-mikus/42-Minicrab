@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/17 13:36:17 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/20 12:08:17 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,6 @@ int	line_len(t_envp **envp_mx, char *input)
 			free(var);
 			while (input[i] && input[i] != ' ')
 				i++;
-		}
-		else if (input[i] == '~')
-		{
-			i++;
-			var = "HOME";
-			len += ft_strlen(get_content_envp_mx(envp_mx, var));
 		}
 		else
 		{
@@ -70,12 +64,11 @@ char	*expansion(t_envp **envp_mx, char *input)
 			while (input[i] && input[i] != ' ')
 				i++;
 		}
-		else if (input[i] == '~' && (input[i + 1] == ' ' || !input[i + 1]))
+		else if (input[i] == '~')
 		{
 			i++;
-			var = "HOME";
-			k = ft_strlcat(line, get_content_envp_mx(envp_mx, var), \
-			(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, var)) + 1));
+			k = ft_strlcat(line, get_content_envp_mx(envp_mx, "~"), \
+			(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, "~")) + 1));
 		}
 		else
 			line[k++] = input[i++];

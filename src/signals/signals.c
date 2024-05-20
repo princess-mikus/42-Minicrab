@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 00:36:45 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/17 14:39:48 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/20 13:02:04 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void    signal_management(void)
 	signal(SIGINT, get_signal);
 	if (g_sig == SIGINT)
 	{
-    	write(2, "\n", 1);
-    	rl_replace_line("", 0);
+		write(2, "\n", 1);
     	rl_on_new_line();
+    	rl_replace_line("", 0);
     	rl_redisplay();
 	}
 	signal(SIGQUIT, SIG_IGN);
