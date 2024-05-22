@@ -25,6 +25,7 @@ typedef struct s_command
 	bool				hdoc;
 	bool				apend;
 	pid_t				pid;
+	int					status;
 	char				**dec;
 	char				*infile;
 	char				*command;

@@ -19,19 +19,20 @@ int	main(int argc, char **argv, char **envp)
 
 	envp_mx = NULL;
 	init_envp(&envp_mx, envp);
-	line = ft_strdup("");
 	if (argc == 0 || !argv[0] || !envp)
 		return (0);
-	while (line)
+	while (1)
 	{
-		free(line);
 		signal_management();
 		line = readline("🦀\e[0;93mminicrab: \e[0;37m");
 		if (!ft_strncmp(line, "exit", 5))
 			break ;
-		if (line[0])
+		if (line[0] && line[0] != '\n')
+		{
 			add_history(line);
-		parse_commands(line, envp_mx);
+			parse_commands(line, envp_mx);
+		}
+		free(line);
 		//rl_on_new_line();
 	}
 	free_envp_mx(&envp_mx);

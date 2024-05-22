@@ -16,25 +16,27 @@ static int g_sig;
 
 void 	get_signal(int sig)
 {	
-	g_sig = sig;
+	(void)sig;
+	write(2, "\n", 1);
+   	rl_replace_line("", 0);
+   	rl_on_new_line();
+  	rl_redisplay();
 }
 	
 void    signal_management(void)
 {
 	signal(SIGINT, get_signal);
-	if (g_sig == SIGINT)
-	{
-		write(2, "\n", 1);
-    	rl_on_new_line();
-    	rl_replace_line("", 0);
-    	rl_redisplay();
-	}
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	kill_children(int sig)
+{
+	g_sig = sig;
 }
 
 void	signal_sender(t_command *command)
 {
-	signal(SIGQUIT, get_signal);
+	signal(SIGQUIT, kill_children);
 	if (g_sig == SIGQUIT)
 	{
 		while (command)
