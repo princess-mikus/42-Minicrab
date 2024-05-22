@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   parsing.c										  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: mikus <mikus@student.42.fr>				+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2024/04/10 10:29:05 by xortega		   #+#	#+#			 */
-/*   Updated: 2024/05/16 20:57:28 by mikus			###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
+/*   Updated: 2024/05/22 14:07:01 by xortega          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -24,13 +24,27 @@ int	start_dec(char *line)
 	return (i);
 }
 
-void	init_node(t_command *node)
+char	**make_files(char *line, char c)
+{
+	char	**vector;
+
+	if (count_out_quotes(line, c) != 0)
+	{
+		vector = malloc(sizeof(char *) * (c_out_q_no_d(line, c) + 1));
+		vector[c_out_q_no_d(line, c)] = NULL;	
+	}
+	else
+		vector = NULL;
+	return(vector);
+}
+
+void	init_node(t_command *node, char * line)
 {
 	node->apend = 0;
 	node->hdoc = 0;
-	node->infile = NULL;
-	node->outfile = NULL;
-	node->dec = NULL;
+	node->infile = make_files(line, '<');
+	node->outfile = make_files(line, '>');
+	node->dec = make_files(line, '=');
 	node->command = NULL;
 	node->arg = NULL;
 	node->next = NULL;
@@ -39,18 +53,26 @@ void	init_node(t_command *node)
 t_command	*new_command(char *line)
 {
 	t_command	*new;
+	int			i;
 
 	new = malloc(sizeof(t_command));
-	init_node(new);
+	init_node(new, line);
 	if (search_out_quotes(line, '<') && search_out_quotes(line, '<')[1] == '<')
 		new->hdoc = 1;
 	if (search_out_quotes(line, '>') && search_out_quotes(line, '>')[1] == '>')
 		new->apend = 1;
-	line = get_infile(line, new);
-	line = get_outfile(line, new);
+	i = -1;
+	while (search_out_quotes(line, '<'))
+		line = get_infile(line, &new->infile[++i], new->hdoc);
+	i = -1;
+	while (search_out_quotes(line, '>'))
+		line = get_outfile(line, &new->outfile[++i], new->apend);
 	line = get_dec(line, new);
 	line = get_cmd(line, new);
-	get_arg(line, new);
+	if(ft_strlen(line) == 0)
+		free(line);
+	else
+		get_arg(line, new);
 	return (new);
 }
 
@@ -87,8 +109,10 @@ void	parse(char *line_expanded, t_command **commands)
 }
 
 
-int main(void)//int argc, char **argv
+int main(int argc, char **argv)
 {
+	if (argc != 2)
+		return (0);
 	//./minishell "<   in ls -l a   >    out   |   <   out  cat -l>    in | aaaaa aaa"
 	//char *line = "   >    outfile    ls  < infile ";
 	//char *line = "  <     infile    ls    -l   a    >    outfile";
@@ -102,12 +126,13 @@ int main(void)//int argc, char **argv
 	//char *line = " ls -la ";
 	//char *line = " ls -l     a ";
 	//char *line = " ls ";
-	char *line = ft_strdup("<   infile");
+	char *line = ft_strtrim(argv[1], " ");
 	//char *line = ft_strtrim("<    in\"  file\"57 l\"s\"a -l\" a\"> \" jiji\"jija", " ");
 	//char *line = ft_strtrim("<    in\"  file\"57 ", " ");
 	//line = line_cutter(line, "que");
 	//printf("[%s]\n", line);
 	t_command *command;
+	int i = -1;
 //	if (argc < 2)
 //		return (0);
 //
@@ -115,20 +140,32 @@ int main(void)//int argc, char **argv
 //	parse(argv[1], &command);
     printf("line: [%s]\n", line);
 	command = new_command(line);
-    cleaning(command);
-	int i = -1;
+	//cleaning(command);
 	while (command)
 	{
+		i = -1;
 		printf("-----------------------------------------\n");
 		printf("hdoc:[%d]\n", command->hdoc);
 		printf("apend:[%d]\n", command->apend);
-		printf("infile:[%s]\n", command->infile);
-		printf("outfile:[%s]\n", command->outfile);
+		if(command->infile)
+			while (command->infile[++i])
+				ft_printf("infile:[%s]\n", command->infile[i]);
+		else
+			ft_printf("infile:[(null)]\n");
+		i = -1;
+		if(command->outfile)
+			while (command->outfile[++i])
+				ft_printf("outfile:[%s]\n", command->outfile[i]);
+		else
+			ft_printf("outfile:[(null)]\n");
+		i = -1;
 		if (command->dec)
 			while (command->dec[++i])
-				printf("declaration %d:[%s]\n", i, command->dec[i]);
-		printf("command:[%s]\n", command->command);
-		printf("arg:[%s]\n", command->arg);
+				ft_printf("declaration %d:[%s]\n", i, command->dec[i]);
+		else
+			ft_printf("declaration:[(null)]\n");
+		ft_printf("command:[%s]\n", command->command);
+		ft_printf("arg:[%s]\n", command->arg);
 		command = command->next;
 	}
 	printf("-----------------------------------------\n");
