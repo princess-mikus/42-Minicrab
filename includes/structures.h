@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/22 14:51:45 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/22 16:40:51 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 typedef struct s_file
 {
-	int		class;
 	char	*name;
 	bool	special;
 }			t_file;
@@ -29,11 +28,9 @@ typedef struct s_envp
 
 typedef struct s_command
 {
-	bool				hdoc;
-	bool				apend;
-	char				**dec; //0
-	char				**infile; //1
-	char				**outfile; //2
+	t_file				**dec;
+	t_file				**infile;
+	t_file				**outfile;
 	char				*command;
 	char				*arg;
 	char				*path;

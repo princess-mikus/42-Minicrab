@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/22 14:07:01 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/22 17:23:00 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,18 @@ int	start_dec(char *line)
 	return (i);
 }
 
-char	**make_files(char *line, char c)
+t_file	**make_files(char *line, char c)
 {
-	char	**vector;
+	t_file	**vector;
+	int	n;
 
 	if (count_out_quotes(line, c) != 0)
 	{
-		vector = malloc(sizeof(char *) * (c_out_q_no_d(line, c) + 1));
-		vector[c_out_q_no_d(line, c)] = NULL;	
+		n = c_out_q_no_d(line, c);
+		vector = malloc(sizeof(t_file *) * (n + 1));
+		vector[n] = NULL;
+		while (n > 0)
+			vector[--n] = malloc(sizeof(t_file));
 	}
 	else
 		vector = NULL;
@@ -40,8 +44,6 @@ char	**make_files(char *line, char c)
 
 void	init_node(t_command *node, char * line)
 {
-	node->apend = 0;
-	node->hdoc = 0;
 	node->infile = make_files(line, '<');
 	node->outfile = make_files(line, '>');
 	node->dec = make_files(line, '=');
@@ -57,16 +59,12 @@ t_command	*new_command(char *line)
 
 	new = malloc(sizeof(t_command));
 	init_node(new, line);
-	if (search_out_quotes(line, '<') && search_out_quotes(line, '<')[1] == '<')
-		new->hdoc = 1;
-	if (search_out_quotes(line, '>') && search_out_quotes(line, '>')[1] == '>')
-		new->apend = 1;
 	i = -1;
 	while (search_out_quotes(line, '<'))
-		line = get_infile(line, &new->infile[++i], new->hdoc);
+		line = get_infile(line, &new->infile[++i]->name);
 	i = -1;
 	while (search_out_quotes(line, '>'))
-		line = get_outfile(line, &new->outfile[++i], new->apend);
+		line = get_outfile(line, &new->outfile[++i]->name);
 	line = get_dec(line, new);
 	line = get_cmd(line, new);
 	if(ft_strlen(line) == 0)
@@ -139,29 +137,27 @@ int main(int argc, char **argv)
 	command = NULL;
 //	parse(argv[1], &command);
     printf("line: [%s]\n", line);
-	command = new_command(line);
+	command = new_command(line);	
 	//cleaning(command);
 	while (command)
 	{
 		i = -1;
 		printf("-----------------------------------------\n");
-		printf("hdoc:[%d]\n", command->hdoc);
-		printf("apend:[%d]\n", command->apend);
 		if(command->infile)
 			while (command->infile[++i])
-				ft_printf("infile:[%s]\n", command->infile[i]);
+				ft_printf("infile:[%s]\n", command->infile[i]->name);
 		else
 			ft_printf("infile:[(null)]\n");
 		i = -1;
 		if(command->outfile)
 			while (command->outfile[++i])
-				ft_printf("outfile:[%s]\n", command->outfile[i]);
+				ft_printf("outfile:[%s]\n", command->outfile[i]->name);
 		else
 			ft_printf("outfile:[(null)]\n");
 		i = -1;
 		if (command->dec)
 			while (command->dec[++i])
-				ft_printf("declaration %d:[%s]\n", i, command->dec[i]);
+				ft_printf("declaration %d:[%s]\n", i, command->dec[i]->name);
 		else
 			ft_printf("declaration:[(null)]\n");
 		ft_printf("command:[%s]\n", command->command);

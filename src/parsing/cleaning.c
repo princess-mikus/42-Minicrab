@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaning.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/17 12:46:50 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/22 17:20:50 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,12 @@ void clean_dec(t_command *node)
 	i = 0;
 	while (node->dec[i])
 	{
-		while (strchr(node->dec[i], '"'))
-			node->dec[i] = line_cutter(node->dec[i], "\"");
+		ft_printf("%s\n", node->dec[i]->name);
+		while (strchr(node->dec[i]->name, '"'))
+		{
+			node->dec[i]->name = line_cutter(node->dec[i]->name, "\"");
+			node->dec[i]->special = 0;
+		}
 		i++;
 	}
 }
@@ -41,31 +45,53 @@ void clean_outfile(t_command *node)
 {
 	char	*temp;
 	int		start;
+	int		i;
 
 	if (!node->outfile)
 		return ;
-	start = jmp_spaces(node->outfile + 1 + node->apend) - node->outfile;
-	temp = ft_strdup(node->outfile + start);
-	while (strchr(temp, '"'))
-		temp = line_cutter(temp, "\"");
-	free(node->outfile);
-	node->outfile = temp;
+	i = 0;
+	while (node->outfile[i])
+	{
+		if(node->outfile[i]->name[1] == '>')
+			node->outfile[i]->special = 1;		
+		if (ft_strlen(node->outfile[i]->name) > 2)
+			start = jmp_spaces(node->outfile[i]->name + 2)
+				- node->outfile[i]->name;
+		else
+			start = 0;
+		temp = ft_strdup(node->outfile[i]->name + start);
+		while (strchr(temp, '"'))
+			temp = line_cutter(temp, "\"");
+		free(node->outfile[i]->name);
+		node->outfile[i]->name = temp;
+		i++;
+	}
 }
 
 void clean_infile(t_command *node)
 {
 	char	*temp;
 	int		start;
+	int		i;
 
 	if (!node->infile)
 		return ;
-	
-	start = jmp_spaces(node->infile + 1 + node->hdoc) - node->infile;
-	temp = ft_strdup(node->infile + start);
-	while (strchr(temp, '"'))
-		temp = line_cutter(temp, "\"");
-	free(node->infile);
-	node->infile = temp;
+	i = 0;
+	while (node->infile[i])
+	{
+		if(node->infile[i]->name[1] == '<')
+			node->infile[i]->special = 1;		
+		if (ft_strlen(node->infile[i]->name) > 2)
+			start = jmp_spaces(node->infile[i]->name + 2) - node->infile[i]->name;
+		else
+			start = 0;
+		temp = ft_strdup(node->infile[i]->name + start);
+		while (strchr(temp, '"'))
+			temp = line_cutter(temp, "\"");
+		free(node->infile[i]->name);
+		node->infile[i]->name = temp;
+		i++;
+	}
 }
 
 void	cleaning(t_command *node)

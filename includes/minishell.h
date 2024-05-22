@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/20 11:53:23 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/22 15:24:33 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	init_node(t_command *node, char *line);
 t_command	*new_command(char *line);
 void	add_command(char *line_splited, t_command **commands);
 	//tokenicing
-char	*get_infile(char *line, char **infile, int hdoc);
-char	*get_outfile(char *line, char **outfile, int apend);
+char	*get_infile(char *line, char **infile);
+char	*get_outfile(char *line, char **outfile);
 int	start_dec(char *line);
 char	*get_dec(char *line, t_command *node);
 char	*get_cmd(char *line, t_command *node);

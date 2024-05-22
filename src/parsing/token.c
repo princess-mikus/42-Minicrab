@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/22 14:08:35 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/22 16:49:25 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,27 @@ char	*get_dec(char *line, t_command *node)
 		}
 		else
 			end = ft_strchr(search_out_quotes(line, '='), ' ') - line;
-		node->dec[i] = ft_substr(line, start, end - start);
-		line = line_cutter(line, node->dec[i++]);
+		node->dec[i]->name = ft_substr(line, start, end - start);
+		line = line_cutter(line, node->dec[i++]->name);
 	}
 	node->dec[i] = NULL;
 	return (line);
 }
 
-char	*get_outfile(char *line, char **outfile, int apend)
+int	logic(char *temp, char caso, char other)
+{
+	if (search_out_quotes(temp, caso))
+	{
+		if (search_out_quotes(temp, other) && 
+		search_out_quotes(temp, other) <
+		search_out_quotes(temp, caso))
+			return (0);
+		return (1);
+	}
+	return (0);
+}
+
+char	*get_outfile(char *line, char **outfile)
 {
 	int		start;
 	int		end;
@@ -79,7 +92,10 @@ char	*get_outfile(char *line, char **outfile, int apend)
 	if (!search_out_quotes(line, '>'))
 		return (line);
 	start = search_out_quotes(line, '>') - line;
-	end = jmp_spaces(line + start + apend + 1) - line;
+	if (ft_strlen(line) > 2)
+		end = jmp_spaces(line + start + 2) - line;
+	else
+		end = 0;
 	if (line[end] == '"')
 		end = ft_strchr(line + end + 1, '"') - line;
     else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
@@ -90,17 +106,17 @@ char	*get_outfile(char *line, char **outfile, int apend)
     else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
-	if (search_out_quotes(temp, '<'))
+	if (logic(temp + 2, '<', '>'))
 		*outfile = ft_substr(temp, 0, search_out_quotes(temp, '<') - temp);
-	else if (search_out_quotes(temp + 1 + apend, '>'))
-		*outfile = ft_substr(temp, 0, search_out_quotes(temp + 1 + apend, '>') - temp);
+	else if (logic(temp + 2, '>', '<'))
+		*outfile = ft_substr(temp, 0, search_out_quotes(temp + 2, '>') - temp);
 	else
 		*outfile = ft_strdup(temp);
 	free(temp);
 	return (line_cutter(line, *outfile));
 }
 
-char	*get_infile(char *line, char **infile, int hdoc)
+char	*get_infile(char *line, char **infile)
 {
 	int		start;
 	int		end;
@@ -109,7 +125,10 @@ char	*get_infile(char *line, char **infile, int hdoc)
 	if (!search_out_quotes(line, '<'))
 		return (line);
 	start = search_out_quotes(line, '<') - line;
-	end = jmp_spaces(line + start + hdoc + 1) - line;
+	if (ft_strlen(line) > 2)
+		end = jmp_spaces(line + start + 2) - line;
+	else
+		end = 0;
 	if (line[end] == '"')
 		end = ft_strchr(line + end + 1, '"') - line;
     else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
@@ -120,10 +139,10 @@ char	*get_infile(char *line, char **infile, int hdoc)
     else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
-	if (search_out_quotes(temp, '>'))
+	if (logic(temp + 2, '>', '<'))
 		*infile = ft_substr(temp, 0, search_out_quotes(temp, '>') - temp);
-	else if (search_out_quotes(temp + 1 + hdoc, '<'))
-		*infile = ft_substr(temp, 0, search_out_quotes(temp + 1 + hdoc, '<') - temp);
+	else if (logic(temp + 2, '<', '>'))
+		*infile = ft_substr(temp, 0, search_out_quotes(temp + 2, '<') - temp);
 	else
 		*infile = ft_strdup(temp);
 	free(temp);
