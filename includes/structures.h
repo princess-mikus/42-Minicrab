@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/17 14:06:17 by mikus            ###   ########.fr       *
+/*   Updated: 2024/05/22 16:40:51 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ typedef struct s_command
 	t_file				**dec;
 	t_file				**infile;
 	t_file				**outfile;
-	pid_t				pid;
-	int					status;
 	char				*command;
 	char				*arg;
 	char				*path;
