@@ -3,10 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
+<<<<<<< HEAD
 #    By: mikus <mikus@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
 #    Updated: 2024/05/23 22:20:32 by mikus            ###   ########.fr        #
+=======
+#    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
+#    Updated: 2024/05/20 12:07:28 by fcasaubo         ###   ########.fr        #
+>>>>>>> parent of 6c6710e (Merging parsing into built-ins)
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,11 +33,19 @@ BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx echo_mx
 ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
+<<<<<<< HEAD
 MAIN		:= #main
 PARSING 	:= parsing token cleaning
 PIPING 		:= #parse_commands execute_commands path built-in change_envp
 SIGNALS 	:=
 UTILS		:= free error strings
+=======
+MAIN		:= main
+PARSING 	:= parsing
+PIPING 		:= parse_commands execute_commands path built-in change_envp
+SIGNALS 	:= signals
+UTILS		:= free error
+>>>>>>> parent of 6c6710e (Merging parsing into built-ins)
 
 
 
