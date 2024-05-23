@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/20 12:44:47 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/05/23 22:06:10 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	manage_here_doc(void)
+{
+	printf("Lmao\n");
+}
 
 char	**get_arguments(t_command *current)
 {
@@ -59,10 +64,22 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 
 void	resolve_infile(int *outpipe, int *inpipe, t_command *current)
 {
+	int		i;
+	char	*file;
+	
+	i = 0;
 	if (current->infile)
 	{
 		close(*inpipe);
-		*inpipe = open(current->infile, O_RDONLY);
+		while (current->infile[i])
+			i++;
+		if (current->infile[i]->special)
+			manage_here_doc();
+		else
+		{
+			file = current->infile[i]->name;
+			*inpipe = open(file, O_RDONLY);
+		}
 	}
 	else if (outpipe[0] > 0)
 	{
@@ -73,8 +90,24 @@ void	resolve_infile(int *outpipe, int *inpipe, t_command *current)
 
 void	resolve_outfile(int *outpipe, t_command *current)
 {
+	int		i;
+	char	*file;
+
+	i = 0;
 	if (current->outfile)
-		outpipe[1] = open(current->outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	{
+		while (current->outfile[i])
+		{
+			file = current->outfile[i]->name;
+			if (current->outfile[i]->special)
+				outpipe[1] = open(file, O_CREAT | O_APPEND | O_WRONLY, 0644);
+			else
+				outpipe[1] = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			i++;
+			if (current->outfile[i])
+				close(outpipe[1]);
+		}
+	}
 	else if (!current->next)
 		outpipe[1] = dup(STDOUT_FILENO);
 	else

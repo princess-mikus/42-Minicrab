@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/22 15:24:33 by xortega          ###   ########.fr       */
+/*   Created: 2024/05/23 21:49:54 by mikus             #+#    #+#             */
+/*   Updated: 2024/05/23 21],:57:40 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int		execute_commands(t_command **commands, t_envp *envp_mx);
 char	**update_environment(t_command *current, t_envp **envp_mx);
 
 // Puts optional same-line vars to temp envp_mx
-void	dec_to_env(char **dec, t_envp **envp_mx_temp);
+void	dec_to_env(t_file **dec, t_envp **envp_mx_temp);
 
 // Executes mx_ built-ins
 void	execute_builtin(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
