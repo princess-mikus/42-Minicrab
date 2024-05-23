@@ -268,9 +268,11 @@ void	parse(char *line_expanded, t_command **commands)
 	}
 }
 
-/*
-int main(void)//int argc, char **argv
+
+int main(int argc, char **argv)
 {
+	if (argc != 2)
+		return (0);
 	//./minishell "<   in ls -l a   >    out   |   <   out  cat -l>    in | aaaaa aaa"
 	//char *line = "   >    outfile    ls  < infile ";
 	//char *line = "  <     infile    ls    -l   a    >    outfile";
@@ -284,37 +286,53 @@ int main(void)//int argc, char **argv
 	//char *line = " ls -la ";
 	//char *line = " ls -l     a ";
 	//char *line = " ls ";
-	//char *line = ft_strdup("<<\"ho  \"la>>\"que tal\" \"ja\"ja c=que b=\"lol\" c=que b=\"lo\"l creo \"que me\" cago    ");
-	char *line = ft_strtrim("<   \" infile\"57 l\"s\"asdfghjkl -la> \" jiji\"jija", " ");
+	char *line = ft_strtrim(argv[1], " ");
+	//char *line = ft_strtrim("<    in\"  file\"57 l\"s\"a -l\" a\"> \" jiji\"jija", " ");
+	//char *line = ft_strtrim("<    in\"  file\"57 ", " ");
 	//line = line_cutter(line, "que");
 	//printf("[%s]\n", line);
 	t_command *command;
+	int i = -1;
 //	if (argc < 2)
 //		return (0);
 //
 	command = NULL;
 //	parse(argv[1], &command);
-	command = new_command(line);
-	int i = -1;
+    printf("line: [%s]\n", line);
+	command = new_command(line);	
+	cleaning(command);
 	while (command)
 	{
+		i = -1;
 		printf("-----------------------------------------\n");
-		printf("hdoc:[%d]\n", command->hdoc);
-		printf("apend:[%d]\n", command->apend);
-		printf("infile:[%s]\n", command->infile);
-		printf("outfile:[%s]\n", command->outfile);
+		if(command->infile)
+			while (command->infile[++i])
+			{
+				ft_printf("infile:[%s][%d]\n", command->infile[i]->name, command->infile[i]->special);
+
+			}
+		else
+			ft_printf("infile:[(null)]\n");
+		i = -1;
+		if(command->outfile)
+			while (command->outfile[++i])
+				ft_printf("outfile:[%s][%d]\n", command->outfile[i]->name, command->outfile[i]->special);
+		else
+			ft_printf("outfile:[(null)]\n");
+		i = -1;
 		if (command->dec)
 			while (command->dec[++i])
-				printf("declaration %d:[%s]\n", i, command->dec[i]);
-		printf("command:[%s]\n", command->command);
-		printf("arg:[%s]\n", command->arg);
+				ft_printf("declaration %d:[%s][%d]\n", i, command->dec[i]->name, command->dec[i]->special);
+		else
+			ft_printf("declaration:[(null)]\n");
+		ft_printf("command:[%s]\n", command->command);
+		ft_printf("arg:[%s]\n", command->arg);
 		command = command->next;
 	}
 	printf("-----------------------------------------\n");
 	return (0);
 }
-*/
+
 //el end de los substrings va a fallar sin espacio al final, asi que arreglalo
 //las declaraciones de tipo b="ho"la tambien van mal
-// Outfile no se saltea los espacios
-// Infile no se saltea los espacios
+// si el infile|outfile tieene > out"  file" no va

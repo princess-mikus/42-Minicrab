@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/16 21:04:05 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/23 22:20:33 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ typedef struct s_envp
 
 typedef struct s_command
 {
-	bool				hdoc;
-	bool				apend;
-	char				**dec;
-	char				*infile;
+	t_file				**dec;
+	t_file				**infile;
+	t_file				**outfile;
 	char				*command;
 	char				*arg;
 	char				*path;
