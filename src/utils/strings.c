@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   strings.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 10:23:14 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/17 10:28:25 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/22 17:18:09 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,26 @@ int	count_out_quotes(char *line, char c)
 	}
 	return (n);
 }
+int	c_out_q_no_d(char *line, char c)
+{
+	int	i;
+	int	n;
+	int	status;
+
+	i = 0;
+	status = 0;
+	n = 0;
+	while (line[i])
+	{
+		if (line[i] == '\"')
+			status++;
+		if (line[i] == c && status % 2 == 0
+		&& line[i + 1] && line[i + 1] != c)
+			n++;
+		i++;
+	}
+	return (n);
+}
 
 char	*search_out_quotes(char *line, char c)
 {
@@ -58,9 +78,7 @@ char	*search_out_quotes(char *line, char c)
 		if (line[i] == '\"')
 			status++;
 		if (line[i] == c && status % 2 == 0)
-		{
 			return (line + i);
-		}
 		i++;
 	}
 	return (NULL);

@@ -3,17 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-<<<<<<< HEAD
-#    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
+#    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/20 12:07:28 by fcasaubo         ###   ########.fr        #
-=======
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/17 10:57:00 by codespace        ###   ########.fr        #
->>>>>>> cleaning
+#    Updated: 2024/05/23 10:04:20 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,19 +23,14 @@ RLINE_FLAGS	:= -I/usr/include/readline -lreadline #-L/Users/$(USER)/.brew/opt/re
 
 # SRCS #
 BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx echo_mx
-ENVP	 	:= envp envp_utils envp_arg
+ENVP	 	  := envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
-MAIN		:= #main
+MAIN		  := main
 PARSING 	:= parsing token cleaning
 PIPING 		:= parse_commands execute_commands path built-in change_envp
-<<<<<<< HEAD
 SIGNALS 	:= signals
-UTILS		:= free error
-=======
-SIGNALS 	:=
-UTILS		:= free error strings
->>>>>>> cleaning
+UTILS		  := free error strings
 
 
 
@@ -61,16 +49,26 @@ OBJS := $(addprefix $(OBJ_DIR), $(PLAIN_SRCS:.c=.o))
 
 
 # ASCII COLORS #
-BLACK=\033[0;30m
-RED=\033[0;31m
-GREEN=\033[0;32m
-YELLOW=\033[0;33m
-BLUE=\033[0;34m
-MAG=\033[0;35m
-CYAN=\033[0;36m
-WHITE=\033[0;37m
-PAPYRUS=\033[38;5;223m
-END=\033[0m
+#BLACK=\033[0;30m
+#RED=\033[0;31m
+#GREEN=\033[0;32m
+#YELLOW=\033[0;33m
+#BLUE=\033[0;34m
+#MAG=\033[0;35m
+#CYAN=\033[0;36m
+#WHITE=\033[0;37m
+#PAPYRUS=\033[38;5;223m
+#END=\033[0m
+BLACK=
+RED=
+GREEN=
+YELLOW=
+BLUE=
+MAG=
+CYAN=
+WHITE=
+PAPYRUS=
+END=
 
 
 all: $(NAME)

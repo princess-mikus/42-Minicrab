@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/05/17 14:06:17 by mikus            ###   ########.fr       */
-=======
-/*   Updated: 2024/05/17 11:50:53 by codespace        ###   ########.fr       */
->>>>>>> cleaning
+/*   Updated: 2024/05/17 14:06:17 by mikus            ###   ########.fr       *
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
+
+typedef struct s_file
+{
+	char	*name;
+	bool	special;
+}			t_file;
 
 typedef struct s_envp
 {
@@ -26,16 +28,14 @@ typedef struct s_envp
 
 typedef struct s_command
 {
-	bool				hdoc;
-	bool				apend;
+	t_file				**dec;
+	t_file				**infile;
+	t_file				**outfile;
 	pid_t				pid;
 	int					status;
-	char				**dec;
-	char				*infile;
 	char				*command;
 	char				*arg;
 	char				*path;
-	char				*outfile;
 	struct s_command	*next;
 }						t_command;
 

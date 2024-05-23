@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   parsing.c										  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: mikus <mikus@student.42.fr>				+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2024/04/10 10:29:05 by xortega		   #+#	#+#			 */
-/*   Updated: 2024/05/16 20:57:28 by mikus			###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
+/*   Updated: 2024/05/23 10:37:53 by xortega          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -28,7 +28,6 @@ char	*get_cmd(char *line, t_command *node)
 
 	if (!line || !jmp_spaces(line))
 		return (line);
-    printf("antes de cmd [%s]\n", line);
 	start = jmp_spaces(line) - line;
 	end = start;
 	if (line[start] == '"')
@@ -51,7 +50,6 @@ char	*get_dec(char *line, t_command *node)
 
 	if (count_out_quotes(line, '=') == 0)
 		return (line);
-	node->dec = malloc(sizeof(char *) * (count_out_quotes(line, '=') + 1));
 	i = 0;
 	while (count_out_quotes(line, '=') > 0)
 	{
@@ -65,14 +63,27 @@ char	*get_dec(char *line, t_command *node)
 		}
 		else
 			end = ft_strchr(search_out_quotes(line, '='), ' ') - line;
-		node->dec[i] = ft_substr(line, start, end - start);
-		line = line_cutter(line, node->dec[i++]);
+		node->dec[i]->name = ft_substr(line, start, end - start);
+		line = line_cutter(line, node->dec[i++]->name);
 	}
 	node->dec[i] = NULL;
 	return (line);
 }
 
-char	*get_outfile(char *line, t_command *node)
+int	logic(char *temp, char caso, char other)
+{
+	if (search_out_quotes(temp, caso))
+	{
+		if (search_out_quotes(temp, other) && 
+		search_out_quotes(temp, other) <
+		search_out_quotes(temp, caso))
+			return (0);
+		return (1);
+	}
+	return (0);
+}
+
+char	*get_outfile(char *line, char **outfile)
 {
 	int		start;
 	int		end;
@@ -81,27 +92,34 @@ char	*get_outfile(char *line, t_command *node)
 	if (!search_out_quotes(line, '>'))
 		return (line);
 	start = search_out_quotes(line, '>') - line;
-	if (jmp_spaces(line + start + node->apend + 1)[0] == '"')
-		end = ft_strchr(jmp_spaces(line + start + node->apend + 2) + 1, '"') - line;
-    else if (strchr(line + start, '"' && strchr(line + start, ' ')
-    && strchr(line + start, '"') > strchr(line + start, ' ')))
-        end = ft_strchr(ft_strchr(line + start, '"') + 1, '"') - line;
+	if (ft_strlen(line + start) > 2)
+		end = jmp_spaces(line + start + 2) - line;
 	else
-		end = jmp_spaces(line + start + node->apend + 1) - line;
+		end = 0;
+	ft_printf("end  : %d\n", end);
+	ft_printf("'\"': %p \n' ': %p\n", ft_strchr(line + end, '"'), ft_strchr(line + end, ' '));
+	ft_printf("'\"': [%s] \n' ': [%s]\n", ft_strchr(line + end, '"'), ft_strchr(line + end, ' '));
+	if (line[end] == '"')
+		end = ft_strchr(line + end + 1, '"') - line;
+    else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
+    && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
+        end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
-	if (search_out_quotes(temp, '>'))
-		node->outfile = ft_substr(temp, 0, search_out_quotes(temp, '<') - temp);
+	if (logic(temp + 2, '<', '>'))
+		*outfile = ft_substr(temp, 0, search_out_quotes(temp, '<') - temp);
+	else if (logic(temp + 2, '>', '<'))
+		*outfile = ft_substr(temp, 0, search_out_quotes(temp + 2, '>') - temp);
 	else
-		node->outfile = ft_strdup(temp);
+		*outfile = ft_strdup(temp);
 	free(temp);
-	return (line_cutter(line, node->outfile));
+	return (line_cutter(line, *outfile));
 }
 
-char	*get_infile(char *line, t_command *node)
+char	*get_infile(char *line, char **infile)
 {
 	int		start;
 	int		end;
@@ -110,22 +128,26 @@ char	*get_infile(char *line, t_command *node)
 	if (!search_out_quotes(line, '<'))
 		return (line);
 	start = search_out_quotes(line, '<') - line;
-	if (jmp_spaces(line + start + node->hdoc + 1)[0] == '"')
-		end = ft_strchr(jmp_spaces(line + start + node->hdoc + 2) + 1, '"') - line;
-    else if (strchr(line + start, '"' && strchr(line + start, ' ')
-    && strchr(line + start, '"') > strchr(line + start, ' ')))
-        end = ft_strchr(ft_strchr(line + start, '"') + 2, '"') - line;
+	if (ft_strlen(line + start) > 2)
+		end = jmp_spaces(line + start + 2) - line;
 	else
-		end = jmp_spaces(line + start + node->hdoc + 1) - line;
+		end = 0;
+	if (line[end] == '"')
+		end = ft_strchr(line + end + 1, '"') - line;
+    else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
+    && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
+        end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
-    else 
+    else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
-	if (search_out_quotes(temp, '>'))
-		node->infile = ft_substr(temp, 0, search_out_quotes(temp, '>') - temp);
+	if (logic(temp + 2, '>', '<'))
+		*infile = ft_substr(temp, 0, search_out_quotes(temp, '>') - temp);
+	else if (logic(temp + 2, '<', '>'))
+		*infile = ft_substr(temp, 0, search_out_quotes(temp + 2, '<') - temp);
 	else
-		node->infile = ft_strdup(temp);
+		*infile = ft_strdup(temp);
 	free(temp);
-	return (line_cutter(line, node->infile));
+	return (line_cutter(line, *infile));
 }

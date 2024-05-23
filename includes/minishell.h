@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/05/17 14:31:18 by mikus            ###   ########.fr       */
-=======
-/*   Updated: 2024/05/17 10:56:28 by codespace        ###   ########.fr       */
->>>>>>> cleaning
+/*   Updated: 2024/05/22 15:24:33 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +61,12 @@ int		echo_mx(char *arguments);
 // Parse and add to command list
 void	parse(char *line_expanded, t_command **commands);
 	//listing
-void	init_node(t_command *node);
+void	init_node(t_command *node, char *line);
 t_command	*new_command(char *line);
 void	add_command(char *line_splited, t_command **commands);
 	//tokenicing
-char	*get_infile(char *line, t_command *node);
-char	*get_outfile(char *line, t_command *node);
+char	*get_infile(char *line, char **infile);
+char	*get_outfile(char *line, char **outfile);
 int	start_dec(char *line);
 char	*get_dec(char *line, t_command *node);
 char	*get_cmd(char *line, t_command *node);
@@ -118,6 +114,8 @@ void	resolve_exec_error(int *inpipe, int *outpipe);
 	//strings
 char	*jmp_spaces(char *str);
 int	count_out_quotes(char *line, char c);
+int	c_out_q_no_d(char *line, char c);
+char	*search_out_quotes(char *line, char c);
 char	*search_out_quotes(char *line, char c);
 char	*line_cutter(char *line, char *to_cut);
 #endif
