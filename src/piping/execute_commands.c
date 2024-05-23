@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/16 20:48:59 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/20 12:44:47 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 	char	**program;
 
 	program = get_arguments(current);
-	if (!fork())
+	current->pid = fork();
+	if (!current->pid)
 	{
 		dup2(*inpipe, STDIN_FILENO);
 		close(*inpipe);
@@ -49,8 +50,8 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 		execve(current->path, program, envp);
 		exit(2);
 	}
-	else
-		wait(NULL);
+	//waitpid(current->pid, &current->status, WNOHANG);
+	waitpid(0, NULL, WNOHANG);
 	close(*inpipe);
 	close(outpipe[1]);
 	free_array((void **)program);
@@ -91,6 +92,7 @@ int	execute_commands(t_command **commands, t_envp *envp_mx)
 	current = *commands;
 	outpipe[0] = -1;
 	outpipe[1] = -1;
+	signal_sender(*commands);
 	while (current)
 	{
 		resolve_infile(outpipe, &inpipe, current);
@@ -102,8 +104,15 @@ int	execute_commands(t_command **commands, t_envp *envp_mx)
 			resolve_exec_error(&inpipe, outpipe);
 		else
 			fork_and_execute(current, &inpipe, outpipe, envp);
-		current = current->next;
 		free_array((void **)envp);
+		if (current->next)
+			current = current->next;
+		else
+			break;
 	}
+	waitpid(current->pid, &current->status, 0);
+	current->status = WEXITSTATUS(current->status);
+	//wait(&current->status);
+	add_var_to_envp_mx(&envp_mx, "?", ft_itoa(current->status));
 	return (close(outpipe[0]), close(outpipe[1]), 0);
 }

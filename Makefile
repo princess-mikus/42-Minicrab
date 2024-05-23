@@ -23,14 +23,14 @@ RLINE_FLAGS	:= -I/usr/include/readline -lreadline #-L/Users/$(USER)/.brew/opt/re
 
 # SRCS #
 BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx echo_mx
-ENVP	 	:= envp envp_utils envp_arg
+ENVP	 	  := envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
-MAIN		:= #main
+MAIN		  := main
 PARSING 	:= parsing token cleaning
-PIPING 		:= #parse_commands execute_commands path built-in change_envp
-SIGNALS 	:=
-UTILS		:= free error strings
+PIPING 		:= parse_commands execute_commands path built-in change_envp
+SIGNALS 	:= signals
+UTILS		  := free error strings
 
 
 

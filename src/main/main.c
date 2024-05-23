@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/16 20:26:38 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/20 13:02:56 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,20 @@ int	main(int argc, char **argv, char **envp)
 
 	envp_mx = NULL;
 	init_envp(&envp_mx, envp);
-	line = ft_strdup("");
 	if (argc == 0 || !argv[0] || !envp)
 		return (0);
-	while (line)
+	while (1)
 	{
-		free(line);
+		signal_management();
 		line = readline("🦀\e[0;93mminicrab: \e[0;37m");
 		if (!ft_strncmp(line, "exit", 5))
 			break ;
-		if (line[0])
+		if (line[0] && line[0] != '\n')
+		{
 			add_history(line);
-		parse_commands(line, envp_mx);
+			parse_commands(line, envp_mx);
+		}
+		free(line);
 		//rl_on_new_line();
 	}
 	free_envp_mx(&envp_mx);

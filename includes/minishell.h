@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <wait.h>
+# include <signal.h>
 # include <errno.h>
 //#include "../libs/readline/readline.h"
 //#include "readline.h"
@@ -98,6 +99,10 @@ char	**get_path_var(char **envp);
 
 // Checks if file exists on PATH or if is a local file (Relative & Absolute paths)
 bool	resolve_path(t_command *current, char **path);
+
+// SIGNALS
+void    signal_management(void);
+void	signal_sender(t_command *command);
 
 //UTILS
 	//free
