@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/22 15:24:33 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/23 22:26:58 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,8 @@ char	**get_path_var(char **envp);
 bool	resolve_path(t_command *current, char **path);
 
 //UTILS
-	//free
 void	free_array(void **array);
 void	free_command_list(t_command **list);
-	//error-handeling
 void	mx_error(int error_number);
 void	resolve_exec_error(int *inpipe, int *outpipe);
 	//strings
