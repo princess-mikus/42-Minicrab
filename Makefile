@@ -6,7 +6,7 @@
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/22 17:04:09 by xortega          ###   ########.fr        #
+#    Updated: 2024/05/23 10:04:20 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,16 +49,26 @@ OBJS := $(addprefix $(OBJ_DIR), $(PLAIN_SRCS:.c=.o))
 
 
 # ASCII COLORS #
-BLACK=\033[0;30m
-RED=\033[0;31m
-GREEN=\033[0;32m
-YELLOW=\033[0;33m
-BLUE=\033[0;34m
-MAG=\033[0;35m
-CYAN=\033[0;36m
-WHITE=\033[0;37m
-PAPYRUS=\033[38;5;223m
-END=\033[0m
+#BLACK=\033[0;30m
+#RED=\033[0;31m
+#GREEN=\033[0;32m
+#YELLOW=\033[0;33m
+#BLUE=\033[0;34m
+#MAG=\033[0;35m
+#CYAN=\033[0;36m
+#WHITE=\033[0;37m
+#PAPYRUS=\033[38;5;223m
+#END=\033[0m
+BLACK=
+RED=
+GREEN=
+YELLOW=
+BLUE=
+MAG=
+CYAN=
+WHITE=
+PAPYRUS=
+END=
 
 
 all: $(NAME)

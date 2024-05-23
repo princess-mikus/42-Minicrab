@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/22 17:20:50 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/23 10:48:19 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void clean_outfile(t_command *node)
 			start = jmp_spaces(node->outfile[i]->name + 2)
 				- node->outfile[i]->name;
 		else
-			start = 0;
+			start = 1;
 		temp = ft_strdup(node->outfile[i]->name + start);
 		while (strchr(temp, '"'))
 			temp = line_cutter(temp, "\"");
@@ -84,7 +84,7 @@ void clean_infile(t_command *node)
 		if (ft_strlen(node->infile[i]->name) > 2)
 			start = jmp_spaces(node->infile[i]->name + 2) - node->infile[i]->name;
 		else
-			start = 0;
+			start = 1;
 		temp = ft_strdup(node->infile[i]->name + start);
 		while (strchr(temp, '"'))
 			temp = line_cutter(temp, "\"");

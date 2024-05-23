@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/22 16:49:25 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/23 10:37:53 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,18 @@ char	*get_outfile(char *line, char **outfile)
 	if (!search_out_quotes(line, '>'))
 		return (line);
 	start = search_out_quotes(line, '>') - line;
-	if (ft_strlen(line) > 2)
+	if (ft_strlen(line + start) > 2)
 		end = jmp_spaces(line + start + 2) - line;
 	else
 		end = 0;
+	ft_printf("end  : %d\n", end);
+	ft_printf("'\"': %p \n' ': %p\n", ft_strchr(line + end, '"'), ft_strchr(line + end, ' '));
+	ft_printf("'\"': [%s] \n' ': [%s]\n", ft_strchr(line + end, '"'), ft_strchr(line + end, ' '));
 	if (line[end] == '"')
 		end = ft_strchr(line + end + 1, '"') - line;
     else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
-    && ft_strchr(line + end, '"') > ft_strchr(line + end, ' '))
-        end = ft_strchr(ft_strchr(line + start, '"') + 2, '"') - line;
+    && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
+        end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else
@@ -125,15 +128,15 @@ char	*get_infile(char *line, char **infile)
 	if (!search_out_quotes(line, '<'))
 		return (line);
 	start = search_out_quotes(line, '<') - line;
-	if (ft_strlen(line) > 2)
+	if (ft_strlen(line + start) > 2)
 		end = jmp_spaces(line + start + 2) - line;
 	else
 		end = 0;
 	if (line[end] == '"')
 		end = ft_strchr(line + end + 1, '"') - line;
     else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
-    && ft_strchr(line + end, '"') > ft_strchr(line + end, ' '))
-        end = ft_strchr(ft_strchr(line + start, '"') + 2, '"') - line;
+    && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
+        end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else

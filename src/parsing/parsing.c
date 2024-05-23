@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/22 17:23:00 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/23 10:41:25 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,26 +138,29 @@ int main(int argc, char **argv)
 //	parse(argv[1], &command);
     printf("line: [%s]\n", line);
 	command = new_command(line);	
-	//cleaning(command);
+	cleaning(command);
 	while (command)
 	{
 		i = -1;
 		printf("-----------------------------------------\n");
 		if(command->infile)
 			while (command->infile[++i])
-				ft_printf("infile:[%s]\n", command->infile[i]->name);
+			{
+				ft_printf("infile:[%s][%d]\n", command->infile[i]->name, command->infile[i]->special);
+
+			}
 		else
 			ft_printf("infile:[(null)]\n");
 		i = -1;
 		if(command->outfile)
 			while (command->outfile[++i])
-				ft_printf("outfile:[%s]\n", command->outfile[i]->name);
+				ft_printf("outfile:[%s][%d]\n", command->outfile[i]->name, command->outfile[i]->special);
 		else
 			ft_printf("outfile:[(null)]\n");
 		i = -1;
 		if (command->dec)
 			while (command->dec[++i])
-				ft_printf("declaration %d:[%s]\n", i, command->dec[i]->name);
+				ft_printf("declaration %d:[%s][%d]\n", i, command->dec[i]->name, command->dec[i]->special);
 		else
 			ft_printf("declaration:[(null)]\n");
 		ft_printf("command:[%s]\n", command->command);
