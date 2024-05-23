@@ -6,16 +6,11 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/23 22:06:10 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/23 23:12:25 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	manage_here_doc(void)
-{
-	printf("Lmao\n");
-}
 
 char	**get_arguments(t_command *current)
 {
@@ -71,10 +66,10 @@ void	resolve_infile(int *outpipe, int *inpipe, t_command *current)
 	if (current->infile)
 	{
 		close(*inpipe);
-		while (current->infile[i])
+		while (current->infile[i + 1])
 			i++;
 		if (current->infile[i]->special)
-			manage_here_doc();
+			*inpipe = manage_here_doc(current->infile[i]->name);
 		else
 		{
 			file = current->infile[i]->name;

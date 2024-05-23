@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/23 10:37:53 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/23 23:15:37 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,6 @@ char	*get_outfile(char *line, char **outfile)
 		end = jmp_spaces(line + start + 2) - line;
 	else
 		end = 0;
-	ft_printf("end  : %d\n", end);
-	ft_printf("'\"': %p \n' ': %p\n", ft_strchr(line + end, '"'), ft_strchr(line + end, ' '));
-	ft_printf("'\"': [%s] \n' ': [%s]\n", ft_strchr(line + end, '"'), ft_strchr(line + end, ' '));
 	if (line[end] == '"')
 		end = ft_strchr(line + end + 1, '"') - line;
     else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
