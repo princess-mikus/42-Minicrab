@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaning.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/23 22:26:59 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/27 09:42:56 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void clean_outfile(t_command *node)
 		if(node->outfile[i]->name[1] == '>')
 			node->outfile[i]->special = 1;		
 		if (ft_strlen(node->outfile[i]->name) > 2)
-			start = jmp_spaces(node->outfile[i]->name + 2)
-				- node->outfile[i]->name;
+			start = jmp_spaces(node->outfile[i]->name + 1 +
+				node->outfile[i]->special) - node->outfile[i]->name;
 		else
-			start = 1;
+			start = 1 + node->outfile[i]->special;
 		temp = ft_strdup(node->outfile[i]->name + start);
 		while (strchr(temp, '"'))
 			temp = line_cutter(temp, "\"");
@@ -82,9 +82,10 @@ void clean_infile(t_command *node)
 		if(node->infile[i]->name[1] == '<')
 			node->infile[i]->special = 1;		
 		if (ft_strlen(node->infile[i]->name) > 2)
-			start = jmp_spaces(node->infile[i]->name + 2) - node->infile[i]->name;
+			start = jmp_spaces(node->infile[i]->name + 1 +
+            node->infile[i]->special) - node->infile[i]->name;
 		else
-			start = 1;
+			start = 1 + node->infile[i]->special;
 		temp = ft_strdup(node->infile[i]->name + start);
 		while (strchr(temp, '"'))
 			temp = line_cutter(temp, "\"");

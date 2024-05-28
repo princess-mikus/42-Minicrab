@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/23 22:27:00 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/27 10:15:25 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,25 +89,28 @@ char	*get_outfile(char *line, char **outfile)
 	int		end;
 	char	*temp;
 
+    ft_printf("1\n");
 	if (!search_out_quotes(line, '>'))
 		return (line);
+    ft_printf("2\n");
 	start = search_out_quotes(line, '>') - line;
+    ft_printf("3\n");
 	if (ft_strlen(line + start) > 2)
 		end = jmp_spaces(line + start + 2) - line;
 	else
 		end = 0;
-	ft_printf("end  : %d\n", end);
-	ft_printf("'\"': %p \n' ': %p\n", ft_strchr(line + end, '"'), ft_strchr(line + end, ' '));
-	ft_printf("'\"': [%s] \n' ': [%s]\n", ft_strchr(line + end, '"'), ft_strchr(line + end, ' '));
-	if (line[end] == '"')
+    ft_printf("4\n");
+    if (line[end] == '"')
 		end = ft_strchr(line + end + 1, '"') - line;
     else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
     && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
         end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
+    ft_printf("5\n");
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else
 		end = ft_strlen(line);
+    ft_printf("6\n");
 	temp = ft_substr(line, start, end - start);
 	if (logic(temp + 2, '<', '>'))
 		*outfile = ft_substr(temp, 0, search_out_quotes(temp, '<') - temp);
@@ -115,6 +118,7 @@ char	*get_outfile(char *line, char **outfile)
 		*outfile = ft_substr(temp, 0, search_out_quotes(temp + 2, '>') - temp);
 	else
 		*outfile = ft_strdup(temp);
+    ft_printf("7\n");
 	free(temp);
 	return (line_cutter(line, *outfile));
 }
