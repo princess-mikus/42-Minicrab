@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/27 10:15:25 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/30 18:44:29 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	get_arg(char *line, t_command *node)
 {
+	char	*temp;
+
 	if (!line)
 		return ;
-	if (jmp_spaces(line))
-		node->arg = ft_strdup(jmp_spaces(line));
+	node->arg = ft_strtrim(line, " ");
 	free(line);
 }
 
@@ -77,40 +78,44 @@ int	logic(char *temp, char caso, char other)
 		if (search_out_quotes(temp, other) && 
 		search_out_quotes(temp, other) <
 		search_out_quotes(temp, caso))
-			return (0);
-		return (1);
+			return (false);
+		return (true);
 	}
-	return (0);
+	return (false);
 }
 
+int	get_end(char *line, int end)
+{
+	if (line[end] == '"')
+		end = ft_strchr(line + end + 1, '"') - line;
+	else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
+	&& ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
+		end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
+	if (line[end] == '\'')
+		end = ft_strchr(line + end + 1, '\'') - line;
+	else if (ft_strchr(line + end, '\'') && ft_strchr(line + end, ' ')
+	&& ft_strchr(line + end, '\'') < ft_strchr(line + end, ' '))
+		end = ft_strchr(ft_strchr(line + end, '\'') + 2, '\'') - line;
+	return (end);
+}
 char	*get_outfile(char *line, char **outfile)
 {
 	int		start;
 	int		end;
 	char	*temp;
 
-    ft_printf("1\n");
 	if (!search_out_quotes(line, '>'))
 		return (line);
-    ft_printf("2\n");
 	start = search_out_quotes(line, '>') - line;
-    ft_printf("3\n");
 	if (ft_strlen(line + start) > 2)
 		end = jmp_spaces(line + start + 2) - line;
 	else
 		end = 0;
-    ft_printf("4\n");
-    if (line[end] == '"')
-		end = ft_strchr(line + end + 1, '"') - line;
-    else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
-    && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
-        end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
-    ft_printf("5\n");
+	end = get_end(line, end);
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else
 		end = ft_strlen(line);
-    ft_printf("6\n");
 	temp = ft_substr(line, start, end - start);
 	if (logic(temp + 2, '<', '>'))
 		*outfile = ft_substr(temp, 0, search_out_quotes(temp, '<') - temp);
@@ -118,7 +123,6 @@ char	*get_outfile(char *line, char **outfile)
 		*outfile = ft_substr(temp, 0, search_out_quotes(temp + 2, '>') - temp);
 	else
 		*outfile = ft_strdup(temp);
-    ft_printf("7\n");
 	free(temp);
 	return (line_cutter(line, *outfile));
 }
@@ -136,11 +140,7 @@ char	*get_infile(char *line, char **infile)
 		end = jmp_spaces(line + start + 2) - line;
 	else
 		end = 0;
-	if (line[end] == '"')
-		end = ft_strchr(line + end + 1, '"') - line;
-    else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
-    && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
-        end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
+	end = get_end(line, end);
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else

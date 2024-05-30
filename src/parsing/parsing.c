@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/27 10:01:41 by codespace        ###   ########.fr       */
+/*   Updated: 2024/05/30 18:37:07 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 //	parse(argv[1], &command);
     printf("line: [%s]\n", line);
 	command = new_command(line);
-    cleaning(command);
+   // cleaning(command);
 	while (command)
 	{
 		i = -1;
