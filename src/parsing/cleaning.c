@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/31 12:07:26 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/31 13:18:03 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,12 @@ void clean_command(t_command *node)
 		c = node->command[0];
 		if (c == '\'' || c == '"')
 		{
+			if (ft_strlen(node->command) <= 2)
+			{
+				free(node->command);
+				node->command = NULL;
+			}
+				return ;
 			temp = ft_strtrim(node->command, &c);
 			free(node->command);
 			node->command = temp;

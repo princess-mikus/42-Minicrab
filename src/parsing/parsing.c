@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/31 11:31:49 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/31 13:21:16 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,9 @@ int main(int argc, char **argv)
 //		return (0);
 //
 	command = NULL;
-//	parse(argv[1], &command);
+	parse(line, &command);
     printf("line: [%s]\n", line);
-	command = new_command(line);
+//	command = new_command(line);
 	cleaning(command);
 	while (command)
 	{
