@@ -6,7 +6,7 @@
 #    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/31 14:48:31 by xortega          ###   ########.fr        #
+#    Updated: 2024/05/31 15:07:36 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,9 @@ WHITE=\033[38;5;255m
 PAPYRUS=\033[38;5;223m
 PINK=\033[38;5;213m
 END=\033[0m
+WHITEB=\033[48;5;255m
+CYANB=\033[48;5;6m
+PINKB=\033[48;5;213m
 
 
 
@@ -171,7 +174,12 @@ $(NAME): $(OBJS) $(LIBFT)
 	@printf "\033[0;32;3mLIBFT\t\t\033[0;32;0m✅\n"
 	@sleep 0.2;
 	@printf "\033[0;32;3mMINISHELL\t\033[0;32;0m✅\033[0;32;3m\n\n"
-	@if	[ $(shell tput cols) -lt 122 ]; then \
+	@if	[ $(shell tput cols) -lt 58 ]; then \
+    printf "\
+$(CYAN)██$(PINK)██$(WHITE)██$(PINK)██$(CYAN)██\n\
+$(CYANB)🦀$(PINKB)🦀$(WHITEB)🦀$(PINKB)🦀$(CYANB)🦀\n\
+$(CYAN)██$(PINK)██$(WHITE)██$(PINK)██$(CYAN)██$(END)\n"; \
+  elif	[ $(shell tput cols) -lt 122 ]; then \
 		printf "$$ASCII_SMALL"; \
 	else \
 		printf "$$ASCII_LONG"; \
