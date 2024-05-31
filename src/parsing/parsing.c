@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/30 18:37:07 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/31 11:31:49 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 //	parse(argv[1], &command);
     printf("line: [%s]\n", line);
 	command = new_command(line);
-   // cleaning(command);
+	cleaning(command);
 	while (command)
 	{
 		i = -1;
@@ -164,6 +164,10 @@ int main(int argc, char **argv)
 		else
 			ft_printf("declaration:[(null)]\n");
 		ft_printf("command:[%s]\n", command->command);
+		i = -1;
+		if (command->argv)
+			while(command->argv[++i])
+				ft_printf("argv[%d]:[%s]\n", i, command->argv[i]);
 		ft_printf("arg:[%s]\n", command->arg);
 		command = command->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/30 18:44:29 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/31 11:09:59 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	get_arg(char *line, t_command *node)
 {
-	char	*temp;
-
 	if (!line)
 		return ;
 	node->arg = ft_strtrim(line, " ");

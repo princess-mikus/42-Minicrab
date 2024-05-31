@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/30 18:50:44 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/31 12:07:26 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,38 +31,86 @@ void clean_dec(t_command *node)
 	}
 }
 
-int get_end(char *line, char c)
+int get_arg_end(char *line, char c)
 {
 	if (c == '"')
-		return (ft_strchr(line + 1, '"') - line);
-	
+	{
+		if (ft_strchr(ft_strchr(line + 1, '"'), ' '))
+			return(ft_strchr(ft_strchr(line + 1, '"'), ' ') - line);
+		return (ft_strchr(line + 1, '"') - line + 1);
+	}
+	if (c == '\'')
+	{
+		if (ft_strchr(ft_strchr(line + 1, '\''), ' '))
+			return(ft_strchr(ft_strchr(line + 1, '\''), ' ') - line);
+		return (ft_strchr(line + 1, '\'') - line + 1);
+	}
+	if (ft_strchr(line, ' '))
+		return(ft_strchr(line, ' ') - line);
+	return(ft_strlen(line));
 }
 
-void clean_command_arg(t_command *node)
+void divide_arg(t_command *node)
 {
 	int		words;
-	int		start;
 	int		end;
 	int		i;
+	char	*temp;
 
-	if (node->arg)
-	{
 		words = c_out_q_no_d(node->arg, ' ') + 1;
 		node->argv = malloc((sizeof(char*)) * words + 1);
 		i = 0;
-		while (i < words)
+		while (ft_strlen(node->arg) > 1)
 		{
-			end = get_end(node->arg, node->arg[0]);
-			node->argv[i] = ft_substr(node->arg, start, end - start);
-			line_cutter(node->arg, node->argv[i]);
+			end = get_arg_end(node->arg, node->arg[0]);
+			node->argv[i] = ft_substr(node->arg, 0, end);
+			node->arg = line_cutter(node->arg, node->argv[i]);
+			temp = ft_strtrim(node->arg, " ");
+			free(node->arg);
+			node->arg = temp;
 			i++;
 		}
 		node->argv[i] = NULL;
-		
+		free(node->arg);
+		node->arg = NULL;
+}
+void clean_arg(t_command *node)
+{
+	int		i;
+	char	c;
+	char	*temp;
+
+	if (node->arg)
+	{
+		divide_arg(node);
+		i = 0;
+		while(node->argv[i])
+		{
+			c = node->argv[i][0];
+			if (c == '\'' || c == '"')
+			{
+				temp = ft_strtrim(node->argv[i], &c);
+				free(node->argv[i]);
+				node->argv[i] = temp;
+			}
+			i++;
+		}
 	}
+}
+void clean_command(t_command *node)
+{
+	char	c;
+	char	*temp;
 	if (node->command)
-		while (ft_strchr(node->command, '"'))
-			node->command = line_cutter(node->command, "\"");
+	{
+		c = node->command[0];
+		if (c == '\'' || c == '"')
+		{
+			temp = ft_strtrim(node->command, &c);
+			free(node->command);
+			node->command = temp;
+		}
+	}
 }
 
 void clean_outfile(t_command *node)
@@ -123,6 +171,7 @@ void	cleaning(t_command *node)
 {
 	clean_infile(node);
 	clean_outfile(node);
-	clean_command_arg(node);
+	clean_command(node);
+	clean_arg(node);
 	clean_dec(node);
 }

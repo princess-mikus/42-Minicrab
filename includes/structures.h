@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/30 18:14:44 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/31 12:06:01 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_command
 	t_file				**outfile;
 	char				*command;
 	char				*arg;
-	char				*argv;
+	char				**argv;
 	char				*path;
 	struct s_command	*next;
 }						t_command;
