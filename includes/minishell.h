@@ -55,7 +55,7 @@ void	export_mx(t_envp **envp_mx, char *variable);
 // Prints current working directory
 int		pwd_mx(void);
 // Changes current working directory
-int		cd_mx(t_envp **envp_mx, char *args);
+int		cd_mx(t_envp **envp_mx, char **args);
 // Prints whatever trash you pass him
 int		echo_mx(char **arguments);
 // PARSING

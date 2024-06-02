@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:02 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/01 14:27:58 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:59:55 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ bool	is_non_forked_builtin(t_command *current, t_envp **envp_mx)
 {
 	if (!ft_strncmp(current->command, "cd", ft_strlen("cd") + 1))
 	{
-		current->status = cd_mx(envp_mx, current->arg);
+		current->status = cd_mx(envp_mx, current->argv);
 		return (true);
 	}
 	if (!ft_strncmp(current->command, "export", ft_strlen("export") + 1))

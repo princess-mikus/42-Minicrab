@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:57:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/02 16:19:49 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:57:18 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	free_command_list(t_command **list)
 	{
 		next = current->next;
 		free(current->command);
+		free(current->path);
 		free_array((void **)current->argv);
 		free_files(current);
 		free(current);

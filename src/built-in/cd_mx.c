@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:47:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/29 10:35:21 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 17:02:21 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,22 @@ int	normal_case(t_envp **envp_mx, char *args)
 	return (0);
 }
 
-int	cd_mx(t_envp **envp_mx, char *args)
+int	cd_mx(t_envp **envp_mx, char **args)
 {
-	if (!args)
+	int	i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	if (i > 1)
+	{
+		errno = E2BIG;
+		return (mx_error("cd"), E2BIG);
+	}
+	if (!args || !args[0])
 		return (home_case(envp_mx));
-	else if (args[0] == '-' && args[1] == '\0')
+	else if (args[0][0] == '-' && args[0][1] == '\0')
 		return (dash_case(envp_mx));
 	else
-		return (normal_case(envp_mx, args));
+		return (normal_case(envp_mx, args[0]));
 }
