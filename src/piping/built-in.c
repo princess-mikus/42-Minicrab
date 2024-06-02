@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:02 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/17 00:19:12 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/01 14:27:58 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	get_builtin(char *program)
 int	choose_builtin(t_command *current, t_envp **envp_mx)
 {
 	if (!ft_strncmp(current->command, "echo", ft_strlen("echo") + 1))
-		return (echo_mx(current->arg));
+		return (echo_mx(current->argv));
 	if (!ft_strncmp(current->command, "env", ft_strlen("env") + 1))
 		return (env_mx(envp_mx), 0);
 	if (!ft_strncmp(current->command, "pwd", ft_strlen("pwd") + 1))
@@ -39,7 +39,10 @@ int	choose_builtin(t_command *current, t_envp **envp_mx)
 bool	is_non_forked_builtin(t_command *current, t_envp **envp_mx)
 {
 	if (!ft_strncmp(current->command, "cd", ft_strlen("cd") + 1))
-		return ((void)cd_mx(envp_mx, current->arg), true);
+	{
+		current->status = cd_mx(envp_mx, current->arg);
+		return (true);
+	}
 	if (!ft_strncmp(current->command, "export", ft_strlen("export") + 1))
 		return (export_mx(envp_mx, current->arg), true);
 	if (!ft_strncmp(current->command, "unset", ft_strlen("unset") + 1))
@@ -50,16 +53,17 @@ bool	is_non_forked_builtin(t_command *current, t_envp **envp_mx)
 void	execute_builtin( \
 t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 {
-	int	status;
-
-	if (!is_non_forked_builtin(current, envp_mx) && !fork())
+	if (is_non_forked_builtin(current, envp_mx))
+		return ;
+	current->pid = fork();
+	if (!current->pid)
 	{
 		dup2(*inpipe, STDIN_FILENO);
 		close(*inpipe);
 		dup2(outpipe[1], STDOUT_FILENO);
 		close(outpipe[1]);
-		status = choose_builtin(current, envp_mx);
-		exit(status);
+		current->status = choose_builtin(current, envp_mx);
+		exit(current->status);
 	}
 	else
 		wait(NULL);

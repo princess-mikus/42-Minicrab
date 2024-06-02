@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/23 23:15:37 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/31 13:13:08 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ void	get_arg(char *line, t_command *node)
 {
 	if (!line)
 		return ;
-	if (jmp_spaces(line))
-		node->arg = ft_strdup(jmp_spaces(line));
+	node->arg = ft_strtrim(line, " ");
 	free(line);
 }
 
@@ -77,12 +76,26 @@ int	logic(char *temp, char caso, char other)
 		if (search_out_quotes(temp, other) && 
 		search_out_quotes(temp, other) <
 		search_out_quotes(temp, caso))
-			return (0);
-		return (1);
+			return (false);
+		return (true);
 	}
-	return (0);
+	return (false);
 }
 
+int	get_end(char *line, int end)
+{
+	if (line[end] == '"')
+		end = ft_strchr(line + end + 1, '"') - line;
+	else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
+	&& ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
+		end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
+	if (line[end] == '\'')
+		end = ft_strchr(line + end + 1, '\'') - line;
+	else if (ft_strchr(line + end, '\'') && ft_strchr(line + end, ' ')
+	&& ft_strchr(line + end, '\'') < ft_strchr(line + end, ' '))
+		end = ft_strchr(ft_strchr(line + end, '\'') + 2, '\'') - line;
+	return (end);
+}
 char	*get_outfile(char *line, char **outfile)
 {
 	int		start;
@@ -96,11 +109,7 @@ char	*get_outfile(char *line, char **outfile)
 		end = jmp_spaces(line + start + 2) - line;
 	else
 		end = 0;
-	if (line[end] == '"')
-		end = ft_strchr(line + end + 1, '"') - line;
-    else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
-    && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
-        end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
+	end = get_end(line, end);
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else
@@ -129,11 +138,7 @@ char	*get_infile(char *line, char **infile)
 		end = jmp_spaces(line + start + 2) - line;
 	else
 		end = 0;
-	if (line[end] == '"')
-		end = ft_strchr(line + end + 1, '"') - line;
-    else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
-    && ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
-        end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
+	end = get_end(line, end);
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
     else

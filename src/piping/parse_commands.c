@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:49:25 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/23 22:32:23 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 13:32:38 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ void	clean(t_command **commands)
 	}
 }
 
-void	parse_commands(char *line, t_envp *envp_mx)
+void	parse_commands(char *line, t_envp **envp_mx)
 {
 	char		*line_expanded;
 	t_command	*commands;
 
 	commands = NULL;
-	line_expanded = expansion(&envp_mx, line);
+	line_expanded = expansion(envp_mx, line);
 	parse(line_expanded, &commands);
 	clean(&commands);
 	execute_commands(&commands, envp_mx);

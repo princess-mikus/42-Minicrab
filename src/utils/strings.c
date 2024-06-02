@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 10:23:14 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/22 17:18:09 by xortega          ###   ########.fr       */
+/*   Updated: 2024/05/31 13:05:19 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,20 @@ int	count_out_quotes(char *line, char c)
 {
 	int	i;
 	int	n;
-	int	status;
+	int	status_1;
+	int	status_2;
 
 	i = 0;
-	status = 0;
+	status_2 = 0;
+	status_1 = 0;
 	n = 0;
 	while (line[i])
 	{
-		if (line[i] == '\"')
-			status++;
-		if (line[i] == c && status % 2 == 0)
+		if (line[i] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[i] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (line[i] == c && status_1 % 2 == 0 && status_2 % 2 == 0)
 			n++;
 		i++;
 	}
@@ -49,16 +53,20 @@ int	c_out_q_no_d(char *line, char c)
 {
 	int	i;
 	int	n;
-	int	status;
+	int	status_1;
+	int	status_2;
 
 	i = 0;
-	status = 0;
+	status_1 = 0;
+	status_2 = 0;
 	n = 0;
 	while (line[i])
 	{
-		if (line[i] == '\"')
-			status++;
-		if (line[i] == c && status % 2 == 0
+		if (line[i] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[i] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (line[i] == c && status_1 % 2 == 0 && status_2 % 2 == 0
 		&& line[i + 1] && line[i + 1] != c)
 			n++;
 		i++;
@@ -69,15 +77,19 @@ int	c_out_q_no_d(char *line, char c)
 char	*search_out_quotes(char *line, char c)
 {
 	int	i;
-	int	status;
+	int	status_1;
+	int	status_2;
 
 	i = 0;
-	status = 0;
+	status_1 = 0;
+	status_2 = 0;
 	while (line[i])
 	{
-		if (line[i] == '\"')
-			status++;
-		if (line[i] == c && status % 2 == 0)
+		if (line[i] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[i] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (line[i] == c && status_1 % 2 == 0 && status_2 % 2 == 0)
 			return (line + i);
 		i++;
 	}

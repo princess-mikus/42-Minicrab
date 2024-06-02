@@ -6,13 +6,13 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:30:15 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/17 13:15:51 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/01 14:27:35 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	get_flag(char *arguments, int *i)
+bool	get_flag(char *arguments, int *i, bool nl)
 {
 	if (!arguments)
 		return (true);
@@ -26,20 +26,29 @@ bool	get_flag(char *arguments, int *i)
 		return (false);
 	}
 	*i = 0;
-	return (true);
+	if (nl)
+		return (true);
+	return (false);
 }
 
-int	echo_mx(char *arguments)
+int	echo_mx(char **arguments)
 {
 	int		i;
+	int		j;
 	bool	nl;
 
 	i = 0;
-	nl = get_flag(arguments, &i);
+	nl = true;
 	while (arguments && arguments[i])
 	{
-		if (write(1, &arguments[i], 1) != 1)
-			return (1);
+		j = 0;
+		while (arguments[i][j])
+		{
+			nl = get_flag(arguments[i], &j, nl);
+			if (write(1, &arguments[i][j], 1) != 1)
+				return (1);
+			j++;
+		}
 		i++;
 	}
 	if (nl)

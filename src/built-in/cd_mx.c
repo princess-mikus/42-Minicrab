@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:47:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/17 00:23:41 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/29 10:35:21 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	home_case(t_envp **envp_mx)
 
 	home = get_content_envp_mx(envp_mx, "HOME");
 	if (!home)
-		return (ft_putstr_fd("minicrab: cd: HOME not set\n", 2), 2);
-	add_var_to_envp_mx(envp_mx, "OLDPWD", \
+		return (ft_putstr_fd("minicrab: cd: HOME not set\n", 2), 1);
+	add_var_to_envp_mx(envp_mx, ft_strdup("OLDPWD"), \
 	get_node_envp_mx(envp_mx, "PWD")->content);
 	get_node_envp_mx(envp_mx, "PWD")->content = home;
 	chdir(home);
@@ -33,7 +33,7 @@ int	dash_case(t_envp **envp_mx)
 
 	old_pwd = get_content_envp_mx(envp_mx, "OLDPWD");
 	if (!old_pwd)
-		return (ft_putstr_fd("minicrab: cd: OLDPWD not set\n", 2), 2);
+		return (ft_putstr_fd("minicrab: cd: OLDPWD not set", 2), 1);
 	pwd = get_content_envp_mx(envp_mx, "PWD");
 	get_node_envp_mx(envp_mx, "OLDPWD")->content = pwd;
 	get_node_envp_mx(envp_mx, "PWD")->content = old_pwd;
@@ -43,10 +43,18 @@ int	dash_case(t_envp **envp_mx)
 
 int	normal_case(t_envp **envp_mx, char *args)
 {
+	struct stat path_stat;
+
 	if (access(args, F_OK))
-		return (perror("minicrab: cd"), ENOENT);
-	add_var_to_envp_mx(envp_mx, "OLDPWD", \
-	get_node_envp_mx(envp_mx, "PWD")->content);
+		return (mx_error("cd"), ENOENT);
+	stat(args, &path_stat);
+	if (!S_ISDIR(path_stat.st_mode))
+	{
+		errno = ENOTDIR;
+		return (mx_error("cd"), ENOTDIR);
+	}
+	add_var_to_envp_mx(envp_mx, ft_strdup("OLDPWD"), \
+	ft_strdup(get_node_envp_mx(envp_mx, "PWD")->content));
 	get_node_envp_mx(envp_mx, "PWD")->content = ft_strdup(args);
 	chdir(args);
 	return (0);
@@ -55,10 +63,9 @@ int	normal_case(t_envp **envp_mx, char *args)
 int	cd_mx(t_envp **envp_mx, char *args)
 {
 	if (!args)
-		home_case(envp_mx);
+		return (home_case(envp_mx));
 	else if (args[0] == '-' && args[1] == '\0')
-		dash_case(envp_mx);
+		return (dash_case(envp_mx));
 	else
-		normal_case(envp_mx, args);
-	return (0);
+		return (normal_case(envp_mx, args));
 }

@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/23 23:12:25 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 13:38:20 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,23 @@
 
 char	**get_arguments(t_command *current)
 {
-	char	**temp;
 	char	**to_return;
 	int		i;
 
 	i = 0;
-	temp = ft_split(current->arg, ' ');
-	while (temp && temp[i])
+	
+	while (current->argv && current->argv[i])
 		i++;
 	to_return = malloc(sizeof(char *) * (i + 2));
 	to_return[0] = ft_strdup(current->command);
 	i = 0;
-	while (temp && temp[i])
+	while (current->argv && current->argv[i])
 	{
-		to_return[i + 1] = ft_strdup(temp[i]);
+		to_return[i + 1] = ft_strdup(current->argv[i]);
 		i++;
 	}
 	to_return[i + 1] = NULL;
-	return (free_array((void **)temp), to_return);
+	return (to_return);
 }
 
 void	fork_and_execute( \
@@ -50,8 +49,7 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 		execve(current->path, program, envp);
 		exit(2);
 	}
-	//waitpid(current->pid, &current->status, WNOHANG);
-	waitpid(0, NULL, WNOHANG);
+	waitpid(current->pid, NULL, WNOHANG);
 	close(*inpipe);
 	close(outpipe[1]);
 	free_array((void **)program);
@@ -109,7 +107,7 @@ void	resolve_outfile(int *outpipe, t_command *current)
 		pipe(outpipe);
 }
 
-int	execute_commands(t_command **commands, t_envp *envp_mx)
+int	execute_commands(t_command **commands, t_envp **envp_mx)
 {
 	int			outpipe[2];
 	int			inpipe;
@@ -125,11 +123,11 @@ int	execute_commands(t_command **commands, t_envp *envp_mx)
 	{
 		resolve_infile(outpipe, &inpipe, current);
 		resolve_outfile(outpipe, current);
-		envp = update_environment(current, &envp_mx);
+		envp = update_environment(current, envp_mx);
 		if (get_builtin(current->command))
-			execute_builtin(current, &inpipe, outpipe, &envp_mx);
+			execute_builtin(current, &inpipe, outpipe, envp_mx);
 		else if (!resolve_path(current, get_path_var(envp)))
-			resolve_exec_error(&inpipe, outpipe);
+			resolve_exec_error(&inpipe, outpipe, current->command);
 		else
 			fork_and_execute(current, &inpipe, outpipe, envp);
 		free_array((void **)envp);
@@ -141,6 +139,6 @@ int	execute_commands(t_command **commands, t_envp *envp_mx)
 	waitpid(current->pid, &current->status, 0);
 	current->status = WEXITSTATUS(current->status);
 	//wait(&current->status);
-	add_var_to_envp_mx(&envp_mx, "?", ft_itoa(current->status));
+	add_var_to_envp_mx(envp_mx, "?", ft_itoa(current->status));
 	return (close(outpipe[0]), close(outpipe[1]), 0);
 }

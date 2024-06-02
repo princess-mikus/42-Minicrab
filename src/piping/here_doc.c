@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 20:37:15 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/29 10:17:21 by mikus            ###   ########.fr       */
+/*   Created: 2024/05/23 23:12:28 by mikus             #+#    #+#             */
+/*   Updated: 2024/05/23 23:12:33 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	mx_error(const char *target)
+int	manage_here_doc(char *delimiter)
 {
-	char	*error;
+	char	*stream;
+	int		pipefd[2];
 
-	error = ft_strjoin("minicrab: ", target);
-	perror(error);
-	free(error);
-}
-
-void	resolve_exec_error(int *inpipe, int *outpipe, char *program)
-{
-	close(*inpipe);
-	close(outpipe[1]);
-	mx_error(program);
+	if (pipe(pipefd))
+		return (-1);
+	while (1)
+	{
+		stream = get_next_line(0);
+		if (!ft_strncmp(stream, delimiter, ft_strlen(delimiter)))
+			break ;
+		else
+			write(pipefd[1], stream, ft_strlen(stream));
+		free(stream);
+	}
+	close (pipefd[1]);
+	return (free(stream), pipefd[0]);
 }

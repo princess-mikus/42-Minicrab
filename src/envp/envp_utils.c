@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:53:23 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/17 13:12:57 by mikus            ###   ########.fr       */
+/*   Updated: 2024/05/27 13:52:30 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,5 @@ char	*get_content_envp_mx(t_envp **envp_mx, char *variable)
 			return (current->content);
 		current = current->next;
 	}
-	return ("");
+	return (NULL);
 }
