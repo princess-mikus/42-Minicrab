@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:47:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/02 17:02:21 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 21:21:03 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	dash_case(t_envp **envp_mx)
 
 	old_pwd = get_content_envp_mx(envp_mx, "OLDPWD");
 	if (!old_pwd)
-		return (ft_putstr_fd("minicrab: cd: OLDPWD not set", 2), 1);
+		return (ft_putstr_fd("minicrab: cd: OLDPWD not set\n", 2), 1);
 	pwd = get_content_envp_mx(envp_mx, "PWD");
 	get_node_envp_mx(envp_mx, "OLDPWD")->content = pwd;
 	get_node_envp_mx(envp_mx, "PWD")->content = old_pwd;
@@ -41,9 +41,9 @@ int	dash_case(t_envp **envp_mx)
 	return (0);
 }
 
-int	normal_case(t_envp **envp_mx, char *args)
+static int	normal_case(t_envp **envp_mx, char *args)
 {
-	struct stat path_stat;
+	struct stat	path_stat;
 
 	if (access(args, F_OK))
 		return (mx_error("cd"), ENOENT);
@@ -65,7 +65,7 @@ int	cd_mx(t_envp **envp_mx, char **args)
 	int	i;
 
 	i = 0;
-	while (args[i])
+	while (args && args[i])
 		i++;
 	if (i > 1)
 	{

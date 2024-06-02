@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 20:16:46 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/02 13:37:38 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 18:50:08 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ char	*get_path(char	*program, char **path)
 
 void	check_local(t_command *current)
 {
-	char	**temp;
-	int		i;
+	struct stat	path_stat;
+	char		**temp;
+	int			i;
 
-	if (!access(current->command, F_OK))
+	stat(current->command, &path_stat);
+	if (!access(current->command, F_OK) && !S_ISDIR(path_stat.st_mode))
 	{
 		current->path = ft_strdup(current->command);
 		temp = ft_split(current->command, '/');

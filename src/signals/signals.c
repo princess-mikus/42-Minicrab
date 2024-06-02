@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 00:36:45 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/20 13:02:04 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/02 21:25:14 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int g_sig;
+static int	g_sig;
 
-void 	get_signal(int sig)
-{	
+void	get_signal(int sig)
+{
 	(void)sig;
 	write(2, "\n", 1);
-   	rl_replace_line("", 0);
-   	rl_on_new_line();
-  	rl_redisplay();
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
-	
-void    signal_management(void)
+
+void	signal_management(void)
 {
 	signal(SIGINT, get_signal);
 	signal(SIGQUIT, SIG_IGN);

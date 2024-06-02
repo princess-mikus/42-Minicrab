@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 20:37:15 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/29 10:17:21 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 21:25:33 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,14 @@ void	mx_error(const char *target)
 
 void	resolve_exec_error(int *inpipe, int *outpipe, char *program)
 {
+	struct stat	path_stat;
+
+	stat(program, &path_stat);
+	if (S_ISDIR(path_stat.st_mode))
+		errno = EISDIR;
+	else
+		errno = ENOENT;
+	mx_error(program);
 	close(*inpipe);
 	close(outpipe[1]);
-	mx_error(program);
 }

@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/01 14:06:20 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 17:12:22 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	init_node(t_command *node, char * line)
 	node->infile = make_files(line, '<');
 	node->outfile = make_files(line, '>');
 	node->dec = make_files(line, '=');
+	node->path = NULL;
 	node->command = NULL;
 	node->arg = NULL;
 	node->next = NULL;

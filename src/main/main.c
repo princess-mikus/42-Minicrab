@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/02 16:44:49 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 21:22:14 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	main(int argc, char **argv, char **envp)
 		prompt = get_rl_prompt();
 		line = readline(prompt);
 		free(prompt);
-		//line = readline("🦀\e[0;93mminicrab: \e[0;37m");
 		if (!line || !ft_strncmp(line, "exit", 5))
 			break ;
 		execute(line, &envp_mx);

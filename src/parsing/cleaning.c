@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/02 16:24:44 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 20:08:37 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,23 @@ void divide_arg(t_command *node)
 	int		i;
 	char	*temp;
 
-		words = c_out_q_no_d(node->arg, ' ') + 1;
-		node->argv = malloc((sizeof(char*)) * words + 1);
-		i = 0;
-		while (ft_strlen(node->arg) > 1)
-		{
-			end = get_arg_end(node->arg, node->arg[0]);
-			node->argv[i] = ft_substr(node->arg, 0, end);
-			node->arg = line_cutter(node->arg, node->argv[i]);
-			temp = ft_strtrim(node->arg, " ");
-			free(node->arg);
-			node->arg = temp;
-			i++;
-		}
-		node->argv[i] = NULL;
-		i = 0;
+	words = c_out_q_no_d(node->arg, ' ') + 1;
+	node->argv = malloc((sizeof(char*)) * words + 1);
+	i = 0;
+	while (ft_strlen(node->arg) > 0)
+	{
+		end = get_arg_end(node->arg, node->arg[0]);
+		node->argv[i] = ft_substr(node->arg, 0, end);
+		node->arg = line_cutter(node->arg, node->argv[i]);
+		temp = ft_strtrim(node->arg, " ");
 		free(node->arg);
-		node->arg = NULL;
+		node->arg = temp;
+		i++;
+	}
+	node->argv[i] = NULL;
+	i = 0;
+	free(node->arg);
+	node->arg = NULL;
 }
 void clean_arg(t_command *node)
 {

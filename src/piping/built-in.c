@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:02 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/02 16:59:55 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 17:52:19 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ bool	is_non_forked_builtin(t_command *current, t_envp **envp_mx)
 		return (true);
 	}
 	if (!ft_strncmp(current->command, "export", ft_strlen("export") + 1))
-		return (export_mx(envp_mx, current->arg), true);
+		return (export_mx(envp_mx, current->argv[0]), true);
 	if (!ft_strncmp(current->command, "unset", ft_strlen("unset") + 1))
-		return (unset_mx(envp_mx, current->arg), true);
+		return (unset_mx(envp_mx, current->argv[0]), true);
 	return (false);
 }
 
