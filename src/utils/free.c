@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:57:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/27 13:47:52 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:19:49 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@ void	free_array(void **array)
 
 	i = -1;
 	while (array && array[++i])
+	{
 		free(array[i]);
+		array[i] = NULL;
+	}
 	free(array);
+	array = NULL;
 }
 
 void	free_files(t_command *current)
@@ -27,23 +31,25 @@ void	free_files(t_command *current)
 	int	i;
 
 	i = 0;
-	while (current->dec[i])
+	while (current->dec && current->dec[i])
 	{
 		if (current->dec[i]->name)
 			free(current->dec[i]->name);
-		free(current->dec[i]);
+		free(current->dec[i++]);
 	}
-	while (current->infile[i])
+	i = 0;
+	while (current->infile && current->infile[i])
 	{
 		if (current->infile[i]->name)
 			free(current->infile[i]->name);
-		free(current->infile[i]);
+		free(current->infile[i++]);
 	}
-	while (current->outfile[i])
+	i = 0;
+	while (current->outfile && current->outfile[i])
 	{
 		if (current->outfile[i]->name)
 			free(current->outfile[i]->name);
-		free(current->outfile[i]);
+		free(current->outfile[i++]);
 	}
 }
 
@@ -57,8 +63,8 @@ void	free_command_list(t_command **list)
 	{
 		next = current->next;
 		free(current->command);
-		//free_array((void **)current->arg);
-		//free_files(current);
+		free_array((void **)current->argv);
+		free_files(current);
 		free(current);
 		current = next;
 	}

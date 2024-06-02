@@ -6,26 +6,25 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:30:15 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/01 14:27:35 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:32:57 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	get_flag(char *arguments, int *i, bool nl)
+bool	get_flag(char *arguments, int *j, bool nl)
 {
 	if (!arguments)
 		return (true);
-	while (arguments[*i] == ' ')
-		*i += 1;
-	if (arguments[*i] == '-' && arguments[*i + 1] == 'n')
+	while (arguments[*j] == ' ')
+		*j += 1;
+	if (arguments[*j] == '-' && arguments[*j + 1] == 'n')
 	{
-		*i += 2;
-		while (arguments[*i] == ' ')
-			*i += 1;
+		*j += 2;
+		while (arguments[*j] == ' ')
+			*j += 1;
 		return (false);
 	}
-	*i = 0;
 	if (nl)
 		return (true);
 	return (false);
@@ -42,13 +41,15 @@ int	echo_mx(char **arguments)
 	while (arguments && arguments[i])
 	{
 		j = 0;
+		nl = get_flag(arguments[i], &j, nl);
 		while (arguments[i][j])
 		{
-			nl = get_flag(arguments[i], &j, nl);
 			if (write(1, &arguments[i][j], 1) != 1)
 				return (1);
 			j++;
 		}
+		if (arguments[i + 1])
+			write(1, " ", 1);
 		i++;
 	}
 	if (nl)

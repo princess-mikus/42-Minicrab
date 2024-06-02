@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/27 13:44:31 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:44:49 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*get_rl_prompt(void)
 	return (ret);
 }
 
-void	add_to_hist(char *line, t_envp **envp_mx)
+void	execute(char *line, t_envp **envp_mx)
 {
 	if (line[0] && line[0] != '\n')
 	{
@@ -53,7 +53,7 @@ int	main(int argc, char **argv, char **envp)
 		//line = readline("🦀\e[0;93mminicrab: \e[0;37m");
 		if (!line || !ft_strncmp(line, "exit", 5))
 			break ;
-		add_to_hist(line, &envp_mx);
+		execute(line, &envp_mx);
 		free(line);
 	}
 	ft_printf("exit\n");

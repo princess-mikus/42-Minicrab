@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/02 13:29:56 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:24:44 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ void clean_arg(t_command *node)
 			i++;
 		}
 	}
+	else
+		node->argv = NULL;
 }
 void clean_command(t_command *node)
 {

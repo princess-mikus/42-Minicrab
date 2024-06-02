@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/02 13:38:20 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:25:24 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	**get_arguments(t_command *current)
 	int		i;
 
 	i = 0;
-	
 	while (current->argv && current->argv[i])
 		i++;
 	to_return = malloc(sizeof(char *) * (i + 2));

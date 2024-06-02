@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/27 11:54:00 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/02 16:40:18 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int	line_len(t_envp **envp_mx, char *input)
 			i++;
 			var = ft_substr(input, i, \
 				(ft_strchr(input + i, ' ') - input) - i);
-			len += ft_strlen(get_content_envp_mx(envp_mx, var));
+			if (!get_content_envp_mx(envp_mx, var))
+				len += 0;
+			else
+				len += ft_strlen(get_content_envp_mx(envp_mx, var));
 			free(var);
 			while (input[i] && input[i] != ' ')
 				i++;
@@ -58,8 +61,11 @@ char	*expansion(t_envp **envp_mx, char *input)
 			i++;
 			var = ft_substr(input, i, \
 			(ft_strchr(input + i, ' ') - input) - i);
-			k = ft_strlcat(line, get_content_envp_mx(envp_mx, var), \
-			(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, var)) + 1));
+			if (!get_content_envp_mx(envp_mx, var))
+				k = 0;
+			else
+				k = ft_strlcat(line, get_content_envp_mx(envp_mx, var), \
+				(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, var)) + 1));
 			free(var);
 			while (input[i] && input[i] != ' ')
 				i++;

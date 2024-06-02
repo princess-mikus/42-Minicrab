@@ -76,6 +76,8 @@ void	get_arg(char *line, t_command *node);
 void	cleaning(t_command *node);
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *input);
+//INTEGRITY
+bool	check_integrity(char *line);
 // PIPING
 // Calls parse and then passes command for execution
 void	parse_commands(char *line, t_envp **envp_mx);
@@ -117,8 +119,8 @@ void	mx_error(const char *target);
 void	resolve_exec_error(int *inpipe, int *outpipe, char *program);
 	//strings
 char	*jmp_spaces(char *str);
-int	count_out_quotes(char *line, char c);
-int	c_out_q_no_d(char *line, char c);
+int		count_out_quotes(char *line, char c);
+int		c_out_q_no_d(char *line, char c);
 char	*search_out_quotes(char *line, char c);
 char	*search_out_quotes(char *line, char c);
 char	*line_cutter(char *line, char *to_cut);
