@@ -85,6 +85,9 @@ void	parse_commands(char *line, t_envp **envp_mx);
 // Executes commands, either local files marked as executable, builtins or PATH programs
 int		execute_commands(t_command **commands, t_envp **envp_mx);
 
+void	resolve_infile(int *outpipe, int *inpipe, t_command *current);
+void	resolve_outfile(int *outpipe, t_command *current);
+
 // Reads fd 0 when <<
 int		manage_here_doc(char *delimiter);
 

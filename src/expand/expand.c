@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/02 21:21:51 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/03 11:06:42 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	normal_len(int *i, t_envp **envp_mx, char *input)
 	else
 		len = ft_strlen(get_content_envp_mx(envp_mx, var) + 1);
 	free(var);
+	if (input[*i] == ' ')
+		len += 1;
 	while (input[*i] && input[*i] != ' ')
 		*i += 1;
 	return (len);
@@ -59,14 +61,40 @@ int	line_len(t_envp **envp_mx, char *input)
 	return (len);
 }
 
+char	*return_next(bool *space, char *input, int i)
+{
+	char	*contender;
+	char	*contender2;
+
+	contender = ft_strchr(input + i, ' ');
+	contender2 = ft_strchr(input + i, '$');
+
+	if (!contender2)
+	{
+		*space = false;
+		return (contender);
+	}
+	if (contender && ft_strlen(contender) > ft_strlen(contender2))
+	{
+		*space = true;
+		return (contender2);
+	}
+	*space = false;
+	return (contender2);
+}
+
 static int	normal_case(int *i, t_envp **envp_mx, char *line, char *input)
 {
 	char	*var;
+	char	*next;
+	bool	space;
 	int		k;
 
 	*i += 1;
+	next = return_next(&space, input, *i);
+	ft_printf("%s\n", next);
 	var = ft_substr(input, *i, \
-	(ft_strchr(input + *i, ' ') - input) - *i);
+	(next - input) - *i);
 	if (!get_content_envp_mx(envp_mx, var))
 		k = 0;
 	else

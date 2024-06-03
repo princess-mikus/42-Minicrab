@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_mx.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:47:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/02 21:21:03 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/03 10:54:56 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	normal_case(t_envp **envp_mx, char *args)
 	}
 	add_var_to_envp_mx(envp_mx, ft_strdup("OLDPWD"), \
 	ft_strdup(get_node_envp_mx(envp_mx, "PWD")->content));
-	get_node_envp_mx(envp_mx, "PWD")->content = ft_strdup(args);
+	get_node_envp_mx(envp_mx, "PWD")->content = getcwd(NULL, 0);
 	chdir(args);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaning.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/02 20:08:37 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/03 10:43:04 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void clean_dec(t_command *node)
 	i = 0;
 	while (node->dec[i])
 	{
-		ft_printf("%s\n", node->dec[i]->name);
 		while (ft_strchr(node->dec[i]->name, '"'))
 		{
 			node->dec[i]->name = line_cutter(node->dec[i]->name, "\"");

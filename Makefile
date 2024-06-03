@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mikus <mikus@student.42.fr>                +#+  +:+       +#+         #
+#    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/23 23:14:29 by mikus            ###   ########.fr        #
+#    Updated: 2024/06/03 10:44:54 by fcasaubo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ EXPAND	 	:= expand
 HISTORY 	:=
 MAIN		 := main
 PARSING 	:= parsing token cleaning
-PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc
+PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc resolve_files
 SIGNALS 	:= signals
 UTILS		:= free error strings
 

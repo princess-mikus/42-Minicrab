@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   change_envp.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 20:47:57 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/02 18:22:08 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/03 10:43:20 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	dec_to_env(t_file **dec, t_envp **envp_mx_temp)
 		temp = ft_split(dec[i]->name, '=');
 		variable = ft_strdup(temp[0]);
 		content = ft_strdup(temp[1]);
-		ft_printf("%s\n", dec[i]->name);
 		free_array((void **)temp);
 		add_var_to_envp_mx(envp_mx_temp, variable, content);
 		i++;
