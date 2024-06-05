@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/31 13:18:03 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:06:46 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,25 @@
 
 void clean_dec(t_command *node)
 {
-	int i;
+	int		i;
+	char	c;
+	char	*temp;
 	
 	if(!node->dec || !node->dec[0])
 		return ;
 	i = 0;
 	while (node->dec[i])
 	{
-		ft_printf("%s\n", node->dec[i]->name);
-		while (ft_strchr(node->dec[i]->name, '"'))
+		c = node->dec[0];
+		if (c == '\'' || c == '"')
 		{
-			node->dec[i]->name = line_cutter(node->dec[i]->name, "\"");
-			node->dec[i]->special = 0;
+			temp = ft_strtrim(node->dec[i], &c);
+			free(node->dec[i]);
+			node->dec[i] = temp;			
+		}
+		else if ()
+		{
+			
 		}
 		i++;
 	}
@@ -60,7 +67,7 @@ void divide_arg(t_command *node)
 		words = c_out_q_no_d(node->arg, ' ') + 1;
 		node->argv = malloc((sizeof(char*)) * words + 1);
 		i = 0;
-		while (ft_strlen(node->arg) > 1)
+		while (ft_strlen(node->arg) > 0)
 		{
 			end = get_arg_end(node->arg, node->arg[0]);
 			node->argv[i] = ft_substr(node->arg, 0, end);

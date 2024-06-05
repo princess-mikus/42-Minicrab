@@ -6,11 +6,64 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/31 13:21:16 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/03 10:53:45 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	quote_case(char *line)
+{
+	int	i;
+	int	status_1;
+	int	status_2;
+
+	i = 0;
+	status_1 = 0;
+	status_2 = 0;
+	while (line[i])
+	{
+		if (line[i] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[i] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (status_1 == 2)
+			return(1);
+		if (status_2 == 2)
+			return(2);
+		i++;
+	}
+	return (0);
+}
+
+char *clear_line(char *str)
+{
+	char	*retu;
+	char	*start;
+	char	*mid;
+	char	*end;
+	char	c;
+
+	//nada que limpiar (no hay " ' pares)
+	if (!quote_case(str))
+		return(str);
+	c = '\'';
+	if (ft_strchr(str, '"') &&
+	ft_strchr(str, '"') < ft_strchr(str, '\''))
+		c = '"';
+	start = ft_substr(str, 0, ft_strchr(str, c) - str);
+	mid = ft_substr(str, ft_strchr(str, c) - str, ft_strrchr(str, c) - str);
+	end = ft_substr(str, ft_strrchr(str, c) - str + 1, 
+	ft_strlen(ft_strrchr(str, c)));
+	retu = ft_strtrim(mid, &c);
+	free(mid);
+	mid = retu;
+	retu = ft_strjoin(start, mid);
+	free(mid);
+	mid = retu;
+	retu = ft_strjoin(mid, end);
+	return(free(start), free(mid), free(end), retu);
+}
 
 int	start_dec(char *line)
 {
@@ -111,7 +164,7 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 		return (0);
-	//./minishell "<   in ls -l a   >    out   |   <   out  cat -l>    in | aaaaa aaa"
+/*	//./minishell "<   in ls -l a   >    out   |   <   out  cat -l>    in | aaaaa aaa"
 	//char *line = "   >    outfile    ls  < infile ";
 	//char *line = "  <     infile    ls    -l   a    >    outfile";
 	//char *line = "   > o    l    a  u  < i ";
@@ -171,10 +224,12 @@ int main(int argc, char **argv)
 		ft_printf("arg:[%s]\n", command->arg);
 		command = command->next;
 	}
-	printf("-----------------------------------------\n");
+	printf("-----------------------------------------\n");*/
+	ft_printf("%s\n", argv[1]);
+	ft_printf("%d\n", quote_case(argv[1]));
+	ft_printf("%s\n", clear_line(argv[1]));
 	return (0);
 }
 
-//el end de los substrings va a fallar sin espacio al final, asi que arreglalo
-//las declaraciones de tipo b="ho"la tambien van mal
-// si el infile|outfile tieene > out"  file" no va
+//creo que los outfiles e infiles despues del comando joden el arg pero no se porque
+//no pilla las comiilas dobles o simples en las declaraciones
