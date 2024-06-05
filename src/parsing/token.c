@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+int	get_end(char *line, int end)
+{
+	if (line[end] == '"')
+		end = ft_strchr(line + end + 1, '"') - line;
+	else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
+	&& ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
+		end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
+	if (line[end] == '\'')
+		end = ft_strchr(line + end + 1, '\'') - line;
+	else if (ft_strchr(line + end, '\'') && ft_strchr(line + end, ' ')
+	&& ft_strchr(line + end, '\'') < ft_strchr(line + end, ' '))
+		end = ft_strchr(ft_strchr(line + end, '\'') + 2, '\'') - line;
+	return (end);
+}
+
 void	get_arg(char *line, t_command *node)
 {
 	if (!line)
@@ -29,14 +44,13 @@ char	*get_cmd(char *line, t_command *node)
 		return (line);
 	start = jmp_spaces(line) - line;
 	end = start;
+	end = get_end(line, end);
 	if (line[start] == '"')
 		end = (ft_strchr(line + start + 1, '"') - line) + 1;
-    if (ft_strchr(line + start, ' '))
-        end = ft_strchr(line + end, ' ') - line;
+	if (ft_strchr(line + start, ' '))
+		end = ft_strchr(line + end, ' ') - line;
     else
-    {
-        end = ft_strlen(line);
-    }
+		end = ft_strlen(line);
 	node->command = ft_substr(line, start, end - start);
 	return (line_cutter(line, node->command));
 }
@@ -82,20 +96,6 @@ int	logic(char *temp, char caso, char other)
 	return (false);
 }
 
-int	get_end(char *line, int end)
-{
-	if (line[end] == '"')
-		end = ft_strchr(line + end + 1, '"') - line;
-	else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
-	&& ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
-		end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
-	if (line[end] == '\'')
-		end = ft_strchr(line + end + 1, '\'') - line;
-	else if (ft_strchr(line + end, '\'') && ft_strchr(line + end, ' ')
-	&& ft_strchr(line + end, '\'') < ft_strchr(line + end, ' '))
-		end = ft_strchr(ft_strchr(line + end, '\'') + 2, '\'') - line;
-	return (end);
-}
 char	*get_outfile(char *line, char **outfile)
 {
 	int		start;
@@ -105,10 +105,9 @@ char	*get_outfile(char *line, char **outfile)
 	if (!search_out_quotes(line, '>'))
 		return (line);
 	start = search_out_quotes(line, '>') - line;
+	end = 0;
 	if (ft_strlen(line + start) > 2)
-		end = jmp_spaces(line + start + 2) - line;
-	else
-		end = 0;
+		end = jmp_spaces(line + start + 1) - line;
 	end = get_end(line, end);
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
@@ -134,10 +133,9 @@ char	*get_infile(char *line, char **infile)
 	if (!search_out_quotes(line, '<'))
 		return (line);
 	start = search_out_quotes(line, '<') - line;
+	end = 0;
 	if (ft_strlen(line + start) > 2)
-		end = jmp_spaces(line + start + 2) - line;
-	else
-		end = 0;
+		end = jmp_spaces(line + start + 1) - line;
 	end = get_end(line, end);
     if (ft_strchr(line + end, ' '))
         end = ft_strchr(line + end, ' ') - line;
