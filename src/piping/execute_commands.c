@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/02 21:23:00 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/06 01:04:10 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,15 @@ bool	has_permissions(char *program, char *path)
 	return (false);
 }
 
+void	kill_yourself(int sig)
+{
+	if (sig == SIGQUIT || sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		exit(130);
+	}
+}
+
 void	fork_and_execute( \
 t_command *current, int *inpipe, int *outpipe, char **envp)
 {
@@ -53,6 +62,7 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 	current->pid = fork();
 	if (!current->pid)
 	{
+		signal(SIGINT, kill_yourself);
 		if (!has_permissions(current->command, current->path))
 			exit(EACCES);
 		dup2(*inpipe, STDIN_FILENO);
@@ -83,6 +93,15 @@ void	select_execution(t_command *current, int inpipe, \
 	free_array((void **)envp);
 }
 
+void	wait_for_children(t_command *current)
+{
+	while (current)
+	{
+		waitpid(current->pid, &current->status, 0);
+		current = current->next;
+	}
+}
+
 int	execute_commands(t_command **commands, t_envp **envp_mx)
 {
 	int			outpipe[2];
@@ -93,7 +112,6 @@ int	execute_commands(t_command **commands, t_envp **envp_mx)
 	current = *commands;
 	outpipe[0] = -1;
 	outpipe[1] = -1;
-	signal_sender(*commands);
 	while (current)
 	{
 		resolve_infile(outpipe, &inpipe, current);
@@ -104,8 +122,9 @@ int	execute_commands(t_command **commands, t_envp **envp_mx)
 			current = current->next;
 		else
 			break ;
+		signal_sender(*commands);
 	}
-	waitpid(current->pid, &current->status, 0);
+	wait_for_children(*commands);
 	current->status = WEXITSTATUS(current->status);
 	add_var_to_envp_mx(envp_mx, "?", ft_itoa(current->status));
 	return (close(outpipe[0]), close(outpipe[1]), 0);
