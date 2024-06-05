@@ -6,7 +6,7 @@
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:47:36 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/05 21:28:55 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/05 21:38:19 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,14 @@ bool	check_infiles(char *str, char c, int *i)
 	int	j;
 
 	j = 1;
-	if (str[1] == c)
+	if (str[j] == c)
 	{
 		j++;
 		*i += 1;
 	}
-	if ((c == '>' && str[1] == '<') || (c == '<' && str[1] == '>'))
-		return (false);
 	while (str[j] && str[j] == ' ')
 		j++;
-	if (!str[j] || str[j] == '|')
+	if (!str[j] || str[j] == '|' || str[j] == '>' || str[j] == '<')
 		return (false);
 	return (true);
 }
