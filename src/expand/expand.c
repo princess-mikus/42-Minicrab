@@ -15,6 +15,29 @@
 // BIEN $PWD "$PWD"
 // MAL $"PWD" '$PWD'
 
+bool	is_betwen_quotes(char *line, int i)
+{
+	int	j;
+	int	status_1;
+	int	status_2;
+
+	j = 0;
+	status_1 = 0;
+	status_2 = 0;
+	while (line[j])
+	{
+		if (line[j] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[j] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (j == i && status_2 % 2 != 0)
+			return (false);
+		j++;
+	}
+	ft_printf("im true status_2 [%d]\n", status_2);
+	return (true);
+}
+
 t_envp *next_node(t_envp **envp_mx, char *input)
 {
 	t_envp	*node;
@@ -22,7 +45,8 @@ t_envp *next_node(t_envp **envp_mx, char *input)
 	char	*temp;
 
 	len = 0;
-	while(input[len] && input[len] != ' ' && input[len] != '$' && input[len] != '"')
+	while(input[len] && input[len] != ' ' && input[len] != '$'
+		&& input[len] != '"' && input[len] != '\'')
 		len++;;
 	temp = ft_substr(input, 0, len);
 	node = get_node_envp_mx(envp_mx, temp);
@@ -39,7 +63,8 @@ int	normal_len(int *i, t_envp **envp_mx, char *input)
 	len = 0;
 	start = *i + 1;
 	*i += 1;
-	while(input[*i] && input[*i] != ' ' && input[*i] != '$' && input[*i] != '"')
+	while(input[*i] && input[*i] != ' ' && input[*i] != '$'
+		&& input[*i] != '"' && input[*i] != '\'')
 	{
 		len++;
 		*i += 1;
@@ -60,7 +85,7 @@ int	line_len(t_envp **envp_mx, char *input)
 	len = 0;
 	while (input[i])
 	{
-		if (input[i] == '$')
+		if (input[i] == '$' && is_betwen_quotes(input, i))
 			len += normal_len(&i, envp_mx, input);
 		else if (input[i] == '~')
 		{
@@ -105,7 +130,8 @@ static int	normal_case(int *i, t_envp **envp_mx, char *line, char *input)
 	if (!next_node(envp_mx, input + *i + 1))
 	{
 		*i += 1;
-		while(input[*i] && input[*i] != ' ' && input[*i] != '$' && input[*i] != '"')
+		while(input[*i] && input[*i] != ' ' && input[*i] != '$'
+		&& input[*i] != '"' && input[*i] != '\'')
 			*i += 1;
 		return(0);
 	}
@@ -128,7 +154,7 @@ char	*expansion(t_envp **envp_mx, char *input)
 	ft_printf("[%s]\n", input);
 	while (input[i])
 	{
-		while (input[i] == '$')
+		while (input[i] == '$' && is_betwen_quotes(input, i))
 		{
 			k += normal_case(&i, envp_mx, line, input);
 			ft_printf("en medio [%s]\n", input + i);
