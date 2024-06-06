@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/31 13:13:08 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/06 12:57:24 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -31,6 +32,7 @@ void	get_arg(char *line, t_command *node)
 {
 	if (!line)
 		return ;
+	node->arg = ft_strtrim(line, " ");
 	node->arg = ft_strtrim(line, " ");
 	free(line);
 }
@@ -92,10 +94,27 @@ int	logic(char *temp, char caso, char other)
 		search_out_quotes(temp, caso))
 			return (false);
 		return (true);
+			return (false);
+		return (true);
 	}
+	return (false);
 	return (false);
 }
 
+int	get_end(char *line, int end)
+{
+	if (line[end] == '"')
+		end = ft_strchr(line + end + 1, '"') - line;
+	else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
+	&& ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
+		end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
+	if (line[end] == '\'')
+		end = ft_strchr(line + end + 1, '\'') - line;
+	else if (ft_strchr(line + end, '\'') && ft_strchr(line + end, ' ')
+	&& ft_strchr(line + end, '\'') < ft_strchr(line + end, ' '))
+		end = ft_strchr(ft_strchr(line + end, '\'') + 2, '\'') - line;
+	return (end);
+}
 char	*get_outfile(char *line, char **outfile)
 {
 	int		start;

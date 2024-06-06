@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/30 18:37:00 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/06 12:55:02 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <wait.h>
+# include <sys/stat.h>
+# include <signal.h>
 # include <errno.h>
 //#include "../libs/readline/readline.h"
 //#include "readline.h"
@@ -53,9 +55,9 @@ void	export_mx(t_envp **envp_mx, char *variable);
 // Prints current working directory
 int		pwd_mx(void);
 // Changes current working directory
-int		cd_mx(t_envp **envp_mx, char *args);
+int		cd_mx(t_envp **envp_mx, char **args);
 // Prints whatever trash you pass him
-int		echo_mx(char *arguments);
+int		echo_mx(char **arguments);
 // PARSING
 // Parse and add to command list
 void	parse(char *line_expanded, t_command **commands);
@@ -74,18 +76,26 @@ void	get_arg(char *line, t_command *node);
 void	cleaning(t_command *node);
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *input);
+//INTEGRITY
+bool	check_integrity(char *line);
 // PIPING
 // Calls parse and then passes command for execution
-void	parse_commands(char *line, t_envp *envp_mx);
+void	parse_commands(char *line, t_envp **envp_mx);
 
 // Executes commands, either local files marked as executable, builtins or PATH programs
-int		execute_commands(t_command **commands, t_envp *envp_mx);
+int		execute_commands(t_command **commands, t_envp **envp_mx);
+
+void	resolve_infile(int *outpipe, int *inpipe, t_command *current);
+void	resolve_outfile(int *outpipe, t_command *current);
+
+// Reads fd 0 when <<
+int		manage_here_doc(char *delimiter);
 
 // Updates envp before execution, with optional same-line vars
 char	**update_environment(t_command *current, t_envp **envp_mx);
 
 // Puts optional same-line vars to temp envp_mx
-void	dec_to_env(char **dec, t_envp **envp_mx_temp);
+void	dec_to_env(t_file **dec, t_envp **envp_mx_temp);
 
 // Executes mx_ built-ins
 void	execute_builtin(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
@@ -102,12 +112,13 @@ bool	resolve_path(t_command *current, char **path);
 //UTILS
 void	free_array(void **array);
 void	free_command_list(t_command **list);
-void	mx_error(int error_number);
-void	resolve_exec_error(int *inpipe, int *outpipe);
+	//error-handeling
+void	mx_error(const char *target);
+void	resolve_exec_error(int *inpipe, int *outpipe, char *program);
 	//strings
 char	*jmp_spaces(char *str);
-int	count_out_quotes(char *line, char c);
-int	c_out_q_no_d(char *line, char c);
+int		count_out_quotes(char *line, char c);
+int		c_out_q_no_d(char *line, char c);
 char	*search_out_quotes(char *line, char c);
 char	*search_out_quotes(char *line, char c);
 char	*line_cutter(char *line, char *to_cut);

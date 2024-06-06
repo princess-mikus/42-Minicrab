@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built-in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:02 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/16 20:46:16 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/06 12:57:30 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ bool	get_builtin(char *program)
 int	choose_builtin(t_command *current, t_envp **envp_mx)
 {
 	if (!ft_strncmp(current->command, "echo", ft_strlen("echo") + 1))
-		return (echo_mx(current->arg));
-	if (!ft_strncmp(current->command, "cd", ft_strlen("cd") + 1))
-		return (cd_mx(envp_mx, current->arg));
+		return (echo_mx(current->argv));
 	if (!ft_strncmp(current->command, "env", ft_strlen("env") + 1))
 		return (env_mx(envp_mx), 0);
 	if (!ft_strncmp(current->command, "export", ft_strlen("export") + 1))
@@ -42,19 +40,45 @@ int	choose_builtin(t_command *current, t_envp **envp_mx)
 	return (2);
 }
 
+bool	is_non_forked_builtin(t_command *current, t_envp **envp_mx)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_strncmp(current->command, "cd", ft_strlen("cd") + 1))
+	{
+		current->status = cd_mx(envp_mx, current->argv);
+		return (true);
+	}
+	if (!ft_strncmp(current->command, "export", ft_strlen("export") + 1))
+	{
+		while (current->argv && current->argv[i])
+			export_mx(envp_mx, current->argv[i++]);
+		return (true);
+	}
+	if (!ft_strncmp(current->command, "unset", ft_strlen("unset") + 1))
+	{
+		while (current->argv && current->argv[i])
+			unset_mx(envp_mx, current->argv[i++]);
+		return (true);
+	}
+	return (false);
+}
+
 void	execute_builtin( \
 t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 {
-	int	status;
-
-	if (!fork())
+	if (is_non_forked_builtin(current, envp_mx))
+		return ;
+	current->pid = fork();
+	if (!current->pid)
 	{
 		dup2(*inpipe, STDIN_FILENO);
 		close(*inpipe);
 		dup2(outpipe[1], STDOUT_FILENO);
 		close(outpipe[1]);
-		status = choose_builtin(current, envp_mx);
-		exit(status);
+		current->status = choose_builtin(current, envp_mx);
+		exit(current->status);
 	}
 	else
 		wait(NULL);

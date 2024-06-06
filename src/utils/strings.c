@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   strings.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 10:23:14 by codespace         #+#    #+#             */
-/*   Updated: 2024/05/31 13:05:19 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/06 12:58:27 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,12 @@ int	count_out_quotes(char *line, char c)
 	int	n;
 	int	status_1;
 	int	status_2;
+	int	status_1;
+	int	status_2;
 
 	i = 0;
+	status_2 = 0;
+	status_1 = 0;
 	status_2 = 0;
 	status_1 = 0;
 	n = 0;
@@ -44,19 +48,29 @@ int	count_out_quotes(char *line, char c)
 		if (line[i] == '\'' && status_1 % 2 == 0)
 			status_2++;
 		if (line[i] == c && status_1 % 2 == 0 && status_2 % 2 == 0)
+		if (line[i] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[i] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (line[i] == c && status_1 % 2 == 0 && status_2 % 2 == 0)
 			n++;
 		i++;
 	}
 	return (n);
 }
+
 int	c_out_q_no_d(char *line, char c)
 {
 	int	i;
 	int	n;
 	int	status_1;
 	int	status_2;
+	int	status_1;
+	int	status_2;
 
 	i = 0;
+	status_1 = 0;
+	status_2 = 0;
 	status_1 = 0;
 	status_2 = 0;
 	n = 0;
@@ -79,12 +93,21 @@ char	*search_out_quotes(char *line, char c)
 	int	i;
 	int	status_1;
 	int	status_2;
+	int	status_1;
+	int	status_2;
 
 	i = 0;
 	status_1 = 0;
 	status_2 = 0;
+	status_1 = 0;
+	status_2 = 0;
 	while (line[i])
 	{
+		if (line[i] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[i] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (line[i] == c && status_1 % 2 == 0 && status_2 % 2 == 0)
 		if (line[i] == '\"' && status_2 % 2 == 0)
 			status_1++;
 		if (line[i] == '\'' && status_1 % 2 == 0)

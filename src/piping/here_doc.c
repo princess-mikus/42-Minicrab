@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_mx.c                                           :+:      :+:    :+:   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/08 12:19:18 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/03 20:16:27 by mikus            ###   ########.fr       */
+/*   Created: 2024/05/23 23:12:28 by mikus             #+#    #+#             */
+/*   Updated: 2024/05/23 23:12:33 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env_mx(t_envp **envp_mx)
+int	manage_here_doc(char *delimiter)
 {
-	t_envp	*current;
+	char	*stream;
+	int		pipefd[2];
 
-	if (!*envp_mx)
-		return ;
-	current = *envp_mx;
-	while (current)
+	if (pipe(pipefd))
+		return (-1);
+	while (1)
 	{
-		if (current->exported)
-			ft_printf("%s=%s\n", current->variable, current->content);
-		current = current->next;
+		stream = get_next_line(0);
+		if (!ft_strncmp(stream, delimiter, ft_strlen(delimiter)))
+			break ;
+		else
+			write(pipefd[1], stream, ft_strlen(stream));
+		free(stream);
 	}
+	close (pipefd[1]);
+	return (free(stream), pipefd[0]);
 }

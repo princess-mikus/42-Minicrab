@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaning.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/03 13:06:46 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/06 12:57:13 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,8 @@ void	cleaning(t_command *node)
 {
 	clean_infile(node);
 	clean_outfile(node);
+	clean_command(node);
+	clean_arg(node);
 	clean_command(node);
 	clean_arg(node);
 	clean_dec(node);

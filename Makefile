@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
+#    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/05/31 15:07:36 by xortega          ###   ########.fr        #
+#    Updated: 2024/06/06 12:53:53 by fcasaubo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,10 +26,10 @@ BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx echo_mx
 ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
 HISTORY 	:=
-MAIN		:= #main
+MAIN		 := main
 PARSING 	:= parsing token cleaning
-PIPING 		:= #parse_commands execute_commands path built-in change_envp
-SIGNALS 	:=
+PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc resolve_files
+SIGNALS 	:= signals
 UTILS		:= free error strings
 
 

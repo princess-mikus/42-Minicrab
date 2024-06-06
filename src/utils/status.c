@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_mx.c                                           :+:      :+:    :+:   */
+/*   status.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/08 12:19:18 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/03 20:16:27 by mikus            ###   ########.fr       */
+/*   Created: 2024/05/31 11:18:55 by fcasaubo          #+#    #+#             */
+/*   Updated: 2024/06/03 10:43:41 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env_mx(t_envp **envp_mx)
+void    return_status(int status, t_command *current)
 {
-	t_envp	*current;
-
-	if (!*envp_mx)
-		return ;
-	current = *envp_mx;
-	while (current)
-	{
-		if (current->exported)
-			ft_printf("%s=%s\n", current->variable, current->content);
-		current = current->next;
-	}
+    current->pid = fork();
+    if (!current->pid)
+        exit (status);
+    waitpid(0, NULL, WNOHANG);
 }

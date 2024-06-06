@@ -3,20 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/31 12:06:01 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/06 12:55:35 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
-
-typedef struct s_file
-{
-	char	*name;
-	bool	special;
-}			t_file;
 
 typedef struct s_envp
 {
@@ -25,6 +19,12 @@ typedef struct s_envp
 	bool			exported;
 	struct s_envp	*next;	
 }					t_envp;
+
+typedef struct s_file
+{
+	char	*name;
+	bool	special;
+}			t_file;
 
 typedef struct s_command
 {

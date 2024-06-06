@@ -3,34 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/16 20:54:39 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/06 12:56:45 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	normal_len(int *i, t_envp **envp_mx, char *input)
+{
+	char	*var;
+	int		len;
+
+	len = 0;
+	*i += 1;
+	var = ft_substr(input, *i, \
+		(ft_strchr(input + *i, ' ') - input) - *i);
+	if (!get_content_envp_mx(envp_mx, var))
+		len = 0;
+	else
+		len = ft_strlen(get_content_envp_mx(envp_mx, var) + 1);
+	free(var);
+	if (input[*i] == ' ')
+		len += 1;
+	while (input[*i] && input[*i] != ' ')
+		*i += 1;
+	return (len);
+}
+
 int	line_len(t_envp **envp_mx, char *input)
 {
 	int		len;
 	int		i;
-	char	*var;
 
-	len = 0;
 	i = 0;
+	len = 0;
 	while (input[i])
 	{
 		if (input[i] == '$')
+			len += normal_len(&i, envp_mx, input);
+		else if (input[i] == '~')
 		{
 			i++;
-			var = ft_substr(input, i, \
-				(ft_strchr(input + i, ' ') - input) - i);
-			len += ft_strlen(get_content_envp_mx(envp_mx, var));
-			free(var);
-			while (input[i] && input[i] != ' ')
-				i++;
+			if (!get_content_envp_mx(envp_mx, "~"))
+				len += 0;
+			else
+				len += ft_strlen(get_content_envp_mx(envp_mx, "~") + 1);
 		}
 		else
 		{
@@ -41,10 +61,54 @@ int	line_len(t_envp **envp_mx, char *input)
 	return (len);
 }
 
+char	*return_next(bool *space, char *input, int i)
+{
+	char	*contender;
+	char	*contender2;
+
+	contender = ft_strchr(input + i, ' ');
+	contender2 = ft_strchr(input + i, '$');
+
+	if (!contender2)
+	{
+		*space = false;
+		return (contender);
+	}
+	if (contender && ft_strlen(contender) > ft_strlen(contender2))
+	{
+		*space = true;
+		return (contender2);
+	}
+	*space = false;
+	return (contender2);
+}
+
+static int	normal_case(int *i, t_envp **envp_mx, char *line, char *input)
+{
+	char	*var;
+	char	*next;
+	bool	space;
+	int		k;
+
+	*i += 1;
+	next = return_next(&space, input, *i);
+	ft_printf("%s\n", next);
+	var = ft_substr(input, *i, \
+	(next - input) - *i);
+	if (!get_content_envp_mx(envp_mx, var))
+		k = 0;
+	else
+		k = ft_strlcat(line, get_content_envp_mx(envp_mx, var), \
+		(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, var)) + 1));
+	free(var);
+	while (input[*i] && input[*i] != ' ')
+		*i += 1;
+	return (k);
+}
+
 char	*expansion(t_envp **envp_mx, char *input)
 {
 	char	*line;
-	char	*var;
 	int		i;
 	int		k;
 
@@ -54,13 +118,13 @@ char	*expansion(t_envp **envp_mx, char *input)
 	while (input[i])
 	{
 		if (input[i] == '$')
+			k += normal_case(&i, envp_mx, line, input);
+		else if (input[i] == '~')
 		{
 			i++;
-			var = ft_substr(input, i, \
-			(ft_strchr(input + i, ' ') - input) - i);
-			k = ft_strlcat(line, get_content_envp_mx(envp_mx, var), \
-			(ft_strlen(line), ft_strlen(get_content_envp_mx(envp_mx, var)) + 1));
-			free(var);
+			k = ft_strlcat(line, get_content_envp_mx(envp_mx, "~"), \
+			(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, "~")) \
+			+ 1));
 			while (input[i] && input[i] != ' ')
 				i++;
 		}
