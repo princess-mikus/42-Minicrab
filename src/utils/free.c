@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:57:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/16 12:17:03 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/06 12:42:22 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,33 @@ void	free_array(void **array)
 	free(array);
 }
 
+void	free_files(t_command *current)
+{
+	int	i;
+
+	i = 0;
+	while (current->dec && current->dec[i])
+	{
+		if (current->dec[i]->name)
+			free(current->dec[i]->name);
+		free(current->dec[i++]);
+	}
+	i = 0;
+	while (current->infile && current->infile[i])
+	{
+		if (current->infile[i]->name)
+			free(current->infile[i]->name);
+		free(current->infile[i++]);
+	}
+	i = 0;
+	while (current->outfile && current->outfile[i])
+	{
+		if (current->outfile[i]->name)
+			free(current->outfile[i]->name);
+		free(current->outfile[i++]);
+	}
+}
+
 void	free_command_list(t_command **list)
 {
 	t_command	*next;
@@ -31,9 +58,13 @@ void	free_command_list(t_command **list)
 	while (current)
 	{
 		next = current->next;
-		free(current->infile);
 		free(current->command);
-		free(current->arg);
+		if (current->path)
+			free(current->path);
+		free_array((void **)current->argv);
+		free_files(current);
+		free(current->dec);
+		free(current->infile);
 		free(current->outfile);
 		free(current);
 		current = next;

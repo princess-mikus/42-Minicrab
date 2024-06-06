@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/30 18:37:00 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/06 10:24:22 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	free_array(void **array);
 void	free_command_list(t_command **list);
 void	mx_error(int error_number);
 void	resolve_exec_error(int *inpipe, int *outpipe);
+int		quote_case(char *line);
 	//strings
 char	*jmp_spaces(char *str);
 int	count_out_quotes(char *line, char c);

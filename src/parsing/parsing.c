@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/03 10:53:45 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/06 12:42:45 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	init_node(t_command *node, char * line)
 	node->dec = make_files(line, '=');
 	node->command = NULL;
 	node->arg = NULL;
+	node->path = NULL;
 	node->next = NULL;
 }
 
@@ -67,7 +68,7 @@ t_command	*new_command(char *line)
 		line = get_outfile(line, &new->outfile[++i]->name);
 	line = get_dec(line, new);
 	line = get_cmd(line, new);
-	if(ft_strlen(line) == 0)
+	if(!jmp_spaces(line))
 		free(line);
 	else
 		get_arg(line, new);
@@ -101,12 +102,12 @@ void	parse(char *line_expanded, t_command **commands)
 	{
 		trim = ft_strtrim(splited[i], " ");
 		add_command(trim, commands);
-		//free(trim);
 		i++;
 	}
+	free_array((void **)splited);
 }
 
-
+/*
 int main(int argc, char **argv)
 {
 	if (argc != 2)
@@ -130,7 +131,7 @@ int main(int argc, char **argv)
 	//line = line_cutter(line, "que");
 	//printf("[%s]\n", line);
 	t_command *command;
-	int i = -1;
+//	int i = -1;
 //	if (argc < 2)
 //		return (0);
 //
@@ -139,6 +140,7 @@ int main(int argc, char **argv)
     printf("line: [%s]\n", line);
 //	command = new_command(line);
 	cleaning(command);
+	t_command *head = command;
 	while (command)
 	{
 		i = -1;
@@ -171,12 +173,11 @@ int main(int argc, char **argv)
 		ft_printf("arg:[%s]\n", command->arg);
 		command = command->next;
 	}
-	printf("-----------------------------------------\n");
+	printf("-----------------------------------------\n");	free(line);
+	free_command_list(&head);
 	//ft_printf("%s\n", line]);
 	//ft_printf("%d\n", quote_case(line));
 	//ft_printf("%s\n", clear_line(line));
 	return (0);
 }
-
-//creo que los outfiles e infiles despues del comando joden el arg pero no se porque
-//no pilla las comiilas dobles o simples en las declaraciones
+*/
