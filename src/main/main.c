@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 13:33:23 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/06 21:25:10 by mikus            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,16 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_envp		*envp_mx;
 	char		*line;
+	int			status;
 	char		*prompt;
 
 	if (argc == 0 || !argv[0] || !envp)
 		return (0);
 	envp_mx = NULL;
 	init_envp(&envp_mx, envp);
-	signal_management();
 	while (1)
 	{
+		signal_management();
 		prompt = get_rl_prompt();
 		line = readline(prompt);
 		free(prompt);
@@ -56,36 +57,8 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 	}
 	ft_printf("exit\n");
+	status = ft_atoi(get_content_envp_mx(&envp_mx, "?"));
 	free_envp_mx(&envp_mx);
 	clear_history();
-	return (0);
+	return (status);
 }
-
-/*
-
-int	main(int argc, char **argv, char **envp)
-{
-	char		*line;
-	t_envp		*envp_mx;
-
-	envp_mx = NULL;
-	init_envp(&envp_mx, envp);
-	line = ft_strdup("");
-	if (argc == 0 || !argv[0] || !envp)
-		return (0);
-	while (line)
-	{
-		free(line);
-		line = readline("🦀\e[0;93mminicrab: \e[0;37m");
-		if (!ft_strncmp(line, "exit", 5))
-			break ;
-		if (line[0])
-			add_history(line);
-		parse_commands(line, envp_mx);
-		//rl_on_new_line();
-	}
-	free_envp_mx(&envp_mx);
-	clear_history();
-	return (0);
-}
-*/
