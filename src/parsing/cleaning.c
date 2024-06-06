@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/06 12:57:13 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:01:50 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void clean_dec(t_command *node)
 
 int get_arg_end(char *line, char c)
 {
-	ft_printf("%c\n", c);
 	if (c == '"')
 	{
 		if (ft_strchr(ft_strchr(line + 1, '"'), ' '))
@@ -180,7 +179,7 @@ void clean_infile(t_command *node)
 	while (node->infile[i])
 	{
 		node->infile[i]->special = 0;
-		if(node->infile[i]->name[1] == '>')
+		if(node->infile[i]->name[1] == '<')
 			node->infile[i]->special = 1;
 		temp = ft_strtrim(node->infile[i]->name +
 			node->infile[i]->special + 1, " ");

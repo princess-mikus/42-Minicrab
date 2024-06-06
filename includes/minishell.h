@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/06 12:55:02 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:01:43 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,9 @@ bool	resolve_path(t_command *current, char **path);
 //UTILS
 void	free_array(void **array);
 void	free_command_list(t_command **list);
-	//error-handeling
-void	mx_error(const char *target);
-void	resolve_exec_error(int *inpipe, int *outpipe, char *program);
+void	mx_error(int error_number);
+void	resolve_exec_error(int *inpipe, int *outpipe);
+int		quote_case(char *line);
 	//strings
 char	*jmp_spaces(char *str);
 int		count_out_quotes(char *line, char c);

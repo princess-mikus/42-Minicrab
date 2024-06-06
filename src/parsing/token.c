@@ -5,28 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 12:57:24 by fcasaubo         ###   ########.fr       */
+/*   Created: 2024/06/06 10:15:06 by xortega           #+#    #+#             */
+/*   Updated: 2024/06/06 13:01:59 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
-
-int	get_end(char *line, int end)
-{
-	if (line[end] == '"')
-		end = ft_strchr(line + end + 1, '"') - line;
-	else if (ft_strchr(line + end, '"') && ft_strchr(line + end, ' ')
-	&& ft_strchr(line + end, '"') < ft_strchr(line + end, ' '))
-		end = ft_strchr(ft_strchr(line + end, '"') + 2, '"') - line;
-	if (line[end] == '\'')
-		end = ft_strchr(line + end + 1, '\'') - line;
-	else if (ft_strchr(line + end, '\'') && ft_strchr(line + end, ' ')
-	&& ft_strchr(line + end, '\'') < ft_strchr(line + end, ' '))
-		end = ft_strchr(ft_strchr(line + end, '\'') + 2, '\'') - line;
-	return (end);
-}
 
 void	get_arg(char *line, t_command *node)
 {
@@ -45,13 +30,9 @@ char	*get_cmd(char *line, t_command *node)
 	if (!line || !jmp_spaces(line))
 		return (line);
 	start = jmp_spaces(line) - line;
-	end = start;
-	end = get_end(line, end);
-	if (line[start] == '"')
-		end = (ft_strchr(line + start + 1, '"') - line) + 1;
-	if (ft_strchr(line + start, ' '))
-		end = ft_strchr(line + end, ' ') - line;
-    else
+	if (search_out_quotes(line + start, ' '))
+		end = (search_out_quotes(line + start, ' ') - line);
+	else
 		end = ft_strlen(line);
 	node->command = ft_substr(line, start, end - start);
 	return (line_cutter(line, node->command));
@@ -69,15 +50,10 @@ char	*get_dec(char *line, t_command *node)
 	while (count_out_quotes(line, '=') > 0)
 	{
 		start = start_dec(line);
-		if (search_out_quotes(line, '=')[1] == '"')
-		{
-			if (ft_strchr(ft_strchr(search_out_quotes(line, '=') + 2, '"'), ' '))
-				end = (ft_strchr(ft_strchr(search_out_quotes(line, '=') + 2, '"'), ' ') - line);
-			else
-				end = ft_strlen(search_out_quotes(line, '=') - 1);
-		}
+		if (search_out_quotes(search_out_quotes(line, '='), ' '))
+			end = (search_out_quotes(search_out_quotes(line, '='), ' ') - line);
 		else
-			end = ft_strchr(search_out_quotes(line, '='), ' ') - line;
+			end = ft_strlen(line);
 		node->dec[i]->name = ft_substr(line, start, end - start);
 		line = line_cutter(line, node->dec[i++]->name);
 	}
@@ -126,11 +102,10 @@ char	*get_outfile(char *line, char **outfile)
 	start = search_out_quotes(line, '>') - line;
 	end = 0;
 	if (ft_strlen(line + start) > 2)
-		end = jmp_spaces(line + start + 1) - line;
-	end = get_end(line, end);
-    if (ft_strchr(line + end, ' '))
-        end = ft_strchr(line + end, ' ') - line;
-    else
+		end = jmp_spaces(line + start + (line[start + 1] == '>') + 1) - line;
+	if (search_out_quotes(line + end, ' '))
+		end = (search_out_quotes(line + end, ' ') - line);
+	else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
 	if (logic(temp + 2, '<', '>'))
@@ -154,11 +129,10 @@ char	*get_infile(char *line, char **infile)
 	start = search_out_quotes(line, '<') - line;
 	end = 0;
 	if (ft_strlen(line + start) > 2)
-		end = jmp_spaces(line + start + 1) - line;
-	end = get_end(line, end);
-    if (ft_strchr(line + end, ' '))
-        end = ft_strchr(line + end, ' ') - line;
-    else
+		end = jmp_spaces(line + start + (line[start + 1] == '<') + 1) - line;
+	if (search_out_quotes(line + end, ' '))
+		end = (search_out_quotes(line + end, ' ') - line);
+	else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
 	if (logic(temp + 2, '>', '<'))
