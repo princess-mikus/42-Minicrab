@@ -107,7 +107,7 @@ void	parse(char *line_expanded, t_command **commands)
 	free_array((void **)splited);
 }
 
-
+/*
 int main(int argc, char **argv)
 {
 	if (argc != 2)
@@ -180,4 +180,4 @@ int main(int argc, char **argv)
 	//ft_printf("%d\n", quote_case(line));
 	//ft_printf("%s\n", clear_line(line));
 	return (0);
-}
+}*/

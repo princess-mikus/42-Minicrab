@@ -12,31 +12,43 @@
 
 #include "minishell.h"
 
+// BIEN $PWD "$PWD"
+// MAL $"PWD" '$PWD'
+
+t_envp *next_node(t_envp **envp_mx, char *input)
+{
+	t_envp	*node;
+	int		len;
+	char	*temp;
+
+	len = 0;
+	while(input[len] && input[len] != ' ' && input[len] != '$' && input[len] != '"')
+		len++;;
+	temp = ft_substr(input, 0, len);
+	node = get_node_envp_mx(envp_mx, temp);
+	free(temp);
+	return(node);
+}
+
 int	normal_len(int *i, t_envp **envp_mx, char *input)
 {
-	char	*var;
-	char	*temp;
 	int		len;
+	int		start;
+	char	*temp;
 
+	len = 0;
+	start = *i + 1;
 	*i += 1;
-	if (ft_strchr(input + *i, ' '))
-		temp = ft_substr(input, *i, \
-		(ft_strchr(input + *i, ' ') - input) - *i);
-	else
-		temp = ft_substr(input, *i, \
-		ft_strlen(input) - *i);
-	var = ft_strtrim(temp, "\"");
-	free(temp);
-	if (!get_content_envp_mx(envp_mx, var))
-		len = 0;
-	else
-		len = ft_strlen(get_content_envp_mx(envp_mx, var) + 1);
-	free(var);
-	if (input[*i] == ' ')
-		len += 1;
-	while (input[*i] && input[*i] != ' ' && input[*i] != '"')
+	while(input[*i] && input[*i] != ' ' && input[*i] != '$' && input[*i] != '"')
+	{
+		len++;
 		*i += 1;
-	return (len);
+	}
+	*i -= 1;
+	temp = ft_substr(input, start, len);
+	if (get_content_envp_mx(envp_mx, temp))
+		len = ft_strlen(get_content_envp_mx(envp_mx, temp));
+	return (len - 1);
 }
 
 int	line_len(t_envp **envp_mx, char *input)
@@ -49,9 +61,7 @@ int	line_len(t_envp **envp_mx, char *input)
 	while (input[i])
 	{
 		if (input[i] == '$')
-		{
 			len += normal_len(&i, envp_mx, input);
-		}
 		else if (input[i] == '~')
 		{
 			i++;
@@ -90,30 +100,18 @@ char	*return_next(bool *space, char *input, int i)
 
 static int	normal_case(int *i, t_envp **envp_mx, char *line, char *input)
 {
-	char	*var;
-	char	*temp;
-	int		k;
+	int k;
 
-	*i += 1;
-	if (ft_strchr(input + *i, ' '))
-		temp = ft_substr(input, *i, \
-		(ft_strchr(input + *i, ' ') - input) - *i);
-	else
-		temp = ft_substr(input, *i, \
-		ft_strlen(input) - *i);
-	var = ft_strtrim(temp, "\"");
-	free(temp);
-	if (!get_content_envp_mx(envp_mx, var))
-		k = 0;
-	else
-		k = ft_strlcat(line, get_content_envp_mx(envp_mx, var), \
-		(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, var)) + 1));
-	free(var);
-	while (input[*i] && (input[*i] != ' ' && input[*i] != '"'))
+	if (!next_node(envp_mx, input + *i + 1))
+	{
 		*i += 1;
-	k -= (input[*i] == '"');
-	ft_printf("line === [%s]\n", line);
-	ft_printf("input === [%s]\n", input + *i);
+		while(input[*i] && input[*i] != ' ' && input[*i] != '$' && input[*i] != '"')
+			*i += 1;
+		return(0);
+	}
+	k = ft_strlen(next_node(envp_mx, input + *i + 1)->content);
+	ft_strlcat(line, next_node(envp_mx, input + *i + 1)->content, ft_strlen(line) + k + 1);
+	*i += ft_strlen(next_node(envp_mx, input + *i + 1)->variable) + 1;
 	return (k);
 }
 
@@ -125,13 +123,17 @@ char	*expansion(t_envp **envp_mx, char *input)
 
 	i = 0;
 	k = 0;
-	line = ft_calloc(sizeof(char), line_len(envp_mx, input) + 2);
-	ft_printf("[%d]\n", line_len(envp_mx, input) + 1);
+	line = ft_calloc(sizeof(char), line_len(envp_mx, input) + 1);
+	ft_printf("[%d]\n", line_len(envp_mx, input));
+	ft_printf("[%s]\n", input);
 	while (input[i])
 	{
-		if (input[i] == '$')
+		while (input[i] == '$')
+		{
 			k += normal_case(&i, envp_mx, line, input);
-		else if (input[i] == '~')
+			ft_printf("en medio [%s]\n", input + i);
+		}
+		while (input[i] == '~')
 		{
 			i++;
 			k = ft_strlcat(line, get_content_envp_mx(envp_mx, "~"), \
@@ -142,5 +144,6 @@ char	*expansion(t_envp **envp_mx, char *input)
 		}
 		line[k++] = input[i++];
 	}
+	ft_printf("adios [%s]\n", line);
 	return (line);
 }
