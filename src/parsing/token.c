@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 11:15:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/31 13:13:08 by xortega          ###   ########.fr       */
+/*   Created: 2024/06/06 10:15:06 by xortega           #+#    #+#             */
+/*   Updated: 2024/06/06 13:01:59 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -16,6 +17,7 @@ void	get_arg(char *line, t_command *node)
 {
 	if (!line)
 		return ;
+	node->arg = ft_strtrim(line, " ");
 	node->arg = ft_strtrim(line, " ");
 	free(line);
 }
@@ -28,15 +30,10 @@ char	*get_cmd(char *line, t_command *node)
 	if (!line || !jmp_spaces(line))
 		return (line);
 	start = jmp_spaces(line) - line;
-	end = start;
-	if (line[start] == '"')
-		end = (ft_strchr(line + start + 1, '"') - line) + 1;
-    if (ft_strchr(line + start, ' '))
-        end = ft_strchr(line + end, ' ') - line;
-    else
-    {
-        end = ft_strlen(line);
-    }
+	if (search_out_quotes(line + start, ' '))
+		end = (search_out_quotes(line + start, ' ') - line);
+	else
+		end = ft_strlen(line);
 	node->command = ft_substr(line, start, end - start);
 	return (line_cutter(line, node->command));
 }
@@ -53,15 +50,10 @@ char	*get_dec(char *line, t_command *node)
 	while (count_out_quotes(line, '=') > 0)
 	{
 		start = start_dec(line);
-		if (search_out_quotes(line, '=')[1] == '"')
-		{
-			if (ft_strchr(ft_strchr(search_out_quotes(line, '=') + 2, '"'), ' '))
-				end = (ft_strchr(ft_strchr(search_out_quotes(line, '=') + 2, '"'), ' ') - line);
-			else
-				end = ft_strlen(search_out_quotes(line, '=') - 1);
-		}
+		if (search_out_quotes(search_out_quotes(line, '='), ' '))
+			end = (search_out_quotes(search_out_quotes(line, '='), ' ') - line);
 		else
-			end = ft_strchr(search_out_quotes(line, '='), ' ') - line;
+			end = ft_strlen(line);
 		node->dec[i]->name = ft_substr(line, start, end - start);
 		line = line_cutter(line, node->dec[i++]->name);
 	}
@@ -78,7 +70,10 @@ int	logic(char *temp, char caso, char other)
 		search_out_quotes(temp, caso))
 			return (false);
 		return (true);
+			return (false);
+		return (true);
 	}
+	return (false);
 	return (false);
 }
 
@@ -105,14 +100,12 @@ char	*get_outfile(char *line, char **outfile)
 	if (!search_out_quotes(line, '>'))
 		return (line);
 	start = search_out_quotes(line, '>') - line;
+	end = 0;
 	if (ft_strlen(line + start) > 2)
-		end = jmp_spaces(line + start + 2) - line;
+		end = jmp_spaces(line + start + (line[start + 1] == '>') + 1) - line;
+	if (search_out_quotes(line + end, ' '))
+		end = (search_out_quotes(line + end, ' ') - line);
 	else
-		end = 0;
-	end = get_end(line, end);
-    if (ft_strchr(line + end, ' '))
-        end = ft_strchr(line + end, ' ') - line;
-    else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
 	if (logic(temp + 2, '<', '>'))
@@ -134,14 +127,12 @@ char	*get_infile(char *line, char **infile)
 	if (!search_out_quotes(line, '<'))
 		return (line);
 	start = search_out_quotes(line, '<') - line;
+	end = 0;
 	if (ft_strlen(line + start) > 2)
-		end = jmp_spaces(line + start + 2) - line;
+		end = jmp_spaces(line + start + (line[start + 1] == '<') + 1) - line;
+	if (search_out_quotes(line + end, ' '))
+		end = (search_out_quotes(line + end, ' ') - line);
 	else
-		end = 0;
-	end = get_end(line, end);
-    if (ft_strchr(line + end, ' '))
-        end = ft_strchr(line + end, ' ') - line;
-    else
 		end = ft_strlen(line);
 	temp = ft_substr(line, start, end - start);
 	if (logic(temp + 2, '>', '<'))

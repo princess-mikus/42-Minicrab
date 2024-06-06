@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built-in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:02 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/03 20:18:32 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/06 12:57:30 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,12 @@ int	choose_builtin(t_command *current, t_envp **envp_mx)
 		return (echo_mx(current->argv));
 	if (!ft_strncmp(current->command, "env", ft_strlen("env") + 1))
 		return (env_mx(envp_mx), 0);
+	if (!ft_strncmp(current->command, "export", ft_strlen("export") + 1))
+		return (export_mx(envp_mx, current->arg), 0);
 	if (!ft_strncmp(current->command, "pwd", ft_strlen("pwd") + 1))
 		return (pwd_mx());
+	if (!ft_strncmp(current->command, "unset", ft_strlen("unset") + 1))
+		return (unset_mx(envp_mx, current->arg), 0);
 	return (2);
 }
 

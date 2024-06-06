@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/23 21:49:54 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/23 21],:57:40 by mikus            ###   ########.fr       */
+/*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
+/*   Updated: 2024/06/06 13:01:43 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,17 +109,12 @@ char	**get_path_var(char **envp);
 // Checks if file exists on PATH or if is a local file (Relative & Absolute paths)
 bool	resolve_path(t_command *current, char **path);
 
-// SIGNALS
-void    signal_management(void);
-void	signal_sender(t_command *command);
-
 //UTILS
-	//free
 void	free_array(void **array);
 void	free_command_list(t_command **list);
-	//error-handeling
-void	mx_error(const char *target);
-void	resolve_exec_error(int *inpipe, int *outpipe, char *program);
+void	mx_error(int error_number);
+void	resolve_exec_error(int *inpipe, int *outpipe);
+int		quote_case(char *line);
 	//strings
 char	*jmp_spaces(char *str);
 int		count_out_quotes(char *line, char c);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/06 01:29:35 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/06 12:57:52 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 	char	**program;
 
 	program = get_arguments(current);
-	current->pid = fork();
-	if (!current->pid)
+	if (!fork())
 	{
 		signal(SIGINT, kill_yourself);
 		signal(SIGKILL, kill_yourself);
@@ -110,7 +109,6 @@ int	execute_commands(t_command **commands, t_envp **envp_mx)
 	current = *commands;
 	outpipe[0] = -1;
 	outpipe[1] = -1;
-	signal_sender(*commands);
 	while (current)
 	{
 		resolve_infile(outpipe, &inpipe, current);

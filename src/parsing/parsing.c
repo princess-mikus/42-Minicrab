@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/02 17:12:22 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/06 13:01:55 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	init_node(t_command *node, char * line)
 	node->path = NULL;
 	node->command = NULL;
 	node->arg = NULL;
+	node->path = NULL;
 	node->next = NULL;
 }
 
@@ -68,7 +69,7 @@ t_command	*new_command(char *line)
 		line = get_outfile(line, &new->outfile[++i]->name);
 	line = get_dec(line, new);
 	line = get_cmd(line, new);
-	if(ft_strlen(line) == 0)
+	if(!jmp_spaces(line))
 		free(line);
 	else
 		get_arg(line, new);
@@ -102,9 +103,9 @@ void	parse(char *line_expanded, t_command **commands)
 	{
 		trim = ft_strtrim(splited[i], " ");
 		add_command(trim, commands);
-		//free(trim);
 		i++;
 	}
+	free_array((void **)splited);
 }
 
 /*
@@ -112,6 +113,7 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 		return (0);
+	char *line = ft_strtrim(argv[1], " ");
 	//./minishell "<   in ls -l a   >    out   |   <   out  cat -l>    in | aaaaa aaa"
 	//char *line = "   >    outfile    ls  < infile ";
 	//char *line = "  <     infile    ls    -l   a    >    outfile";
@@ -125,13 +127,12 @@ int main(int argc, char **argv)
 	//char *line = " ls -la ";
 	//char *line = " ls -l     a ";
 	//char *line = " ls ";
-	char *line = ft_strtrim(argv[1], " ");
 	//char *line = ft_strtrim("<    in\"  file\"57 l\"s\"a -l\" a\"> \" jiji\"jija", " ");
 	//char *line = ft_strtrim("<    in\"  file\"57 ", " ");
 	//line = line_cutter(line, "que");
 	//printf("[%s]\n", line);
 	t_command *command;
-	int i = -1;
+//	int i = -1;
 //	if (argc < 2)
 //		return (0);
 //
@@ -140,6 +141,7 @@ int main(int argc, char **argv)
     printf("line: [%s]\n", line);
 //	command = new_command(line);
 	cleaning(command);
+	t_command *head = command;
 	while (command)
 	{
 		i = -1;
@@ -172,11 +174,11 @@ int main(int argc, char **argv)
 		ft_printf("arg:[%s]\n", command->arg);
 		command = command->next;
 	}
-	printf("-----------------------------------------\n");
+	printf("-----------------------------------------\n");	free(line);
+	free_command_list(&head);
+	//ft_printf("%s\n", line]);
+	//ft_printf("%d\n", quote_case(line));
+	//ft_printf("%s\n", clear_line(line));
 	return (0);
 }
 */
-
-//el end de los substrings va a fallar sin espacio al final, asi que arreglalo
-//las declaraciones de tipo b="ho"la tambien van mal
-// si el infile|outfile tieene > out"  file" no va
