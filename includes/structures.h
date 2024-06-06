@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/06 12:55:35 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:24:16 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef struct s_command
 	t_file				**dec;
 	t_file				**infile;
 	t_file				**outfile;
+	pid_t				pid;
+	int					status;
 	char				*command;
 	char				*arg;
 	char				**argv;

@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:20:50 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 12:56:51 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:33:23 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	envp_mx = NULL;
 	init_envp(&envp_mx, envp);
+	signal_management();
 	while (1)
 	{
-		signal_management();
 		prompt = get_rl_prompt();
 		line = readline(prompt);
 		free(prompt);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 13:01:55 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/06 12:42:45 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	init_node(t_command *node, char * line)
 	node->infile = make_files(line, '<');
 	node->outfile = make_files(line, '>');
 	node->dec = make_files(line, '=');
-	node->path = NULL;
 	node->command = NULL;
 	node->arg = NULL;
 	node->path = NULL;

@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/06 13:01:50 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:23:09 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,8 @@ void clean_arg(t_command *node)
 			i++;
 		}
 	}
+	else
+		node->argv = NULL;
 }
 void clean_command(t_command *node)
 {
@@ -193,8 +195,6 @@ void	cleaning(t_command *node)
 {
 	clean_infile(node);
 	clean_outfile(node);
-	clean_command(node);
-	clean_arg(node);
 	clean_command(node);
 	clean_arg(node);
 	clean_dec(node);

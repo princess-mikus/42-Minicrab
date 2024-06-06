@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_integrity.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:47:36 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/05 21:38:19 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/06 13:30:02 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ bool	check_integrity(char *line)
 	while (line[i] && ret)
 	{
 		if (line[i] == '"' && !s_quotes)
-			d_quotes = 1 - d_quotes;
+			d_quotes ^= 1;
 		if (line[i] == '\'' && !d_quotes)
-			s_quotes = 1 - s_quotes;
+			s_quotes ^= 1;
 		if (!d_quotes && !s_quotes && (line[i] == '<' || line[i] == '>'))
 			ret = check_infiles(line + i, line[i], &i);
 		if (!d_quotes && !s_quotes && (line[i] == '|'))
@@ -74,15 +74,4 @@ bool	check_integrity(char *line)
 	if (ret && (s_quotes || d_quotes))
 		return (false);
 	return (ret);
-}
-
-
-int main(int argc, char **argv)
-{
-	if (argc < 2)
-		return (0);
-	if (check_integrity(argv[1]))
-		ft_printf("Valid line\n");
-	else
-		ft_printf("NOT valid line\n");
 }

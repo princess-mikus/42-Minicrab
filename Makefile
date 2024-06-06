@@ -6,7 +6,7 @@
 #    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/06/06 12:53:53 by fcasaubo         ###   ########.fr        #
+#    Updated: 2024/06/06 13:29:14 by fcasaubo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ RLINE_FLAGS	:= -I/usr/include/readline -lreadline #-L/Users/$(USER)/.brew/opt/re
 BUILT-IN 	:= env_mx export_mx unset_mx cd_mx pwd_mx echo_mx
 ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
+INTEGRITY 	:= check_integrity
 HISTORY 	:=
 MAIN		 := main
 PARSING 	:= parsing token cleaning
@@ -37,6 +38,7 @@ UTILS		:= free error strings
 PLAIN_SRCS =	$(addsuffix .c, $(addprefix built-in/,	$(BUILT-IN)))		\
 				$(addsuffix .c, $(addprefix envp/,		$(ENVP)))			\
 				$(addsuffix .c, $(addprefix expand/,	$(EXPAND)))			\
+				$(addsuffix .c, $(addprefix integrity/,	$(INTEGRITY)))		\
 				$(addsuffix .c, $(addprefix history/,	$(HISTORY)))		\
 				$(addsuffix .c, $(addprefix main/,		$(MAIN)))			\
 				$(addsuffix .c, $(addprefix parsing/,	$(PARSING)))		\

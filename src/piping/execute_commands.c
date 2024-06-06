@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/06 12:57:52 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:40:46 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 	char	**program;
 
 	program = get_arguments(current);
-	if (!fork())
+	current->pid = fork();
+	if (!current->pid)
 	{
 		signal(SIGINT, kill_yourself);
 		signal(SIGKILL, kill_yourself);
@@ -74,6 +75,7 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 	close(outpipe[1]);
 	free_array((void **)program);
 }
+
 
 void	select_execution(t_command *current, int inpipe, \
 						int *outpipe, t_envp **envp_mx)
