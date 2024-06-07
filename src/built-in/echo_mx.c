@@ -6,28 +6,32 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:30:15 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/06 12:56:03 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 12:27:44 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	get_flag(char *arguments, int *j, bool nl)
+bool	get_flag(char **arguments, int *i)
 {
+	bool	nl;
+
+	nl = true;
 	if (!arguments)
 		return (true);
-	while (arguments[*j] == ' ')
-		*j += 1;
-	if (arguments[*j] == '-' && arguments[*j + 1] == 'n')
+	while (arguments[*i])
 	{
-		*j += 2;
-		while (arguments[*j] == ' ')
-			*j += 1;
-		return (false);
+		if (arguments[*i][0] == '-' && arguments[*i][1] == 'n')
+		{
+			nl = false;
+			if (arguments[*i][2])
+				break;
+			(*i)++;
+		}
+		else
+			break ;
 	}
-	if (nl)
-		return (true);
-	return (false);
+	return (nl);
 }
 
 int	echo_mx(char **arguments)
@@ -37,11 +41,11 @@ int	echo_mx(char **arguments)
 	bool	nl;
 
 	i = 0;
-	nl = true;
+	i = 0;
+	nl = get_flag(arguments, &i);
 	while (arguments && arguments[i])
 	{
 		j = 0;
-		nl = get_flag(arguments[i], &j, nl);
 		while (arguments[i][j])
 		{
 			if (write(1, &arguments[i][j], 1) != 1)

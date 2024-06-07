@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:57:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/07 11:58:45 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/07 13:20:14 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,8 @@ void	free_envp_mx(t_envp **envp_mx)
 	while (current)
 	{
 		next = current->next;
-		if (current->variable[0] != '~')
-		{
-			free(current->variable);
-			free(current->content);
-		}
+		free(current->variable);
+		free(current->content);
 		free(current);
 		current = next;
 	}

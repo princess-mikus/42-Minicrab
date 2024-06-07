@@ -6,7 +6,7 @@
 #    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/06/06 13:29:14 by fcasaubo         ###   ########.fr        #
+#    Updated: 2024/06/07 13:15:53 by fcasaubo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ RLINE_PATH	:=	readline
 LIBFT		:=	libft.a
 #READLINE	:=	/usr/lib/x86_64-linux-gnu/libreadline.so
 CC			:=	gcc
-CFLAGS		:=	-Wall -Wextra -Werror -Iincludes
+CFLAGS		:=	-Wall -Wextra -Werror -Iincludes -g3
 RLINE_FLAGS	:= -I/usr/include/readline -lreadline #-L/Users/$(USER)/.brew/opt/readline/lib/
 
 # SRCS #
@@ -29,7 +29,7 @@ INTEGRITY 	:= check_integrity
 HISTORY 	:=
 MAIN		:= main
 PARSING 	:= parsing token cleaning
-PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc resolve_files
+PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc resolve_files piping_utils
 SIGNALS 	:= signals
 UTILS		:= free error strings
 

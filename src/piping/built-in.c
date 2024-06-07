@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:02 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/06 12:57:30 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 13:21:57 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@ bool	is_non_forked_builtin(t_command *current, t_envp **envp_mx)
 	{
 		while (current->argv && current->argv[i])
 			export_mx(envp_mx, current->argv[i++]);
+		current->status = 0;
 		return (true);
 	}
 	if (!ft_strncmp(current->command, "unset", ft_strlen("unset") + 1))
 	{
 		while (current->argv && current->argv[i])
 			unset_mx(envp_mx, current->argv[i++]);
+		current->status = 0;
 		return (true);
 	}
 	return (false);

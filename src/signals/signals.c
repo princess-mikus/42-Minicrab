@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 00:36:45 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/06 01:31:19 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/07 12:28:01 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	g_sig;
 
 static int	g_sig;
 
@@ -31,10 +29,16 @@ void	signal_management(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+void	kill_yourself(int sig)
+{
+	(void)sig;
+	exit(130);
+}
+
 void	kill_children(int sig)
 {
 	if (sig == SIGINT || sig == SIGQUIT)
-		ft_printf("\n");
+		write(1, "\n", 1);
 	g_sig = sig;
 }
 

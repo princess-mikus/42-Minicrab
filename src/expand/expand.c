@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 11:42:49 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/07 12:46:01 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ bool	is_betwen_quotes(char *line, int i)
 			return (false);
 		j++;
 	}
-	ft_printf("im true status_2 [%d]\n", status_2);
 	return (true);
 }
 
@@ -73,10 +72,11 @@ int	normal_len(int *i, t_envp **envp_mx, char *input)
 	temp = ft_substr(input, start, len);
 	if (get_content_envp_mx(envp_mx, temp))
 		len = ft_strlen(get_content_envp_mx(envp_mx, temp));
+	free(temp);
 	return (len - 1);
 }
 
-int	line_len(t_envp **envp_mx, char *input)
+int		line_len(t_envp **envp_mx, char *input)
 {
 	int		len;
 	int		i;

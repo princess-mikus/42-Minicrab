@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/06 13:23:41 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 12:13:15 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ bool	check_integrity(char *line);
 // Calls parse and then passes command for execution
 void	parse_commands(char *line, t_envp **envp_mx);
 
+void	wait_for_children(t_command *current);
+
 // Executes commands, either local files marked as executable, builtins or PATH programs
 int		execute_commands(t_command **commands, t_envp **envp_mx);
 
@@ -111,6 +113,7 @@ bool	resolve_path(t_command *current, char **path);
 
 // SIGNALS
 void    signal_management(void);
+void	kill_yourself(int sig);
 void	signal_sender(t_command *command);
 
 //UTILS

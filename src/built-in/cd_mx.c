@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:47:20 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 12:55:54 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 13:24:47 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,13 @@ static int	normal_case(t_envp **envp_mx, char *args)
 		errno = ENOTDIR;
 		return (mx_error("cd"), ENOTDIR);
 	}
-	add_var_to_envp_mx(envp_mx, ft_strdup("OLDPWD"), \
-	ft_strdup(get_node_envp_mx(envp_mx, "PWD")->content));
+	if (!is_envp(envp_mx, "OLDPWD"))
+		add_var_to_envp_mx(envp_mx, ft_strdup("OLDPWD"), \
+		ft_strdup(get_node_envp_mx(envp_mx, "PWD")->content));
+	else
+		add_var_to_envp_mx(envp_mx, "OLDPWD", \
+		ft_strdup(get_node_envp_mx(envp_mx, "PWD")->content));
+	free(get_node_envp_mx(envp_mx, "PWD")->content);
 	get_node_envp_mx(envp_mx, "PWD")->content = getcwd(NULL, 0);
 	chdir(args);
 	return (0);

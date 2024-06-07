@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:49:25 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/06 13:27:57 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 13:58:51 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	parse_commands(char *line, t_envp **envp_mx)
 	commands = NULL;
 	if (!check_integrity(line))
 	{
-		ft_putstr_fd("minicrab: syntax error near unexpected token", 2);
+		ft_putstr_fd("minicrab: syntax error near unexpected token\n", 2);
 		add_var_to_envp_mx(envp_mx, "?", ft_strdup("2"));
 		return ;
 	}

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 11:36:07 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/06 13:40:46 by fcasaubo         ###   ########.fr       */
+/*   Created: 2024/06/07 12:08:04 by fcasaubo          #+#    #+#             */
+/*   Updated: 2024/06/07 12:12:03 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,6 @@ bool	has_permissions(char *program, char *path)
 	return (false);
 }
 
-void	kill_yourself(int sig)
-{
-	(void)sig;
-	exit(130);
-}
-
 void	fork_and_execute( \
 t_command *current, int *inpipe, int *outpipe, char **envp)
 {
@@ -76,7 +70,6 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 	free_array((void **)program);
 }
 
-
 void	select_execution(t_command *current, int inpipe, \
 						int *outpipe, t_envp **envp_mx)
 {
@@ -90,15 +83,6 @@ void	select_execution(t_command *current, int inpipe, \
 	else
 		fork_and_execute(current, &inpipe, outpipe, envp);
 	free_array((void **)envp);
-}
-
-void	wait_for_children(t_command *current)
-{
-	while (current)
-	{
-		waitpid(current->pid, &current->status, 0);
-		current = current->next;
-	}
 }
 
 int	execute_commands(t_command **commands, t_envp **envp_mx)

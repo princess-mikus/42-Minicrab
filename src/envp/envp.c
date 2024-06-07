@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:58:58 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 12:56:23 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 13:20:09 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,11 @@ void	init_envp(t_envp **envp_mx, char **envp)
 		envp_add_back(envp_mx, new_envp(ft_substr(envp[i], 0, \
 		(ft_strchr(envp[i], '=') - envp[i])), \
 		ft_strdup(ft_strchr(envp[i], '=') + 1)));
-	envp_add_back(envp_mx, new_envp("~", get_content_envp_mx(envp_mx, "HOME")));
+	envp_add_back(envp_mx, new_envp(ft_strdup("~"), \
+	ft_strdup(get_content_envp_mx(envp_mx, "HOME"))));
+	get_node_envp_mx(envp_mx, "~")->exported = false;
 	envp_add_back(envp_mx, new_envp(ft_strdup("?"), ft_strdup("0")));
+	get_node_envp_mx(envp_mx, "?")->exported = false;
 	current = *envp_mx;
 	unset_mx(envp_mx, "OLDPWD");
 	while (current)
