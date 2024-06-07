@@ -5,3 +5,5 @@
 - "./"ls borra el ./ y solo deja ls.
 - "1"$X2? no expande por detrás de las comillas dobles (Solo deja el 1)
 - ~ + cosas detrás aún no implementado
+- Non existent infile should give error "minicrab: filedoesnotexist: No such file or directory" and stop execution
+- Export on same line (even before pipes) as other commands does not export really
