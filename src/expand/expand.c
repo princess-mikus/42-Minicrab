@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 16:47:48 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:42:49 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,20 @@ bool	is_betwen_quotes(char *line, int i)
 	return (true);
 }
 
-t_envp *next_node(t_envp **envp_mx, char *input)
+t_envp	*next_node(t_envp **envp_mx, char *input)
 {
 	t_envp	*node;
 	int		len;
 	char	*temp;
 
 	len = 0;
-	while(input[len] && input[len] != ' ' && input[len] != '$'
+	while (input[len] && input[len] != ' ' && input[len] != '$'
 		&& input[len] != '"' && input[len] != '\'')
-		len++;;
+		len++;
 	temp = ft_substr(input, 0, len);
 	node = get_node_envp_mx(envp_mx, temp);
 	free(temp);
-	return(node);
+	return (node);
 }
 
 int	normal_len(int *i, t_envp **envp_mx, char *input)
@@ -63,7 +63,7 @@ int	normal_len(int *i, t_envp **envp_mx, char *input)
 	len = 0;
 	start = *i + 1;
 	*i += 1;
-	while(input[*i] && input[*i] != ' ' && input[*i] != '$'
+	while (input[*i] && input[*i] != ' ' && input[*i] != '$'
 		&& input[*i] != '"' && input[*i] != '\'')
 	{
 		len++;
@@ -101,42 +101,21 @@ int	line_len(t_envp **envp_mx, char *input)
 	return (len);
 }
 
-char	*return_next(bool *space, char *input, int i)
-{
-	char	*contender;
-	char	*contender2;
-
-	contender = ft_strchr(input + i, ' ');
-	contender2 = ft_strchr(input + i, '$');
-
-	if (!contender2)
-	{
-		*space = false;
-		return (contender);
-	}
-	if (contender && ft_strlen(contender) > ft_strlen(contender2))
-	{
-		*space = true;
-		return (contender2);
-	}
-	*space = false;
-	return (contender2);
-}
-
 static int	normal_case(int *i, t_envp **envp_mx, char *line, char *input)
 {
-	int k;
+	int	k;
 
 	if (!next_node(envp_mx, input + *i + 1))
 	{
 		*i += 1;
-		while(input[*i] && input[*i] != ' ' && input[*i] != '$'
-		&& input[*i] != '"' && input[*i] != '\'')
+		while (input[*i] && input[*i] != ' ' && input[*i] != '$'
+			&& input[*i] != '"' && input[*i] != '\'')
 			*i += 1;
-		return(0);
+		return (0);
 	}
 	k = ft_strlen(next_node(envp_mx, input + *i + 1)->content);
-	ft_strlcat(line, next_node(envp_mx, input + *i + 1)->content, ft_strlen(line) + k + 1);
+	ft_strlcat(line, next_node(envp_mx, input + *i + 1)->content,
+		ft_strlen(line) + k + 1);
 	*i += ft_strlen(next_node(envp_mx, input + *i + 1)->variable) + 1;
 	return (k);
 }
@@ -150,15 +129,10 @@ char	*expansion(t_envp **envp_mx, char *input)
 	i = 0;
 	k = 0;
 	line = ft_calloc(sizeof(char), line_len(envp_mx, input) + 1);
-	ft_printf("[%d]\n", line_len(envp_mx, input));
-	ft_printf("[%s]\n", input);
 	while (input[i])
 	{
 		while (input[i] == '$' && is_betwen_quotes(input, i))
-		{
 			k += normal_case(&i, envp_mx, line, input);
-			ft_printf("en medio [%s]\n", input + i);
-		}
 		while (input[i] == '~')
 		{
 			i++;
@@ -170,6 +144,5 @@ char	*expansion(t_envp **envp_mx, char *input)
 		}
 		line[k++] = input[i++];
 	}
-	ft_printf("adios [%s]\n", line);
 	return (line);
 }

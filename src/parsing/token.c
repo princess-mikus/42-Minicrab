@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:15:06 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 12:01:25 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/07 11:51:23 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	logic(char *temp, char caso, char other)
 {
 	if (search_out_quotes(temp, caso))
 	{
-		if (search_out_quotes(temp, other) && 
-		search_out_quotes(temp, other) <
-		search_out_quotes(temp, caso))
+		if (search_out_quotes(temp, other)
+			&& (search_out_quotes(temp, other)
+				< search_out_quotes(temp, caso)))
 			return (false);
 		return (true);
 	}

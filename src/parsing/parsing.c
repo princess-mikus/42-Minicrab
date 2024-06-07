@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/06 14:04:02 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/07 11:50:04 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	start_dec(char *line)
 t_file	**make_files(char *line, char c)
 {
 	t_file	**vector;
-	int	n;
+	int		n;
 
 	if (count_out_quotes(line, c) != 0)
 	{
@@ -39,10 +39,10 @@ t_file	**make_files(char *line, char c)
 	}
 	else
 		vector = NULL;
-	return(vector);
+	return (vector);
 }
 
-void	init_node(t_command *node, char * line)
+void	init_node(t_command *node, char *line)
 {
 	node->infile = make_files(line, '<');
 	node->outfile = make_files(line, '>');
@@ -68,7 +68,7 @@ t_command	*new_command(char *line)
 		line = get_outfile(line, &new->outfile[++i]->name);
 	line = get_dec(line, new);
 	line = get_cmd(line, new);
-	if(!jmp_spaces(line))
+	if (!jmp_spaces(line))
 		free(line);
 	else
 		get_arg(line, new);
