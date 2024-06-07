@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
+#    By: xortega <xortega@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/06/06 13:29:14 by fcasaubo         ###   ########.fr        #
+#    Updated: 2024/06/07 14:51:22 by xortega          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ EXPAND	 	:= expand
 INTEGRITY 	:= check_integrity
 HISTORY 	:=
 MAIN		:= main
-PARSING 	:= parsing token cleaning
+PARSING 	:= parsing token cleaning line
 PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc resolve_files
 SIGNALS 	:= signals
 UTILS		:= free error strings

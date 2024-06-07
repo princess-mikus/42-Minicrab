@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 11:01:48 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/07 11:48:12 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/07 14:45:36 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,35 +36,6 @@ int	quote_case(char *line)
 	return (0);
 }
 
-char	*clear_line(char *str)
-{
-	char	*retu;
-	char	*start;
-	char	*mid;
-	char	*end;
-	char	c;
-
-	if (!quote_case(str))
-		return (str);
-	c = '\'';
-	if (!ft_strchr(str, '\'') || (ft_strchr(str, '"')
-			&& ft_strchr(str, '"') < ft_strchr(str, '\'')))
-		c = '"';
-	start = ft_substr(str, 0, ft_strchr(str, c) - str);
-	mid = ft_substr(str, ft_strchr(str, c) - str,
-			ft_strrchr(str, c) - ft_strchr(str, c));
-	end = ft_substr(str, ft_strrchr(str, c) - str + 1,
-			ft_strlen(ft_strrchr(str, c)));
-	retu = ft_strtrim(mid, &c);
-	free(mid);
-	mid = retu;
-	retu = ft_strjoin(start, mid);
-	free(mid);
-	mid = retu;
-	retu = ft_strjoin(mid, end);
-	return (free(str), free(start), free(mid), free(end), retu);
-}
-
 void	clean_dec(t_command *node)
 {
 	int		i;
@@ -77,7 +48,7 @@ void	clean_dec(t_command *node)
 	{
 		temp = ft_strtrim(node->dec[i]->name, " ");
 		free(node->dec[i]->name);
-		node->dec[i]->name = clear_line(temp);
+		node->dec[i]->name = make_line(temp);
 		i++;
 	}
 }
@@ -136,7 +107,7 @@ void	clean_arg(t_command *node)
 		i = 0;
 		while (node->argv[i])
 		{
-			node->argv[i] = clear_line(node->argv[i]);
+			node->argv[i] = make_line(node->argv[i]);
 			i++;
 		}
 	}
@@ -146,7 +117,7 @@ void	clean_arg(t_command *node)
 void	clean_command(t_command *node)
 {
 	if (node->command)
-		node->command = clear_line(node->command);
+		node->command = make_line(node->command);
 }
 
 void	clean_outfile(t_command *node)
@@ -165,7 +136,7 @@ void	clean_outfile(t_command *node)
 		temp = ft_strtrim(node->outfile[i]->name
 				+ node->outfile[i]->special + 1, " ");
 		free(node->outfile[i]->name);
-		node->outfile[i]->name = clear_line(temp);
+		node->outfile[i]->name = make_line(temp);
 		i++;
 	}
 }
@@ -186,7 +157,7 @@ void	clean_infile(t_command *node)
 		temp = ft_strtrim(node->infile[i]->name
 				+ node->infile[i]->special + 1, " ");
 		free(node->infile[i]->name);
-		node->infile[i]->name = clear_line(temp);
+		node->infile[i]->name = make_line(temp);
 		i++;
 	}
 }

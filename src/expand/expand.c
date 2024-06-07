@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 11:42:49 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/07 14:52:35 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ bool	is_betwen_quotes(char *line, int i)
 			return (false);
 		j++;
 	}
-	ft_printf("im true status_2 [%d]\n", status_2);
 	return (true);
 }
 

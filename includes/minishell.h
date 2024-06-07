@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/06 13:23:41 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 14:44:37 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,14 @@ void	add_command(char *line_splited, t_command **commands);
 	//tokenicing
 char	*get_infile(char *line, char **infile);
 char	*get_outfile(char *line, char **outfile);
-int	start_dec(char *line);
+int		start_dec(char *line);
 char	*get_dec(char *line, t_command *node);
 char	*get_cmd(char *line, t_command *node);
 void	get_arg(char *line, t_command *node);
     //cleaning
 void	cleaning(t_command *node);
+int		quote_case(char *line);
+char	*make_line(char *str);
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *input);
 //INTEGRITY
