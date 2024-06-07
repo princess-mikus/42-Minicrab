@@ -15,7 +15,7 @@
 // BIEN $PWD "$PWD"
 // MAL $"PWD" '$PWD'
 
-bool	is_betwen_quotes(char *line, int i)
+bool	is_betwen_s_quotes(char *line, int i)
 {
 	int	j;
 	int	status_1;
@@ -31,6 +31,28 @@ bool	is_betwen_quotes(char *line, int i)
 		if (line[j] == '\'' && status_1 % 2 == 0)
 			status_2++;
 		if (j == i && status_2 % 2 != 0)
+			return (false);
+		j++;
+	}
+	return (true);
+}
+
+bool	is_betwen_quotes(char *line, int i)
+{
+	int	j;
+	int	status_1;
+	int	status_2;
+
+	j = 0;
+	status_1 = 0;
+	status_2 = 0;
+	while (line[j])
+	{
+		if (line[j] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[j] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (j == i && (status_2 % 2 || status_1 % 2) != 0)
 			return (false);
 		j++;
 	}
@@ -76,6 +98,23 @@ int	normal_len(int *i, t_envp **envp_mx, char *input)
 	return (len - 1);
 }
 
+int	home_len(int *i, t_envp **envp_mx, char *input)
+{
+	int		len;
+
+	len = 0;
+	*i += 1;
+	while (input[*i] && input[*i] != ' ' && input[*i] != '$'
+		&& input[*i] != '"' && input[*i] != '\'')
+	{
+		len++;
+		*i += 1;
+	}
+	*i -= 1;
+	len = ft_strlen(get_content_envp_mx(envp_mx, "~"));
+	return (len - 1);
+}
+
 int		line_len(t_envp **envp_mx, char *input)
 {
 	int		len;
@@ -85,16 +124,10 @@ int		line_len(t_envp **envp_mx, char *input)
 	len = 0;
 	while (input[i])
 	{
-		if (input[i] == '$' && is_betwen_quotes(input, i))
+		if (input[i] == '$' && is_betwen_s_quotes(input, i))
 			len += normal_len(&i, envp_mx, input);
 		else if (input[i] == '~')
-		{
-			i++;
-			if (!get_content_envp_mx(envp_mx, "~"))
-				len += 0;
-			else
-				len += ft_strlen(get_content_envp_mx(envp_mx, "~") + 1);
-		}
+			len += home_len(&i, envp_mx, input);
 		len++;
 		i++;
 	}
@@ -120,6 +153,21 @@ static int	normal_case(int *i, t_envp **envp_mx, char *line, char *input)
 	return (k);
 }
 
+bool	home_conditions(char *input, int *i)
+{
+	bool	ret;
+
+	ret = true;
+	if (!is_betwen_quotes(input, *i))
+		return (false);
+	while (input[*i] && input[*i] == '~')
+	{
+		ret = false;
+		*i += 1;
+	}
+	return (ret);
+}
+
 char	*expansion(t_envp **envp_mx, char *input)
 {
 	char	*line;
@@ -131,18 +179,17 @@ char	*expansion(t_envp **envp_mx, char *input)
 	line = ft_calloc(sizeof(char), line_len(envp_mx, input) + 1);
 	while (input[i])
 	{
-		while (input[i] == '$' && is_betwen_quotes(input, i))
+		while (input[i] == '$' && is_betwen_s_quotes(input, i))
 			k += normal_case(&i, envp_mx, line, input);
-		while (input[i] == '~')
+		if (input[i] == '~' && home_conditions(input, &i))
 		{
 			i++;
 			k = ft_strlcat(line, get_content_envp_mx(envp_mx, "~"), \
 			(ft_strlen(line) + ft_strlen(get_content_envp_mx(envp_mx, "~")) \
 			+ 1));
-			while (input[i] && input[i] != ' ')
-				i++;
 		}
-		line[k++] = input[i++];
+		else
+			line[k++] = input[i++];
 	}
 	return (line);
 }

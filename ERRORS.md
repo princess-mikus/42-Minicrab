@@ -3,6 +3,6 @@
 - Permissions for writing or reading file not taken into account when opening
 - ./command ejecuta si está en PATH (no debería)
 - "1"$X2? no expande por detrás de las comillas dobles (Solo deja el 1). Sin el ? expande perfecto
-- ~ + cosas detrás aún no implementado
+- ~ comportamientos varios de ~ después de cosas (~name trata de abrir el nombre del username, ~~ no expande ninguno (esto por ahora crashea), etc)
 - Non existent infile should give error "minicrab: filedoesnotexist: No such file or directory" and stop execution
 - Export on same line (even before pipes) as other commands does not export really
