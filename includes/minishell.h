@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/07 12:13:15 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 14:09:40 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	unset_mx(t_envp **envp_mx, char *variable);
 //built-in env prints the env
 void	env_mx(t_envp **envp_mx);
 //given a pointer to the list and a variable name change the bolean of exported  to true
-void	export_mx(t_envp **envp_mx, char *variable);
+void	export_mx(t_envp **envp_mx, char **argv, t_file **dec);
 // Prints current working directory
 int		pwd_mx(void);
 // Changes current working directory

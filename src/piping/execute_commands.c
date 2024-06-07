@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:08:04 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/07 12:12:03 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/07 15:06:40 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,21 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 }
 
 void	select_execution(t_command *current, int inpipe, \
-						int *outpipe, t_envp **envp_mx)
+			int *outpipe, t_envp **envp_mx)
 {
 	char		**envp;
 
-	envp = update_environment(current, envp_mx);
 	if (get_builtin(current->command))
 		execute_builtin(current, &inpipe, outpipe, envp_mx);
-	else if (!resolve_path(current, get_path_var(envp)))
-		resolve_exec_error(&inpipe, outpipe, current->command);
 	else
-		fork_and_execute(current, &inpipe, outpipe, envp);
-	free_array((void **)envp);
+	{
+		envp = update_environment(current, envp_mx);
+		if (!resolve_path(current, get_path_var(envp)))
+			resolve_exec_error(&inpipe, outpipe, current->command);
+		else
+			fork_and_execute(current, &inpipe, outpipe, envp);
+		free_array((void **)envp);
+	}
 }
 
 int	execute_commands(t_command **commands, t_envp **envp_mx)

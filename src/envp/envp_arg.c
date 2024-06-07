@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_arg.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 10:53:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/16 20:53:15 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/07 15:05:31 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ char	**envp_mx_to_arg(t_envp **envp_mx)
 	i = 0;
 	while (current)
 	{
-		envp_new[i] = make_line_envp(current->variable, current->content);
+		if (current->exported)
+			envp_new[i] = make_line_envp(current->variable, current->content);
 		current = current->next;
 		i++;
 	}
