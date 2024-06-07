@@ -12,6 +12,27 @@
 
 #include "minishell.h"
 
+void	export_all_dec(t_file **dec, t_envp **envp_mx_temp)
+{
+	int		i;
+	char	*temp[2];
+	char	*trimmed;
+	char	*variable;
+
+	i = 0;
+	while (dec[i])
+	{
+		trimmed = ft_strtrim(dec[i]->name, "'");
+		variable = ft_substr(trimmed, 0, ft_strlen(trimmed) \
+		- ft_strlen(ft_strchr(trimmed, '=')));;
+		temp[0] = variable;
+		temp[1] = NULL;
+		export_mx(envp_mx_temp, temp, NULL);
+		free(variable);
+		i++;
+	}
+}
+
 char	**update_environment(t_command *current, t_envp **envp_mx)
 {
 	t_envp	*envp_mx_temp;
@@ -24,6 +45,7 @@ char	**update_environment(t_command *current, t_envp **envp_mx)
 		init_envp(&envp_mx_temp, envp);
 		free(envp);
 		dec_to_env(current->dec, &envp_mx_temp);
+		export_all_dec(current->dec, &envp_mx_temp);
 		envp = envp_mx_to_arg(&envp_mx_temp);
 		free_envp_mx(&envp_mx_temp);
 	}
@@ -56,7 +78,13 @@ void	dec_to_env(t_file **dec, t_envp **envp_mx_temp)
 		- ft_strlen(ft_strchr(trimmed, '=')));
 		content = get_var_content_escaped(ft_strchr(trimmed, '=') + 1);
 		free(trimmed);
-		add_var_to_envp_mx(envp_mx_temp, variable, content);
+		if(is_envp(envp_mx_temp, variable))
+		{
+			add_var_to_envp_mx(envp_mx_temp, variable, content);
+			free(variable);
+		}	
+		else
+			add_var_to_envp_mx(envp_mx_temp, variable, content);
 		i++;
 	}
 }

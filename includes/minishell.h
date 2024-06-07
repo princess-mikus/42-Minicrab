@@ -74,6 +74,7 @@ char	*get_cmd(char *line, t_command *node);
 void	get_arg(char *line, t_command *node);
     //cleaning
 void	cleaning(t_command *node);
+char	*make_line(char *str);
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *input);
 //INTEGRITY
