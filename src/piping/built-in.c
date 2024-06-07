@@ -77,8 +77,7 @@ t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 		current->status = choose_builtin(current, envp_mx);
 		exit(current->status);
 	}
-	else
-		wait(NULL);
+	waitpid(current->pid, NULL, WNOHANG);
 	close(*inpipe);
 	close(outpipe[1]);
 }

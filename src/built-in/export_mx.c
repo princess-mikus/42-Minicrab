@@ -30,6 +30,7 @@ void	argv_case(t_envp **envp_mx, char *variable)
 void	dec_case(t_envp **envp_mx, t_file **dec)
 {
 	int		i;
+	char	*var;
 	t_envp	*current;
 
 	dec_to_env(dec, envp_mx);
@@ -39,8 +40,9 @@ void	dec_case(t_envp **envp_mx, t_file **dec)
 		i = 0;
 		while (dec[i])
 		{
-			if (!ft_strncmp(current->variable, \
-				dec[i]->name, ft_strlen(dec[i]->name)))
+			var = ft_substr(dec[i]->name, 0, ft_strlen(dec[i]->name) \
+				- ft_strlen(ft_strchr(dec[i]->name, '=')));
+			if (!ft_strncmp(current->variable, var, ft_strlen(var)))
 				current->exported = true;
 			i++;
 		}
