@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 21:08:02 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/07 14:13:56 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 12:51:44 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,11 @@ void	execute_builtin( \
 t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 {
 	if (is_non_forked_builtin(current, envp_mx))
+	{
+		close(*inpipe);
+		close(outpipe[1]);
 		return ;
+	}
 	current->pid = fork();
 	if (!current->pid)
 	{

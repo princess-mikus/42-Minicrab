@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 12:46:01 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 10:30:24 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,18 +153,16 @@ static int	normal_case(int *i, t_envp **envp_mx, char *line, char *input)
 	return (k);
 }
 
-bool	home_conditions(char *input, int *i)
+bool	home_conditions(char *input, int i)
 {
 	bool	ret;
 
 	ret = true;
-	if (!is_betwen_quotes(input, *i))
+	if (!is_betwen_quotes(input, i))
 		return (false);
-	while (input[*i] && input[*i] == '~')
-	{
+	if ((input[i + 1] && input[i + 1] != ' ') \
+		|| (input[i - 1] && input[i - 1] == '~'))
 		ret = false;
-		*i += 1;
-	}
 	return (ret);
 }
 
@@ -181,7 +179,7 @@ char	*expansion(t_envp **envp_mx, char *input)
 	{
 		while (input[i] == '$' && is_betwen_s_quotes(input, i))
 			k += normal_case(&i, envp_mx, line, input);
-		if (input[i] == '~' && home_conditions(input, &i))
+		if (input[i] == '~' && home_conditions(input, i))
 		{
 			i++;
 			k = ft_strlcat(line, get_content_envp_mx(envp_mx, "~"), \

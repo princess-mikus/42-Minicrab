@@ -1,8 +1,7 @@
-- cat tmp_lol.c | cat > tmp_lol.c does not write to file (Without redirect it does write content correctly)
-- export $TEMP (temp no existe) | cat -e hangs (can't exit with Ctrl+D, only Ctrl+C)
-- Permissions for writing or reading file not taken into account when opening
-- ./command ejecuta si está en PATH (no debería)
-- "1"$X2? no expande por detrás de las comillas dobles (Solo deja el 1). Sin el ? expande perfecto
-- ~ comportamientos varios de ~ después de cosas (~name trata de abrir el nombre del username, ~~ no expande ninguno (esto por ahora crashea), etc)
-- Non existent infile should give error "minicrab: filedoesnotexist: No such file or directory" and stop execution
+# Cosas de Micas
 - Export on same line (even before pipes) as other commands does not export really
+(if command->next xd)
+- exit | command
+
+# Cosas de Xabi
+- "1"$X2? no expande por detrás de las comillas dobles (Solo deja el 1). Sin el ? expande perfecto

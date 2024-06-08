@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:08:04 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/06/07 15:06:40 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 11:48:07 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**get_arguments(t_command *current)
 	return (to_return);
 }
 
-bool	has_permissions(char *program, char *path)
+bool	has_exec_permissions(char *program, char *path)
 {
 	struct stat	path_stat;
 
@@ -55,7 +55,7 @@ t_command *current, int *inpipe, int *outpipe, char **envp)
 	{
 		signal(SIGINT, kill_yourself);
 		signal(SIGKILL, kill_yourself);
-		if (!has_permissions(current->command, current->path))
+		if (!has_exec_permissions(current->command, current->path))
 			exit(EACCES);
 		dup2(*inpipe, STDIN_FILENO);
 		close(*inpipe);
@@ -98,10 +98,11 @@ int	execute_commands(t_command **commands, t_envp **envp_mx)
 	current = *commands;
 	outpipe[0] = -1;
 	outpipe[1] = -1;
+	signal_sender(current);
 	while (current)
 	{
-		resolve_infile(outpipe, &inpipe, current);
-		resolve_outfile(outpipe, current);
+		if (!resolve_files(current, &inpipe, outpipe, envp_mx))
+			return (0);
 		if (current->command)
 			select_execution(current, inpipe, outpipe, envp_mx);
 		if (current->next)

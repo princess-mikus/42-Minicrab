@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 20:16:46 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/02 18:50:08 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/08 12:43:11 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,24 @@ void	check_local(t_command *current)
 		current->path = NULL;
 }
 
+bool	detect_local(t_command *current)
+{
+	char	*str;
+	int		i;
+
+	str = current->command;
+	i = -1;
+	while (str[++i])
+		if (str[i] == '/')
+			return (true);
+	return (false);
+}
+
 bool	resolve_path(t_command *current, char **path)
 {
 	current->path = NULL;
 	check_local(current);
-	if (!current->path)
+	if (!current->path && !detect_local(current))
 		current->path = get_path(current->command, path);
 	if (!current->path)
 		return (false);
