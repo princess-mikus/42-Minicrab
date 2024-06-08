@@ -6,3 +6,7 @@ obj
 obj/*
 minishell.dSYM
 minishell
+temp
+temp/*
+testes
+testes/*

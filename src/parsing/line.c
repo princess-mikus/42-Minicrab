@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:01:01 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 14:52:45 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:02:46 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ int	count_blocks(char *str)
 			status_2++;
 		if ((i > 0 && str[i] != '\"' && str[i] != '\'')
 			&& ((str[i - 1] == '\"' && status_1 % 2 == 0)
-				|| (str[i - 1] == '\'' && status_2 % 2 == 0)))
+				&& (str[i - 1] == '\'' && status_2 % 2 == 0)))
 			count++;
 		i++;
 	}
 	count += (status_1 / 2 + status_2 / 2);
-	return (count);
+	return (count - (str[0] == '\'' || str[0] == '"'));
 }
 
 char	*clear_line_v2(char **str)
@@ -126,12 +126,12 @@ char	*make_line(char *str)
 	free_array((void **)blocks);
 	return (str);
 }
-/*
-int	main(void)
+
+/*int	main(void)
 {
 	char	*str;
 
-	str = ft_strdup("aaa");
+	str = ft_strdup(">\"\'out\'\"");
 	ft_printf("str_before :[%s]\n", str);
 	str = make_line(str);
 	ft_printf("str_after :[%s]\n", str);

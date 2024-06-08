@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:15:06 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 11:51:23 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:02:59 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*get_dec(char *line, t_command *node)
 	if (count_out_quotes(line, '=') == 0)
 		return (line);
 	i = 0;
-	while (count_out_quotes(line, '=') > 0)
+	while (line && count_out_quotes(line, '=') > 0)
 	{
 		start = start_dec(line);
 		if (search_out_quotes(search_out_quotes(line, '='), ' '))
