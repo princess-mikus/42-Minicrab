@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:57:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/07 13:20:14 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 20:08:18 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	free_array(void **array)
 	i = -1;
 	while (array && array[++i])
 	{
+		ft_printf("%s\n", array[i]);
 		free(array[i]);
 		array[i] = NULL;
 	}

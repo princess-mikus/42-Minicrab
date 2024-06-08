@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 12:27:22 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 14:48:06 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 19:42:20 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	dec_case(t_envp **envp_mx, t_file **dec)
 				- ft_strlen(ft_strchr(dec[i]->name, '=')));
 			if (!ft_strncmp(current->variable, var, ft_strlen(var)))
 				current->exported = true;
+			free(var);
 			i++;
 		}
 		current = current->next;

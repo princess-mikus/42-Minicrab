@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 20:47:57 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/07 14:00:19 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 20:09:15 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	export_all_dec(t_file **dec, t_envp **envp_mx_temp)
 		temp[1] = NULL;
 		export_mx(envp_mx_temp, temp, NULL);
 		free(variable);
+		free(trimmed);
 		i++;
 	}
 }
@@ -43,7 +44,7 @@ char	**update_environment(t_command *current, t_envp **envp_mx)
 	if (current->dec)
 	{
 		init_envp(&envp_mx_temp, envp);
-		free(envp);
+		free_array((void **)envp);
 		dec_to_env(current->dec, &envp_mx_temp);
 		export_all_dec(current->dec, &envp_mx_temp);
 		envp = envp_mx_to_arg(&envp_mx_temp);
@@ -78,7 +79,7 @@ void	dec_to_env(t_file **dec, t_envp **envp_mx_temp)
 		- ft_strlen(ft_strchr(trimmed, '=')));
 		content = get_var_content_escaped(ft_strchr(trimmed, '=') + 1);
 		free(trimmed);
-		if(is_envp(envp_mx_temp, variable))
+		if (is_envp(envp_mx_temp, variable))
 		{
 			add_var_to_envp_mx(envp_mx_temp, variable, content);
 			free(variable);

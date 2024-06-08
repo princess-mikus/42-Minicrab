@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 20:16:46 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/08 12:43:11 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 19:58:04 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	**get_path_var(char **envp)
 {
 	int		i;
-	char	**splited;
+	char	**splitted;
 	char	**to_return;
 
 	i = 0;
@@ -23,9 +23,12 @@ char	**get_path_var(char **envp)
 		i++;
 	if (!envp[i])
 		return (NULL);
-	splited = ft_split(envp[i], '=');
-	to_return = ft_split(splited[1], ':');
-	return (free_array((void **)splited), to_return);
+	splitted = ft_split(envp[i], '=');
+	int j = -1;
+	while (splitted[++j])
+		ft_printf("%s\n", splitted[j]);
+	to_return = ft_split(splitted[1], ':');
+	return (free_array((void **)splitted), to_return);
 }
 
 char	*get_path(char	*program, char **path)
@@ -69,7 +72,7 @@ void	check_local(t_command *current)
 		current->path = NULL;
 }
 
-bool	detect_local(t_command *current)
+bool	detect_local(t_command *current, char **path)
 {
 	char	*str;
 	int		i;
@@ -78,15 +81,22 @@ bool	detect_local(t_command *current)
 	i = -1;
 	while (str[++i])
 		if (str[i] == '/')
-			return (true);
+			return (free_array((void**)path), true);
 	return (false);
 }
 
 bool	resolve_path(t_command *current, char **path)
 {
 	current->path = NULL;
+	
+	if (!current->command || !current->command[0])
+	{
+		free(current->command);
+		current->command = ft_strdup("''");
+		return (false);
+	}
 	check_local(current);
-	if (!current->path && !detect_local(current))
+	if (!current->path && !detect_local(current, path))
 		current->path = get_path(current->command, path);
 	if (!current->path)
 		return (false);

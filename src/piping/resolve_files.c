@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 18:14:11 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/08 17:05:45 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 19:08:37 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 	if (!infile || !outfile)
 	{
 		add_var_to_envp_mx(envp_mx, "?", ft_itoa(errno));
-		return (false);
+		return (free(delimiter), false);
 	}
 	if (delimiter[0])
 		*inpipe = manage_here_doc(delimiter);

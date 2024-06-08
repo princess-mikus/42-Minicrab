@@ -6,7 +6,7 @@
 /*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 14:51:17 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:07:20 by xortega          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	start_dec(char *line)
 	int	i;
 
 	i = search_out_quotes(line, '=') - line;
-	while (line[i] != ' ' && i > 0)
+	while (i > 0 && line[i] != ' ')
 		i--;
 	if (i > 0)
 		i++;
@@ -32,6 +32,8 @@ t_file	**make_files(char *line, char c)
 	if (count_out_quotes(line, c) != 0)
 	{
 		n = c_out_q_no_d(line, c);
+		if (c == '=')
+			n = count_out_quotes(line, c);
 		vector = malloc(sizeof(t_file *) * (n + 1));
 		vector[n] = NULL;
 		while (n > 0)

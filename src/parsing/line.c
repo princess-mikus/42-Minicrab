@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:01:01 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 14:52:45 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/08 20:23:35 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	count_blocks(char *str)
 		i++;
 	}
 	count += (status_1 / 2 + status_2 / 2);
-	return (count);
+	return (count - (str[0] == '\'' || str[0] == '"'));
 }
 
 char	*clear_line_v2(char **str)
@@ -46,13 +46,16 @@ char	*clear_line_v2(char **str)
 
 	if (!quote_case(*str))
 		return (*str);
+	ft_printf("oi [%s]\n", *str);
 	c = '\'';
 	if (!ft_strchr(*str, '\'') || (ft_strchr(*str, '"')
 			&& ft_strchr(*str, '"') < ft_strchr(*str, '\'')))
 		c = '"';
 	block = ft_substr(*str, 0,
 			((ft_strchr(*str + 1, c) - *str) + (*str[0] == c)));
+	ft_printf("block [%s]\n", block);
 	*str = line_cutter(*str, block);
+	ft_printf("despues [%p]][%s]\n", *str, *str);
 	return (block);
 }
 
@@ -83,22 +86,23 @@ char	**trim_blocks(char **blocks, int n_blocks)
 	return (trimmed_blocks);
 }
 
-char	**get_blocks(char **str)
+char	**get_blocks(char **str, int *n_blocks)
 {
 	int		i;
-	int		n_blocks;
 	char	**blocks;
 
-	n_blocks = count_blocks(*str);
-	blocks = malloc(sizeof(char *) * (n_blocks + 1));
+	*n_blocks = count_blocks(*str);
+	ft_printf("si me disculpa [%s][%d]\n", *str, *n_blocks);
+	blocks = malloc(sizeof(char *) * (*n_blocks + 1));
 	i = 0;
-	while (i < n_blocks)
+	while (i < *n_blocks)
 	{
 		blocks[i] = clear_line_v2(str);
 		i++;
 	}
-	blocks[n_blocks] = NULL;
-	return (trim_blocks(blocks, n_blocks));
+	blocks[*n_blocks] = NULL;
+	free(*str);
+	return (trim_blocks(blocks, *n_blocks));
 }
 
 char	*make_line(char *str)
@@ -110,28 +114,29 @@ char	*make_line(char *str)
 
 	if (!quote_case(str))
 		return (str);
-	blocks = get_blocks(&str);
-	n_blocks = 0;
-	while (blocks[n_blocks])
-		n_blocks++;
+	blocks = get_blocks(&str, &n_blocks);
 	temp = ft_strdup(blocks[0]);
-	i = 1;
-	while (i < n_blocks)
+	i = 0;
+	while (++i < n_blocks)
 	{
 		str = ft_strjoin(temp, blocks[i]);
 		free(temp);
 		temp = str;
-		i++;
 	}
-	free_array((void **)blocks);
-	return (str);
+	if (!blocks[1])
+	{
+		free(temp);
+		free(str);
+		str = ft_strdup(blocks[0]);
+	}
+	return (free_array((void **)blocks), str);
 }
-/*
-int	main(void)
+
+/*int	main(void)
 {
 	char	*str;
 
-	str = ft_strdup("aaa");
+	str = ft_strdup(">\"\'out\'\"");
 	ft_printf("str_before :[%s]\n", str);
 	str = make_line(str);
 	ft_printf("str_after :[%s]\n", str);
