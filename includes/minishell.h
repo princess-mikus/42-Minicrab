@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/08 12:05:18 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 16:52:06 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,11 @@ int		execute_commands(t_command **commands, t_envp **envp_mx);
 
 bool	resolve_files \
 (t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
+bool	check_infile_error(char *file, bool *infile);
+bool	check_outfile_error(char *file, bool *outfile);
 
 // Reads fd 0 when <<
-int		manage_here_doc(char *delimiter);
+int		manage_here_doc(char **delimiter);
 
 // Updates envp before execution, with optional same-line vars
 char	**update_environment(t_command *current, t_envp **envp_mx);

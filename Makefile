@@ -6,7 +6,7 @@
 #    By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 11:02:31 by xortega           #+#    #+#              #
-#    Updated: 2024/06/07 13:15:53 by fcasaubo         ###   ########.fr        #
+#    Updated: 2024/06/08 16:52:22 by fcasaubo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ INTEGRITY 	:= check_integrity
 HISTORY 	:=
 MAIN		:= main
 PARSING 	:= parsing token cleaning line
-PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc resolve_files piping_utils
+PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc resolve_files piping_utils resolve_file_errors
 SIGNALS 	:= signals
 UTILS		:= free error strings
 

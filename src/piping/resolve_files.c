@@ -6,32 +6,42 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 18:14:11 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/08 12:44:45 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 17:05:45 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	check_infile_error(char *file, bool *infile)
+int		delimiter_len(t_file **infile)
 {
-	struct stat	path_stat;
+	int i;
+	int	len;
 
-	stat(file, &path_stat);
-	if (access(file, F_OK))
+	i = 0;
+	len = 1;
+	if (infile && infile[i])
 	{
-		errno = ENOENT;
-		mx_error(file);
-		*infile = false;
-		return (true);
+		if (infile[i]->special)
+			len++;
+		i++;
 	}
-	if (!(path_stat.st_mode & S_IRUSR))
-	{
-		errno = EACCES;
-		mx_error(file);
-		*infile = false;
-		return (true);
-	}
-	return (false);
+	return (len);
+}
+
+char	**resolve_here_doc(t_command *current)
+{
+	int		i;
+	int		j;
+	char	**delimiter;
+
+	i = -1;
+	j = 0;
+	delimiter = ft_calloc(sizeof(char *), delimiter_len(current->infile));
+	while (current->infile && current->infile[++i])
+		if (current->infile[i]->special)
+			delimiter[j++] = current->infile[i]->name;
+	delimiter[j] = NULL;
+	return (delimiter);
 }
 
 void	resolve_infile(\
@@ -48,31 +58,14 @@ int *outpipe, int *inpipe, t_command *current, bool *infile)
 		close(*inpipe);
 		*inpipe = outpipe[0];
 	}
-	while (current->infile && current->infile[++i] && !stop)
+	while (current->infile && current->infile[++i] && !stop && !current->infile[i]->special)
 	{
-			close(*inpipe);
-			file = current->infile[i]->name;
+		close(*inpipe);
+		file = current->infile[i]->name;
 		stop = check_infile_error(file, infile);
-		if (current->infile[i]->special)
-			*inpipe = manage_here_doc(file);
-		else
+		if (!stop)
 			*inpipe = open(file, O_RDONLY);
 	}
-}
-
-bool	check_outfile_error(char *file, bool *outfile)
-{
-	struct stat	path_stat;
-
-	stat(file, &path_stat);
-	if (!(path_stat.st_mode & S_IWUSR))
-	{
-		errno = EACCES;
-		mx_error(file);
-		*outfile = false;
-		return (true);
-	}
-	return (false);
 }
 
 void	resolve_outfile(int *outpipe, t_command *current, bool *outfile)
@@ -83,6 +76,13 @@ void	resolve_outfile(int *outpipe, t_command *current, bool *outfile)
 
 	i = 0;
 	stop = false;
+	if (!current->outfile)
+	{
+		if (!current->next)
+			outpipe[1] = dup(STDOUT_FILENO);
+		else
+			pipe(outpipe);
+	}
 	while (!stop && current->outfile && current->outfile[i])
 	{
 		close(outpipe[1]);
@@ -94,10 +94,6 @@ void	resolve_outfile(int *outpipe, t_command *current, bool *outfile)
 			outpipe[1] = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		i++;
 	}
-	if (!current->next)
-		outpipe[1] = dup(STDOUT_FILENO);
-	else
-		pipe(outpipe);
 }
 
 bool	resolve_files(\
@@ -105,9 +101,12 @@ t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 {
 	bool	infile;
 	bool	outfile;
+	char	**delimiter;
 
 	infile = true;
 	outfile = true;
+	delimiter = NULL;
+	delimiter = resolve_here_doc(current);
 	resolve_infile(outpipe, inpipe, current, &infile);
 	if (infile)
 		resolve_outfile(outpipe, current, &outfile);
@@ -116,5 +115,8 @@ t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 		add_var_to_envp_mx(envp_mx, "?", ft_itoa(errno));
 		return (false);
 	}
+	if (delimiter[0])
+		*inpipe = manage_here_doc(delimiter);
+	free(delimiter);
 	return (true);
 }
