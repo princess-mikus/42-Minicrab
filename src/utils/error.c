@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 20:37:15 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/08 13:14:14 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 13:17:07 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	mx_error(const char *target)
 {
 	char	*error;
 
-	if (!ft_strncmp(target, "exit", 5) && errno == ENOENT)
-		return ;
 	error = ft_strjoin("minicrab: ", target);
 	perror(error);
 	free(error);
