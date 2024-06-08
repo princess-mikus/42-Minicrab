@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:01:01 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/08 20:23:35 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/08 20:33:45 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,6 @@ char	*make_line(char *str)
 	if (!blocks[1])
 	{
 		free(temp);
-		free(str);
 		str = ft_strdup(blocks[0]);
 	}
 	return (free_array((void **)blocks), str);
