@@ -19,7 +19,6 @@ void	free_array(void **array)
 	i = -1;
 	while (array && array[++i])
 	{
-		ft_printf("%s\n", array[i]);
 		free(array[i]);
 		array[i] = NULL;
 	}

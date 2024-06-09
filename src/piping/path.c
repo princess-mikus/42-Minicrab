@@ -16,7 +16,7 @@ char	**get_path_var(char **envp)
 {
 	int		i;
 	char	**splitted;
-	char	**to_return;
+	char	**to_return;	
 
 	i = 0;
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", ft_strlen("PATH=")))
@@ -24,9 +24,6 @@ char	**get_path_var(char **envp)
 	if (!envp[i])
 		return (NULL);
 	splitted = ft_split(envp[i], '=');
-	int j = -1;
-	while (splitted[++j])
-		ft_printf("%s\n", splitted[j]);
 	to_return = ft_split(splitted[1], ':');
 	return (free_array((void **)splitted), to_return);
 }
@@ -50,7 +47,7 @@ char	*get_path(char	*program, char **path)
 	return (free_array((void **)path), free(appended), NULL);
 }
 
-void	check_local(t_command *current)
+void	check_local(t_command *current, char **path)
 {
 	struct stat	path_stat;
 	char		**temp;
@@ -66,6 +63,7 @@ void	check_local(t_command *current)
 		while (temp[i + 1])
 			i++;
 		current->command = ft_strdup(temp[i]);
+		free_array((void**)path);
 		free_array((void **)temp);
 	}
 	else
@@ -93,9 +91,9 @@ bool	resolve_path(t_command *current, char **path)
 	{
 		free(current->command);
 		current->command = ft_strdup("''");
-		return (false);
+		return (free_array((void **)path), false);
 	}
-	check_local(current);
+	check_local(current, path);
 	if (!current->path && !detect_local(current, path))
 		current->path = get_path(current->command, path);
 	if (!current->path)

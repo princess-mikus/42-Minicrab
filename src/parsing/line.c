@@ -46,16 +46,13 @@ char	*clear_line_v2(char **str)
 
 	if (!quote_case(*str))
 		return (*str);
-	ft_printf("oi [%s]\n", *str);
 	c = '\'';
 	if (!ft_strchr(*str, '\'') || (ft_strchr(*str, '"')
 			&& ft_strchr(*str, '"') < ft_strchr(*str, '\'')))
 		c = '"';
 	block = ft_substr(*str, 0,
 			((ft_strchr(*str + 1, c) - *str) + (*str[0] == c)));
-	ft_printf("block [%s]\n", block);
 	*str = line_cutter(*str, block);
-	ft_printf("despues [%p]][%s]\n", *str, *str);
 	return (block);
 }
 
@@ -92,7 +89,6 @@ char	**get_blocks(char **str, int *n_blocks)
 	char	**blocks;
 
 	*n_blocks = count_blocks(*str);
-	ft_printf("si me disculpa [%s][%d]\n", *str, *n_blocks);
 	blocks = malloc(sizeof(char *) * (*n_blocks + 1));
 	i = 0;
 	while (i < *n_blocks)
