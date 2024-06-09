@@ -60,13 +60,16 @@ int *outpipe, int *inpipe, t_command *current, bool *infile)
 		close(*inpipe);
 		*inpipe = outpipe[0];
 	}
-	while (current->infile && current->infile[++i] && !stop && !current->infile[i]->special)
+	while (current->infile && current->infile[++i] && !stop)
 	{
-		close(*inpipe);
-		file = current->infile[i]->name;
-		stop = check_infile_error(file, infile);
-		if (!stop)
-			*inpipe = open(file, O_RDONLY);
+		if (!current->infile[i]->special)
+		{
+			close(*inpipe);
+			file = current->infile[i]->name;
+			stop = check_infile_error(file, infile);
+			if (!stop)
+				*inpipe = open(file, O_RDONLY);
+		}
 	}
 }
 
