@@ -53,6 +53,8 @@ int *outpipe, int *inpipe, t_command *current, bool *infile)
 
 	i = -1;
 	stop = false;
+	close(*inpipe);
+	*inpipe = -1;
 	if (!current->infile && outpipe[0] > 0)
 	{
 		close(*inpipe);
@@ -105,7 +107,6 @@ t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx)
 
 	infile = true;
 	outfile = true;
-	delimiter = NULL;
 	delimiter = resolve_here_doc(current);
 	resolve_infile(outpipe, inpipe, current, &infile);
 	if (infile)

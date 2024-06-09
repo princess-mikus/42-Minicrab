@@ -50,7 +50,6 @@ void	signal_sender(t_command *command)
 	{
 		while (command)
 		{
-			write(1, "\n", 1);
 			kill(command->pid, SIGQUIT);
 			command = command->next;
 		}
@@ -59,7 +58,6 @@ void	signal_sender(t_command *command)
 	{
 		while (command)
 		{
-			write(1, "\n", 1);
 			kill(command->pid, SIGINT);
 			command = command->next;
 		}
