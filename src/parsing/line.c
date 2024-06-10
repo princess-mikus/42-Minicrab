@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 12:01:01 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/08 20:33:45 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/10 10:10:31 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*clear_line_v2(char **str)
 	char	*block;
 
 	if (!quote_case(*str))
-		return (*str);
+		return (ft_strdup(*str));
 	c = '\'';
 	if (!ft_strchr(*str, '\'') || (ft_strchr(*str, '"')
 			&& ft_strchr(*str, '"') < ft_strchr(*str, '\'')))
@@ -96,11 +96,35 @@ char	**get_blocks(char **str, int *n_blocks)
 		blocks[i] = clear_line_v2(str);
 		i++;
 	}
-	blocks[*n_blocks] = NULL;
+	blocks[i] = NULL;
 	free(*str);
 	return (trim_blocks(blocks, *n_blocks));
 }
 
+char	*make_line(char *str)
+{
+	char	**blocks;
+	char	*temp;
+	int		n_blocks;
+	int		i;
+
+	if (!quote_case(str))
+		return (str);
+	blocks = get_blocks(&str, &n_blocks);
+	(void)n_blocks;
+	str = ft_strdup(blocks[0]);
+	i = 1;
+	while (blocks[i])
+	{
+		temp = ft_strdup(str);
+		free(str);
+		str = ft_strjoin(temp, blocks[i]);
+		free(temp);
+		i++;
+	}
+	return (free_array((void **)blocks), str);
+}
+/*
 char	*make_line(char *str)
 {
 	char	**blocks;
@@ -126,13 +150,14 @@ char	*make_line(char *str)
 	}
 	return (free_array((void **)blocks), str);
 }
+*/
 
 /*int	main(void)
 {
 	char	*str;
 
 	str = ft_strdup(">\"\'out\'\"");
-	ft_printf("str_before :[%s]\n", str);
+	ºº("str_before :[%s]\n", str);
 	str = make_line(str);
 	ft_printf("str_after :[%s]\n", str);
 	//str = ft_strdup("a\"hola\"1''\"jiji\"'que'b");

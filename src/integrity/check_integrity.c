@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_integrity.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:47:36 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/07 11:53:41 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/10 12:48:48 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 bool	check_empty_pipe(char *str, int i)
 {
 	int			j;
-	static int	k = 0;
 
-	j = i - 1;
-	k++;
-	while (j > 0 && str[j] == ' ')
+	j = i;
+	while (j > 0 && str[j - 1] == ' ')
 		j--;
 	if (j == 0)
 		return (false);

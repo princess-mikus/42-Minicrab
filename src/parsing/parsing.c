@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:35:43 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/08 17:07:20 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/10 12:44:32 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,109 @@ void	add_command(char *line_splited, t_command **commands)
 	}
 }
 
+
+char **trim_array(char** array, char *c)
+{
+	char	**trimed;
+	int		i;
+
+	i = 0;
+	while (array[i])
+		i++;
+	trimed = malloc(sizeof(char *) * i);
+	i = 0;
+	while (array[i])
+	{
+		trimed[i] = ft_strtrim(array[i], c);
+		i++;
+	}
+	trimed[i] = NULL;
+	free_array((void **)array);
+	return(trimed);
+
+}
+
+char **split_out_of_q(char* str, char c)
+{
+	char	**splited;
+	int		i;
+	int		j;
+	int		k;
+
+	splited = ft_calloc(sizeof(char *), count_out_quotes(str, c) + 2);
+	splited[count_out_quotes(str, c) + 1] = NULL;
+	i = 0;
+	j = 0;
+	k = 0;
+	while(str[i])
+	{
+		if (is_out_quotes(str, i, c))
+		{
+			splited[k] = ft_substr(str, j, (i - 1) - j);
+			k++;
+			i = i + 1;
+			j = i;
+		}
+		else
+			i++;
+		if (!str[i])
+			splited[k] = ft_strdup(str + j);
+	}
+	return(splited);
+}
+
+/*
+char **split_out_of_q(char *str, char c)
+{
+	char	**splitted;
+	bool	s_quotes;
+	bool	d_quotes;
+	int		i;
+	int		j;
+	int		k;
+
+	splitted = malloc((count_out_quotes(str, c) + 2) * sizeof(char *));
+	s_quotes = false;
+	d_quotes = false;
+	i = 0;
+	j = 0;
+	k = 0;
+	while (str[i])
+	{
+		if (str[i] == '"')
+			d_quotes ^= 1;
+		if (str[i] == '\'')
+			s_quotes ^= 1;
+		if (str[i] == '|' && !d_quotes && !s_quotes)
+		{
+			splitted[k] = ft_substr(str, j, i - 1);
+			i++;
+			j = i;
+			k++;
+		}
+		else
+			i++;
+	}
+	return (splitted);
+}
+*/
 void	parse(char *line_expanded, t_command **commands)
 {
 	char	**splited;
 	char	*trim;
 	int		i;
 
-	splited = ft_split(line_expanded, '|');
+	if (search_out_quotes(line_expanded, '|'))
+		splited = split_out_of_q(line_expanded, '|');
+	else
+	{
+		splited = malloc(sizeof(char *) * 2);
+		splited[0] = ft_strdup(line_expanded);
+		splited[1] = NULL;
+	}
+	int j = -1;
+	while (splited[++j])
+		ft_printf("He salido en [%d] [%s]\n", j, splited[j]);
 	i = 0;
 	while (splited[i])
 	{

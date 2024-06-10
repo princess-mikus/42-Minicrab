@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 10:23:14 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/08 20:12:53 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/10 10:54:29 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,28 @@ char	*search_out_quotes(char *line, char c)
 		i++;
 	}
 	return (NULL);
+}
+
+bool	is_out_quotes(char *line, int k, char c)
+{
+	int	i;
+	int	status_1;
+	int	status_2;
+
+	i = 0;
+	status_1 = 0;
+	status_2 = 0;
+	while (line[i])
+	{
+		if (line[i] == '\"' && status_2 % 2 == 0)
+			status_1++;
+		if (line[i] == '\'' && status_1 % 2 == 0)
+			status_2++;
+		if (line[i] == c && i == k && status_1 % 2 == 0 && status_2 % 2 == 0)
+			return (true);
+		i++;
+	}
+	return (false);
 }
 
 char	*line_cutter(char *line, char *to_cut)

@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/08 16:52:06 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/10 10:54:48 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,4 +132,5 @@ int		c_out_q_no_d(char *line, char c);
 char	*search_out_quotes(char *line, char c);
 char	*search_out_quotes(char *line, char c);
 char	*line_cutter(char *line, char *to_cut);
+bool	is_out_quotes(char *line, int k, char c);
 #endif

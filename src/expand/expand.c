@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:29:05 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/08 18:11:39 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/10 10:29:47 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,14 @@ bool	home_conditions(char *input, int i)
 	return (ret);
 }
 
+
+bool	char_case(char c)
+{
+	if (c == ' ' || c == '$' || c == '=' || c == '\0')
+		return (false);
+	return (true);
+}
+
 char	*expansion(t_envp **envp_mx, char *input)
 {
 	char	*line;
@@ -177,8 +185,12 @@ char	*expansion(t_envp **envp_mx, char *input)
 	line = ft_calloc(sizeof(char), line_len(envp_mx, input) + 1);
 	while (input[i])
 	{
-		while (input[i] == '$' && is_betwen_s_quotes(input, i))
+		while (input[i] == '$' && is_betwen_s_quotes(input, i) && input)
+		{
+			if (!char_case(input[i + 1]) || (i > 0 && input[i - 1] == '$'))
+				break ;
 			k += normal_case(&i, envp_mx, line, input);
+		}
 		if (input[i] == '~' && home_conditions(input, i))
 		{
 			i++;

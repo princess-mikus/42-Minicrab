@@ -6,7 +6,7 @@
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:57:30 by mikus             #+#    #+#             */
-/*   Updated: 2024/06/08 20:08:18 by fcasaubo         ###   ########.fr       */
+/*   Updated: 2024/06/10 12:29:55 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	free_array(void **array)
 		free(array[i]);
 		array[i] = NULL;
 	}
-	free(array);
+	if (array)
+		free(array);
 }
 
 void	free_files(t_command *current)
