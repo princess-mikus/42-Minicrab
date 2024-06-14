@@ -27,11 +27,14 @@ ENVP	 	:= envp envp_utils envp_arg
 EXPAND	 	:= expand
 INTEGRITY 	:= check_integrity
 HISTORY 	:=
-MAIN		:= main
 PARSING 	:= parsing token cleaning line
 PIPING 		:= parse_commands execute_commands path built-in change_envp here_doc resolve_files piping_utils resolve_file_errors
 SIGNALS 	:= signals
 UTILS		:= free error strings
+PARSING 	:= parsing
+PIPING 		:= parse_commands execute_commands path built-in change_envp
+SIGNALS 	:= signals
+UTILS		:= free error
 
 
 

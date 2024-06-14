@@ -49,6 +49,34 @@ void	init_node(t_command *node, char *line)
 	node->infile = make_files(line, '<');
 	node->outfile = make_files(line, '>');
 	node->dec = make_files(line, '=');
+	int		start;
+	int		end;
+	char	*temp;
+
+	if (!search_out_quotes(line, '<'))
+		return (line);
+	start = search_out_quotes(line, '<') - line;
+	if (jmp_spaces(line + start + node->hdoc + 1)[0] == '"')
+		end = ft_strchr(ft_strchr(jmp_spaces(line + start + node->hdoc + 2) + 1, '"'), ' ') - line;
+	else
+		end = ft_strchr(jmp_spaces(line + start + node->hdoc + 1), ' ') - line;
+	temp = ft_substr(line, start, end - start);
+	if (search_out_quotes(temp, '>'))
+		node->infile = ft_substr(temp, 0, search_out_quotes(temp, '>') - temp);
+	else
+		node->infile = ft_strdup(temp);
+	free(temp);
+	return (line_cutter(line, node->infile));
+}
+
+void	init_node(t_command *node)
+{
+	node->apend = 0;
+	node->hdoc = 0;
+	node->status = 0;
+	node->infile = NULL;
+	node->outfile = NULL;
+	node->dec = NULL;
 	node->command = NULL;
 	node->arg = NULL;
 	node->path = NULL;
