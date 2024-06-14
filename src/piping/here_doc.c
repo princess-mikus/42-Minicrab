@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset_mx.c                                         :+:      :+:    :+:   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/08 14:32:00 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 13:14:22 by fcasaubo         ###   ########.fr       */
+/*   Created: 2024/05/23 23:12:28 by mikus             #+#    #+#             */
+/*   Updated: 2024/06/08 16:28:34 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	unset_mx(t_envp **envp_mx, char *variable)
+int	manage_here_doc(char **delimiter)
 {
-	t_envp	*current;
-	t_envp	*next;
+	char	*stream;
+	int		i;
+	int		pipefd[2];
 
-	if (!*envp_mx)
-		return ;
-	current = *envp_mx;
-	next = current->next;
-	while (next)
+	if (pipe(pipefd))
+		return (-1);
+	i = 0;
+	while (1)
 	{
-		if (!ft_strncmp(next->variable, variable, ft_strlen(variable)))
+		stream = get_next_line(0);
+		if (!ft_strncmp(stream, delimiter[i], ft_strlen(delimiter[i])))
 		{
-			current->next = next->next;
-			free(next->content);
-			free(next->variable);
-			free(next);
-			return ;
+			if (!delimiter[++i])
+				break ;
 		}
-		current = current->next;
-		next = next->next;
+		else
+			write(pipefd[1], stream, ft_strlen(stream));
+		free(stream);
 	}
+	close (pipefd[1]);
+	return (free(stream), pipefd[0]);
 }

@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 21:05:30 by mikus             #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/05/16 21:32:55 by mikus            ###   ########.fr       */
-=======
-/*   Updated: 2024/05/17 14:31:18 by mikus            ###   ########.fr       */
->>>>>>> parent of 6c6710e (Merging parsing into built-ins)
+/*   Updated: 2024/06/10 10:54:48 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +18,8 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <wait.h>
+# include <sys/stat.h>
+# include <signal.h>
 # include <errno.h>
 //#include "../libs/readline/readline.h"
 //#include "readline.h"
@@ -53,30 +51,56 @@ void	unset_mx(t_envp **envp_mx, char *variable);
 //built-in env prints the env
 void	env_mx(t_envp **envp_mx);
 //given a pointer to the list and a variable name change the bolean of exported  to true
-void	export_mx(t_envp **envp_mx, char *variable);
+void	export_mx(t_envp **envp_mx, char **argv, t_file **dec);
 // Prints current working directory
 int		pwd_mx(void);
 // Changes current working directory
-int		cd_mx(t_envp **envp_mx, char *args);
+int		cd_mx(t_envp **envp_mx, char **args);
 // Prints whatever trash you pass him
-int		echo_mx(char *arguments);
+int		echo_mx(char **arguments);
 // PARSING
 // Parse and add to command list
 void	parse(char *line_expanded, t_command **commands);
+	//listing
+void	init_node(t_command *node, char *line);
+t_command	*new_command(char *line);
+void	add_command(char *line_splited, t_command **commands);
+	//tokenicing
+char	*get_infile(char *line, char **infile);
+char	*get_outfile(char *line, char **outfile);
+int	start_dec(char *line);
+char	*get_dec(char *line, t_command *node);
+char	*get_cmd(char *line, t_command *node);
+void	get_arg(char *line, t_command *node);
+    //cleaning
+void	cleaning(t_command *node);
+char	*make_line(char *str);
 //EXPAND
 char	*expansion(t_envp **envp_mx, char *input);
+//INTEGRITY
+bool	check_integrity(char *line);
 // PIPING
 // Calls parse and then passes command for execution
-void	parse_commands(char *line, t_envp *envp_mx);
+void	parse_commands(char *line, t_envp **envp_mx);
+
+void	wait_for_children(t_command *current);
 
 // Executes commands, either local files marked as executable, builtins or PATH programs
-int		execute_commands(t_command **commands, t_envp *envp_mx);
+int		execute_commands(t_command **commands, t_envp **envp_mx);
+
+bool	resolve_files \
+(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
+bool	check_infile_error(char *file, bool *infile);
+bool	check_outfile_error(char *file, bool *outfile);
+
+// Reads fd 0 when <<
+int		manage_here_doc(char **delimiter);
 
 // Updates envp before execution, with optional same-line vars
 char	**update_environment(t_command *current, t_envp **envp_mx);
 
 // Puts optional same-line vars to temp envp_mx
-void	dec_to_env(char **dec, t_envp **envp_mx_temp);
+void	dec_to_env(t_file **dec, t_envp **envp_mx_temp);
 
 // Executes mx_ built-ins
 void	execute_builtin(t_command *current, int *inpipe, int *outpipe, t_envp **envp_mx);
@@ -90,9 +114,23 @@ char	**get_path_var(char **envp);
 // Checks if file exists on PATH or if is a local file (Relative & Absolute paths)
 bool	resolve_path(t_command *current, char **path);
 
+// SIGNALS
+void    signal_management(void);
+void	kill_yourself(int sig);
+void	signal_sender(t_command *command);
+
 //UTILS
 void	free_array(void **array);
 void	free_command_list(t_command **list);
-void	mx_error(int error_number);
-void	resolve_exec_error(int *inpipe, int *outpipe);
+void	mx_error(char const *target);
+void	resolve_exec_error(int *inpipe, int *outpipe, char *program);
+int		quote_case(char *line);
+	//strings
+char	*jmp_spaces(char *str);
+int		count_out_quotes(char *line, char c);
+int		c_out_q_no_d(char *line, char c);
+char	*search_out_quotes(char *line, char c);
+char	*search_out_quotes(char *line, char c);
+char	*line_cutter(char *line, char *to_cut);
+bool	is_out_quotes(char *line, int k, char c);
 #endif

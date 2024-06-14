@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xortega <xortega@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:58:58 by xortega           #+#    #+#             */
-/*   Updated: 2024/04/17 12:24:17 by xortega          ###   ########.fr       */
+/*   Updated: 2024/06/08 14:48:13 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	envp_add_back(t_envp **envp_mx, t_envp *new)
 void	init_envp(t_envp **envp_mx, char **envp)
 {
 	int		i;
+	char	*temp[2];
 	t_envp	*current;
 
 	if (envp == NULL || *envp == NULL)
@@ -39,13 +40,18 @@ void	init_envp(t_envp **envp_mx, char **envp)
 		envp_add_back(envp_mx, new_envp(ft_substr(envp[i], 0, \
 		(ft_strchr(envp[i], '=') - envp[i])), \
 		ft_strdup(ft_strchr(envp[i], '=') + 1)));
-	current = *envp_mx;
 	unset_mx(envp_mx, "OLDPWD");
+	current = *envp_mx;
 	while (current)
 	{
-		export_mx(envp_mx, current->variable);
+		temp[0] = current->variable;
+		temp[1] = NULL;
+		export_mx(envp_mx, temp, NULL);
 		current = current->next;
 	}
+	envp_add_back(envp_mx, new_envp(ft_strdup("~"), \
+		ft_strdup(get_content_envp_mx(envp_mx, "HOME"))));
+	envp_add_back(envp_mx, new_envp(ft_strdup("?"), ft_strdup("0")));
 }
 
 t_envp	*new_envp(char *variable, char *content)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 20:16:46 by mikus             #+#    #+#             */
-/*   Updated: 2024/05/16 21:37:18 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/08 19:58:04 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 char	**get_path_var(char **envp)
 {
 	int		i;
-	char	**splited;
-	char	**to_return;
+	char	**splitted;
+	char	**to_return;	
 
 	i = 0;
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", ft_strlen("PATH=")))
 		i++;
 	if (!envp[i])
 		return (NULL);
-	splited = ft_split(envp[i], '=');
-	to_return = ft_split(splited[1], ':');
-	return (free_array((void **)splited), to_return);
+	splitted = ft_split(envp[i], '=');
+	to_return = ft_split(splitted[1], ':');
+	return (free_array((void **)splitted), to_return);
 }
 
 char	*get_path(char	*program, char **path)
@@ -47,12 +47,14 @@ char	*get_path(char	*program, char **path)
 	return (free_array((void **)path), free(appended), NULL);
 }
 
-void	check_local(t_command *current)
+void	check_local(t_command *current, char **path)
 {
-	char	**temp;
-	int		i;
+	struct stat	path_stat;
+	char		**temp;
+	int			i;
 
-	if (!access(current->command, F_OK))
+	stat(current->command, &path_stat);
+	if (!access(current->command, F_OK) && !S_ISDIR(path_stat.st_mode))
 	{
 		current->path = ft_strdup(current->command);
 		temp = ft_split(current->command, '/');
@@ -61,17 +63,38 @@ void	check_local(t_command *current)
 		while (temp[i + 1])
 			i++;
 		current->command = ft_strdup(temp[i]);
+		free_array((void**)path);
 		free_array((void **)temp);
 	}
 	else
 		current->path = NULL;
 }
 
+bool	detect_local(t_command *current, char **path)
+{
+	char	*str;
+	int		i;
+
+	str = current->command;
+	i = -1;
+	while (str[++i])
+		if (str[i] == '/')
+			return (free_array((void**)path), true);
+	return (false);
+}
+
 bool	resolve_path(t_command *current, char **path)
 {
 	current->path = NULL;
-	check_local(current);
-	if (!current->path)
+	
+	if (!current->command || !current->command[0])
+	{
+		free(current->command);
+		current->command = ft_strdup("''");
+		return (free_array((void **)path), false);
+	}
+	check_local(current, path);
+	if (!current->path && !detect_local(current, path))
 		current->path = get_path(current->command, path);
 	if (!current->path)
 		return (false);

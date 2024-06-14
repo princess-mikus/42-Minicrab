@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 13:11:09 by fcasaubo          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/05/23 22:20:33 by mikus            ###   ########.fr       */
-=======
-/*   Updated: 2024/05/17 14:06:17 by mikus            ###   ########.fr       */
->>>>>>> parent of 6c6710e (Merging parsing into built-ins)
+/*   Updated: 2024/06/06 15:28:57 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +20,23 @@ typedef struct s_envp
 	struct s_envp	*next;	
 }					t_envp;
 
+typedef struct s_file
+{
+	char	*name;
+	bool	special;
+}			t_file;
+
 typedef struct s_command
 {
 	t_file				**dec;
 	t_file				**infile;
 	t_file				**outfile;
+	pid_t				pid;
+	int					status;
 	char				*command;
 	char				*arg;
+	char				**argv;
 	char				*path;
-	char				*outfile;
 	struct s_command	*next;
 }						t_command;
 

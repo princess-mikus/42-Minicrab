@@ -1,37 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset_mx.c                                         :+:      :+:    :+:   */
+/*   piping_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/08 14:32:00 by xortega           #+#    #+#             */
-/*   Updated: 2024/06/07 13:14:22 by fcasaubo         ###   ########.fr       */
+/*   Created: 2024/06/07 12:11:14 by fcasaubo          #+#    #+#             */
+/*   Updated: 2024/06/07 14:00:26 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	unset_mx(t_envp **envp_mx, char *variable)
+void	wait_for_children(t_command *current)
 {
-	t_envp	*current;
-	t_envp	*next;
-
-	if (!*envp_mx)
-		return ;
-	current = *envp_mx;
-	next = current->next;
-	while (next)
+	while (current)
 	{
-		if (!ft_strncmp(next->variable, variable, ft_strlen(variable)))
-		{
-			current->next = next->next;
-			free(next->content);
-			free(next->variable);
-			free(next);
-			return ;
-		}
+		waitpid(current->pid, &current->status, 0);
 		current = current->next;
-		next = next->next;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_mx.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:38:35 by xortega           #+#    #+#             */
-/*   Updated: 2024/05/16 20:51:52 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/07 12:31:19 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 int	pwd_mx(void)
 {
-	ft_printf("%s\n", getcwd(NULL, 0));
+	char *str;
+
+	str = getcwd(NULL, 0);
+	ft_printf("%s\n", str);
+	free(str);
 	return (0);
 }

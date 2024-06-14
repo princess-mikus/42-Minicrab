@@ -3,41 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   echo_mx.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikus <mikus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fcasaubo <fcasaubo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:30:15 by fcasaubo          #+#    #+#             */
-/*   Updated: 2024/05/12 21:29:32 by mikus            ###   ########.fr       */
+/*   Updated: 2024/06/07 12:27:44 by fcasaubo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	get_flag(char *arguments, int *i)
+bool	get_flag(char **arguments, int *i)
 {
-	while (arguments[*i] == ' ')
-		*i += 1;
-	if (arguments[*i] == '-' && arguments[*i + 1] == 'n')
+	bool	nl;
+
+	nl = true;
+	if (!arguments)
+		return (true);
+	while (arguments[*i])
 	{
-		*i += 2;
-		while (arguments[*i] == ' ')
-			*i += 1;
-		return (false);
+		if (arguments[*i][0] == '-' && arguments[*i][1] == 'n')
+		{
+			nl = false;
+			if (arguments[*i][2])
+				break;
+			(*i)++;
+		}
+		else
+			break ;
 	}
-	*i = 0;
-	return (true);
+	return (nl);
 }
 
-int	echo_mx(char *arguments)
+int	echo_mx(char **arguments)
 {
 	int		i;
+	int		j;
 	bool	nl;
 
 	i = 0;
+	i = 0;
 	nl = get_flag(arguments, &i);
-	while (arguments[i])
+	while (arguments && arguments[i])
 	{
-		if (write(1, &arguments[i], 1) != 1)
-			return (1);
+		j = 0;
+		while (arguments[i][j])
+		{
+			if (write(1, &arguments[i][j], 1) != 1)
+				return (1);
+			j++;
+		}
+		if (arguments[i + 1])
+			write(1, " ", 1);
 		i++;
 	}
 	if (nl)
