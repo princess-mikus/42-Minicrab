@@ -3,42 +3,42 @@ Minis hell on Earth
 
 <h1>TO DO</h1>
 
-- [ ] Wait for command
-  - [ ] Differentiate command vs environment vs signal
-- [ ] Input parsing
-  - [ ] ' quotes
-  - [ ] " quotes (except $())
-  - [ ] \
-  - [ ] ; 
-- [ ] Create built-in commands
-  - [ ] echo (-n)
-  - [ ] cd
-  - [ ] pwd
+- [X] Wait for command
+  - [X] Differentiate command vs environment vs signal
+- [X] Input parsing
+  - [X] ' quotes
+  - [X] " quotes (except $())
+  - [X] \
+  - [X] ; 
+- [X] Create built-in commands
+  - [X] echo (-n)
+  - [X] cd
+  - [X] pwd
   - [x] export
   - [x] unset
   - [x] env
-  - [ ] exit
-- [ ] Manage piping
+  - [X] exit
+- [X] Manage piping
   - [x] Basic piping
-  - [ ] Redirections (<, >, <<, >>)
-  - [ ] || and && (Bonus)
-  - [ ] Exit & error status  
-- [ ] Terminal variables:
-  - [ ] Valid variables names & contents (characters)
+  - [X] Redirections (<, >, <<, >>)
+  - [X] || and && (Bonus)
+  - [X] Exit & error status  
+- [X] Terminal variables:
+  - [X] Valid variables names & contents (characters)
   - [x] Environment variables
-    - [ ] ~
-    - [ ] . & ..  
-  - [ ] $?
-  - [ ] Wildcard (Bonus)
+    - [X] ~
+    - [X] . & ..  
+  - [X] $?
+  - [X] Wildcard (Bonus)
 - [x] History
   - [x] Don't add empty lines
   - [x] Command history 
-- [ ] Signals
-  - [ ] Ctrl + C
+- [X] Signals
+  - [X] Ctrl + C
   - [x] Ctrl + D
-  - [ ] Ctrl + \
-  - [ ] \t (tab)
-  - [ ] Signal managing
+  - [X] Ctrl + \
+  - [X] \t (tab)
+  - [X] Signal managing
 - [x] Makefile
 https://03-jon-perez.gitbook.io/coding-library/c/readline
 
